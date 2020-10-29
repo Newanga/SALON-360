@@ -122,7 +122,7 @@
                   </HBox>
                   <HBox alignment="TOP_RIGHT" prefHeight="55.0" prefWidth="270.0">
                      <children>
-                        <Label text="ACTIVE CUSTOMERS" textFill="#99abb4">
+                        <Label text="TOTAL CUSTOMERS" textFill="#99abb4">
                            <font>
                               <Font size="14.0" />
                            </font>
