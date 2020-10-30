@@ -30,6 +30,10 @@ public class ServiceCategory {
     }
 
     public void setId(int id) {
-        Id = id;
+        this.Id = id;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

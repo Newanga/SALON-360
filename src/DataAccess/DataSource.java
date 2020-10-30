@@ -9,15 +9,15 @@ public class DataSource {
     //Declare the environment (Production or Development)
     private static final String SERVER = "Production";
 
-    //Development DB Access details.
-    private static final String PROURL = "";
-    private static final String PROUSERNAME = "";
-    private static final String PROPASSWORD = "";
-
     //Production DB Access details.
-    private static final String DEVURL = "";
-    private static final String DEVUSERNAME = "";
-    private static final String DEVPASSWORD = "";
+    private static final String PRO_URL = "jdbc:mysql://localHost:3306/saloon";
+    private static final String PRO_USERNAME = "root";
+    private static final String PRO_PASSWORD = "MyNewPass";
+
+    //Development DB Access details.
+    private static final String DEV_URL = "";
+    private static final String DEV_USERNAME = "";
+    private static final String DEV_PASSWORD = "";
 
     public static Connection getConnection() throws SQLException {
         Connection conn;
@@ -26,7 +26,7 @@ public class DataSource {
         if (SERVER == "Production") {
 
             try {
-                conn = DriverManager.getConnection(PROURL, PROUSERNAME, PROPASSWORD);
+                conn = DriverManager.getConnection(PRO_URL, PRO_USERNAME, PRO_PASSWORD);
             } catch (SQLException exmsg) {
                 throw exmsg;
             }
@@ -36,7 +36,7 @@ public class DataSource {
         if (SERVER == "Development") {
 
             try {
-                conn = DriverManager.getConnection(DEVURL, DEVUSERNAME, DEVPASSWORD);
+                conn = DriverManager.getConnection(DEV_URL, DEV_USERNAME, DEV_PASSWORD);
             } catch (SQLException exmsg) {
                 throw exmsg;
             }
