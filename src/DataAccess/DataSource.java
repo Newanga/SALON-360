@@ -19,14 +19,14 @@ public class DataSource {
     private static final String DEVUSERNAME = "";
     private static final String DEVPASSWORD = "";
 
-    public Connection getConnection() throws SQLException {
-        Connection con;
+    public static Connection getConnection() throws SQLException {
+        Connection conn;
 
         //Create Production connection
         if (SERVER == "Production") {
 
             try {
-                con = DriverManager.getConnection(PROURL, PROUSERNAME, PROPASSWORD);
+                conn = DriverManager.getConnection(PROURL, PROUSERNAME, PROPASSWORD);
             } catch (SQLException exmsg) {
                 throw exmsg;
             }
@@ -36,12 +36,12 @@ public class DataSource {
         if (SERVER == "Development") {
 
             try {
-                con = DriverManager.getConnection(DEVURL, DEVUSERNAME, DEVPASSWORD);
+                conn = DriverManager.getConnection(DEVURL, DEVUSERNAME, DEVPASSWORD);
             } catch (SQLException exmsg) {
                 throw exmsg;
             }
         }
-        return  con;
+        return  conn;
     }
 }
 
