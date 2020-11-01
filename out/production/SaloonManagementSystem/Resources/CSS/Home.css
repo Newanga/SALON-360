@@ -47,3 +47,67 @@
     -fx-border-color: transparent; /* Vertical Lines*/
     -fx-border-width: 1;
 }
+
+
+
+/*******************************************************************************
+ *                                                                             *
+ * Tabpane								                       				   *
+ *                                                                             *
+ ******************************************************************************/
+
+/*!*The whole tab Area including content*!*/
+/*. jfx-tab-pane {*/
+/*    -fx-padding: 0px;*/
+/*    -fx-background-color: white;*/
+/*}*/
+
+/*!*Arrow styling*!*/
+/*.jfx-tab-pane .control-buttons-tab{*/
+/*    visibility: false;*/
+/*}*/
+/*.jfx-tab-pane .control-buttons-tab .tab-down-button{*/
+/*    visibility: false;*/
+/*}*/
+/*.jfx-tab-pane .control-buttons-tab .jfx-rippler{*/
+/*    visibility: false;*/
+/*}*/
+
+
+/*The regions where tabs are available */
+.jfx-tab-pane .headers-region {
+    -fx-background-color: #FFFFFF;
+}
+
+/*The empty region where tabs are unavailable*/
+.jfx-tab-pane .tab-header-background {
+    -fx-background-color: #FFFFFF;
+}
+
+/*!*Ripple effect on selecting tab*!*/
+/*.jfx-tab-pane .tab-header-area .jfx-rippler{*/
+/*    -jfx-rippler-fill :#FFFFFF;*/
+/*}*/
+
+/*Line under a tab on selection*/
+.jfx-tab-pane .tab-selected-line {
+    -fx-background-color: #99abb4;
+}
+
+/*Font color within the table*/
+.tab-label {
+    -fx-text-fill: #5C4AC7 ;
+}
+
+/*Formatting of a single tab*/
+.tab {
+    /*-fx-background-insets: 0 1 0 1,0,0;*/
+    -fx-background-color: #FFFFFF;
+    -fx-font-size: 12pt;
+    -fx-border-color:#FFFFFF;
+    -fx-border-width:1px 50px;
+}
+
+.nav-button:hover{
+    -fx-text-fill: #1976D2;
+}

@@ -1,28 +1,30 @@
 package Models;
 
 public class ServiceCategory {
-    private int Id;
+    private int id;
+    private String name;
     private String description;
 
     public ServiceCategory() {
     }
 
-    public ServiceCategory(String description) {
+    public ServiceCategory(String name, String description) {
+        this.name = name;
         this.description = description;
     }
 
-    public ServiceCategory(int id) {
-        Id = id;
-    }
-
-    public ServiceCategory(int id, String description) {
-        Id = id;
+    public ServiceCategory(int id, String name, String description) {
+        this.id = id;
+        this.name = name;
         this.description = description;
     }
-
 
     public int getId() {
-        return Id;
+        return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getDescription() {
@@ -30,7 +32,11 @@ public class ServiceCategory {
     }
 
     public void setId(int id) {
-        this.Id = id;
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setDescription(String description) {

@@ -12,7 +12,8 @@ public class DBConnectionTest {
 
     @Test
     public void devConnectionTest() throws SQLException {
-        Connection connection = DataSource.getConnection();
+        DataSource db=new DataSource();
+        Connection connection = db.getConnection();
         assertEquals(connection != null, true);
     }
 }

@@ -6,10 +6,56 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CloseConnection {
+public class ConnectionResources {
 
-    //This method will close all the sql related resources created during a database operation.
-    public static void close(@Nullable ResultSet set, @Nullable PreparedStatement statement,@Nullable Connection conn ) throws SQLException {
+    //These method overloads will close all the sql related resources created during a database operation.
+
+    public  static void close(Connection conn) throws SQLException{
+        try {
+            if(conn!=null)
+                conn.close();
+        }
+        catch (SQLException ex){
+
+        }
+    }
+
+    public  static void close(PreparedStatement statement) throws SQLException{
+        try{
+            if(statement!=null){
+                statement.clearParameters();;
+                statement.close();
+            }
+        }
+        catch (SQLException ex) {
+
+        }
+    }
+
+    public static void close(ResultSet set,PreparedStatement statement) throws SQLException {
+        try{
+            if(set!=null)
+                set.close();
+        }
+        catch (SQLException ex) {
+
+        }
+
+
+        try{
+            if(statement!=null){
+                statement.clearParameters();;
+                statement.close();
+            }
+        }
+        catch (SQLException ex) {
+
+        }
+
+    }
+
+
+    public static void close(ResultSet set,PreparedStatement statement,Connection conn ) throws SQLException {
 
         try{
             if(set!=null)
@@ -37,7 +83,6 @@ public class CloseConnection {
         catch (SQLException ex){
 
         }
-
 
     }
 
