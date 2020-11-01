@@ -131,5 +131,43 @@ public class ServiceCategoryController implements Initializable {
     }
 
 
+    public void SearchFunction(){
+        // Wrap the ObservableList in a FilteredList (initially display all data).
+        FilteredList<ServiceCategory> filteredData = new FilteredList<>(serviceCategoryList, b -> true);
+
+        // 2. Set the filter Predicate whenever the filter changes.
+        tfSearchTableData.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(serviceCategory -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                // Compare name and description of every category with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (serviceCategory.getName().toLowerCase().indexOf(lowerCaseFilter) != -1 ) {
+                    return true; // Filter matches name.
+                } else if (serviceCategory.getDescription().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                    return true; // Filter matches description name.
+                }
+                else if (String.valueOf(serviceCategory.getId()).indexOf(lowerCaseFilter)!=-1)
+                    return true;
+                else
+                    return false; // Does not match.
+            });
+        });
+
+        // 3. Wrap the FilteredList in a SortedList.
+        SortedList<ServiceCategory> sortedData = new SortedList<>(filteredData);
+
+        // 4. Bind the SortedList comparator to the TableView comparator.
+        // 	  Otherwise, sorting the TableView would have no effect.
+        sortedData.comparatorProperty().bind(tvServiceCategory.comparatorProperty());
+
+        // 5. Add sorted (and filtered) data to the table.
+        tvServiceCategory.setItems(sortedData);
+
+    }
+
 
 }
