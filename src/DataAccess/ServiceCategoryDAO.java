@@ -1,6 +1,9 @@
 package DataAccess;
 
 import Models.ServiceCategory;
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,9 +14,9 @@ import java.util.List;
 
 public class ServiceCategoryDAO {
 
-    private  Connection conn;
-    private  PreparedStatement statement =null;
-    private  ResultSet result = null;
+    private Connection conn;
+    private PreparedStatement statement = null;
+    private ResultSet result = null;
 
     public ServiceCategoryDAO(Connection conn) {
         this.conn = conn;
@@ -23,12 +26,12 @@ public class ServiceCategoryDAO {
         String sql = "INSERT INTO servicecategory (name, description) VALUES (?, ?);";
         try {
             statement = conn.prepareStatement(sql);
-            String name=model.getName();
-            String description=model.getDescription();
+            String name = model.getName();
+            String description = model.getDescription();
             statement.setString(1, name);
             statement.setString(2, description);
             statement.executeUpdate();
-            return  true;
+            return true;
         } catch (SQLException throwables) {
             return false;
         }
@@ -37,7 +40,7 @@ public class ServiceCategoryDAO {
     public int getServiceCategoryIdByName(String name) throws SQLException {
         int id = 0;
         final String sql = "SELECT Id FROM servicecategory WHERE Name=?";
-        try  {
+        try {
             statement = conn.prepareStatement(sql);
             statement.setString(1, name);
             id = statement.executeUpdate();
@@ -47,35 +50,34 @@ public class ServiceCategoryDAO {
         }
     }
 
-    public List<ServiceCategory> getAllServiceCategories() throws SQLException {
-        List<ServiceCategory> serviceCategories=null;
+    public ObservableList<ServiceCategory> getAllServiceCategories() throws SQLException {
+        ObservableList<ServiceCategory> serviceCategories = FXCollections.observableArrayList();
         final String sql = "SELECT * FROM servicecategory;";
-        try  {
+        try {
             statement = conn.prepareStatement(sql);
             result = statement.executeQuery();
-            serviceCategories = new ArrayList<>();
             while (result.next()) {
-                ServiceCategory sc=new ServiceCategory();
+                ServiceCategory sc = new ServiceCategory(result.getInt("Id"), result.getString("Name"), result.getString("Description"));
                 //Retrieve by column name
-                sc.setId(result.getInt("Id"));
-                sc.setName(result.getString("Name"));
-                sc.setDescription(result.getString("Description"));
+//                sc.setId(result.getInt("id"));
+//                sc.setName(result.getString("name"));
+//                sc.setDescription(result.getString("description"));
                 serviceCategories.add(sc);
             }
-            return  serviceCategories;
-        } catch (SQLException throwables) {
-            return  serviceCategories;
+            return serviceCategories;
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
         }
-
+        return serviceCategories;
     }
 
 
-    public  boolean updateServiceCategory(ServiceCategory model) throws SQLException {
-        final String sql = "UPDATE servicecategory SET Name=? and Description =? WHERE Id=?;";
-        try  {
+    public boolean updateServiceCategory(ServiceCategory model) throws SQLException {
+        final String sql = "UPDATE servicecategory SET Name=?,Description =? WHERE Id=?;";
+        try {
             statement = conn.prepareStatement(sql);
             statement.setString(1, model.getName());
-            statement.setString(2, model.getName());
+            statement.setString(2, model.getDescription());
             statement.setInt(3, model.getId());
             statement.executeUpdate();
             return true;

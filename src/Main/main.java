@@ -14,7 +14,7 @@ public class main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("../Views/CommonTemplates/TabView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../Views/Home.fxml"));
         primaryStage.setTitle("Home");
         primaryStage.setScene(new Scene(root));
         primaryStage.getIcons().add(new Image("Main/app.png"));

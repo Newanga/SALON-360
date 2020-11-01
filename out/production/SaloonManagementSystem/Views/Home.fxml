@@ -1,11 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1040.0" prefWidth="1920.0" stylesheets="@../Resources/CSS/Home.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.HomeController">
-   <children>
-      <AnchorPane prefHeight="1040.0" prefWidth="255.0" />
-      <AnchorPane layoutX="200.0" prefHeight="50.0" prefWidth="1720.0" />
-      <AnchorPane layoutX="248.0" layoutY="50.0" prefHeight="990.0" prefWidth="1665.0" />
-   </children>
-</AnchorPane>
+<BorderPane fx:id="borderpane" prefHeight="1040.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.HomeController">
+   <top>
+      <Pane prefHeight="35.0" prefWidth="1920.0" style="-fx-background-color: #1976D2;">
+         <children>
+            <ImageView fitHeight="33.0" fitWidth="37.0" layoutX="1831.0" layoutY="1.0" onMouseClicked="#minimize" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Resources/Icons/minimizewindows.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="32.0" fitWidth="37.0" layoutX="1874.0" layoutY="1.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Resources/Icons/closewindow.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="30.0" fitWidth="38.0" layoutX="848.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Resources/Icons/app.png" />
+               </image>
+            </ImageView>
+            <Label alignment="TOP_CENTER" layoutX="855.0" layoutY="4.0" prefHeight="32.0" prefWidth="189.0" text="SALOON 360° " textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </top>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <left>
+      <VBox prefHeight="1005.0" prefWidth="240.0" style="-fx-background-color: #FFFFFF;">
+         <children>
+            <Pane prefHeight="158.0" prefWidth="240.0" />
+            <Pane prefHeight="617.0" prefWidth="240.0">
+               <children>
+                  <VBox layoutX="13.0" layoutY="76.0" prefHeight="495.0" prefWidth="214.0" spacing="20.0">
+                     <children>
+                        <JFXButton alignment="TOP_LEFT" buttonType="RAISED" prefHeight="53.0" prefWidth="214.0" ripplerFill="#d7bfbf" styleClass="nav-button" text="   Customers">
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Resources/Icons/customers.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton alignment="TOP_LEFT" buttonType="RAISED" prefHeight="53.0" prefWidth="214.0" styleClass="nav-button" text="   Vouchers">
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Resources/Icons/voucher.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton alignment="TOP_LEFT" buttonType="RAISED" prefHeight="53.0" prefWidth="214.0" styleClass="nav-button" text="   Employees">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Resources/Icons/employee.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton alignment="TOP_LEFT" buttonType="RAISED" onAction="#btnServicesClicked" prefHeight="53.0" prefWidth="214.0" styleClass="nav-button" text="   Services">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Resources/Icons/services.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton alignment="TOP_LEFT" buttonType="RAISED" prefHeight="53.0" prefWidth="214.0" styleClass="nav-button" text="   Marketing">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Resources/Icons/marketing.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton alignment="TOP_LEFT" buttonType="RAISED" prefHeight="53.0" prefWidth="214.0" styleClass="nav-button" text="   Appointments">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Resources/Icons/apointments.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton alignment="TOP_LEFT" buttonType="RAISED" prefHeight="53.0" prefWidth="214.0" styleClass="nav-button" text="   Transactions">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Resources/Icons/transactions.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </VBox>
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+   </left>
+</BorderPane>

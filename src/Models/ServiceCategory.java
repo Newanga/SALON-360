@@ -1,45 +1,46 @@
 package Models;
 
 public class ServiceCategory {
-    private int id;
-    private String name;
-    private String description;
+    private int Id;
+    private String Name;
+    private String Description;
 
     public ServiceCategory() {
+
     }
 
     public ServiceCategory(String name, String description) {
-        this.name = name;
-        this.description = description;
+        this.Name = name;
+        this.Description = description;
     }
 
     public ServiceCategory(int id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
+        this.Id = id;
+        this.Name = name;
+        this.Description = description;
     }
 
     public int getId() {
-        return id;
+        return Id;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public String getDescription() {
-        return description;
+        return Description;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.Id = id;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.Name = name;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.Description = description;
     }
 }
