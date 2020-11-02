@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<StackPane fx:id="stackpane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ServiceCategoryController">
+<StackPane fx:id="stackpane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ServiceController">
    <children>
       <AnchorPane prefHeight="1005.0" prefWidth="1680.0" style="-fx-background-color: #EEF5F9;" stylesheets="@../Resources/CSS/Home.css">
           <children>
@@ -27,7 +38,7 @@
                                                               <children>
                                                                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                       <image>
-                                                                          <Image url="@../Resources/Icons/people.png" />
+                                                                          <Image url="@../Resources/Icons/services.png" />
                                                                       </image>
                                                                   </ImageView>
                                                               </children>
@@ -60,7 +71,7 @@
                                                   </HBox>
                                                   <HBox alignment="TOP_RIGHT" prefHeight="55.0" prefWidth="270.0">
                                                       <children>
-                                                          <Label text="TOTAL CUSTOMERS" textFill="#99abb4">
+                                                          <Label fx:id="lblSTotalServices" text="TOTAL SERVICES" textFill="#99abb4">
                                                               <font>
                                                                   <Font size="14.0" />
                                                               </font>
@@ -113,7 +124,7 @@
                                                   </HBox>
                                                   <HBox alignment="TOP_RIGHT" prefHeight="55.0" prefWidth="270.0">
                                                       <children>
-                                                          <Label text="ACTIVE CUSTOMERS" textFill="#99abb4">
+                                                          <Label fx:id="lblSAvailableServices" text="AVAILABLE SERVICES" textFill="#99abb4">
                                                               <font>
                                                                   <Font size="14.0" />
                                                               </font>
@@ -133,7 +144,7 @@
                                                               <children>
                                                                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                       <image>
-                                                                          <Image url="@../Resources/Icons/today.png" />
+                                                                          <Image url="@../Resources/Icons/non-available.png" />
                                                                       </image>
                                                                   </ImageView>
                                                               </children>
@@ -166,7 +177,7 @@
                                                   </HBox>
                                                   <HBox alignment="TOP_RIGHT" prefHeight="55.0" prefWidth="270.0">
                                                       <children>
-                                                          <Label text="TODAY CUSTOMERS" textFill="#99abb4">
+                                                          <Label fx:id="lblSNonAvailableServices" text="NON-AVAILABLE SERVICES" textFill="#99abb4">
                                                               <font>
                                                                   <Font size="14.0" />
                                                               </font>
@@ -186,7 +197,7 @@
                                                               <children>
                                                                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                       <image>
-                                                                          <Image url="@../Resources/Icons/inactive.png" />
+                                                                          <Image url="@../Resources/Icons/withdrawn.png" />
                                                                       </image>
                                                                   </ImageView>
                                                               </children>
@@ -219,7 +230,7 @@
                                                   </HBox>
                                                   <HBox alignment="TOP_RIGHT" prefHeight="55.0" prefWidth="270.0">
                                                       <children>
-                                                          <Label text="INACTIVE CUSTOMERS" textFill="#99abb4">
+                                                          <Label fx:id="lblSWithdrawnServices" text="WITHDRAWN SERVICES" textFill="#99abb4">
                                                               <font>
                                                                   <Font size="14.0" />
                                                               </font>
@@ -238,14 +249,14 @@
                                       <children>
                                           <AnchorPane prefHeight="42.0" prefWidth="762.0">
                                               <children>
-                                                  <HBox layoutX="14.0" layoutY="8.0" prefHeight="27.0" prefWidth="210.0">
+                                                  <HBox layoutX="14.0" layoutY="8.0" prefHeight="27.0" prefWidth="210.0" spacing="20.0">
                                                       <children>
                                                           <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                                               <image>
                                                                   <Image url="@../Resources/Icons/table.png" />
                                                               </image>
                                                           </ImageView>
-                                                          <Label text="Table Name">
+                                                          <Label text="Service Table">
                                                               <font>
                                                                   <Font size="18.0" />
                                                               </font>
@@ -270,21 +281,21 @@
                                           </AnchorPane>
                                           <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="563.0">
                                               <children>
-                                                  <JFXTextField focusColor="#1976d2" prefHeight="25.0" prefWidth="273.0" promptText="Enter Search Term">
+                                                  <JFXTextField fx:id="tfSSearchTableData" focusColor="#1976d2" onMouseClicked="#SearchFunctionS" prefHeight="25.0" prefWidth="273.0" promptText="Enter Search Term">
                                                       <HBox.margin>
                                                           <Insets right="20.0" />
                                                       </HBox.margin>
                                                   </JFXTextField>
                                               </children>
                                           </HBox>
-                                          <TableView fx:id="tvServices" prefHeight="226.0" prefWidth="543.0" style="-fx-background-color: #FFFFFF;">
+                                          <TableView fx:id="tvServices" prefHeight="326.0" prefWidth="799.0" style="-fx-background-color: #FFFFFF;">
                                               <columns>
-                                                  <TableColumn prefWidth="75.0" text="ID #" />
-                                                  <TableColumn prefWidth="75.0" text="NAME" />
-                                                  <TableColumn prefWidth="75.0" text="PRICE" />
-                                                  <TableColumn prefWidth="75.0" text="CATEGORY" />
-                                                  <TableColumn prefWidth="75.0" text="STATE" />
-                                                  <TableColumn prefWidth="75.0" text="DESCRIPTION" />
+                                                  <TableColumn fx:id="colSId" prefWidth="75.0" text="ID #" />
+                                                  <TableColumn fx:id="colSName" prefWidth="75.0" text="NAME" />
+                                                  <TableColumn fx:id="colSPrice" prefWidth="75.0" text="PRICE" />
+                                                  <TableColumn fx:id="colSCategory" prefWidth="75.0" text="CATEGORY" />
+                                                  <TableColumn fx:id="colSState" prefWidth="75.0" text="STATE" />
+                                                  <TableColumn fx:id="colSDescription" prefWidth="75.0" text="DESCRIPTION" />
                                               </columns>
                                               <VBox.margin>
                                                   <Insets left="20.0" right="20.0" top="10.0" />
@@ -297,28 +308,28 @@
                                   </VBox>
                                   <VBox alignment="CENTER" layoutX="149.0" layoutY="251.0" prefHeight="508.0" prefWidth="378.0" spacing="30.0">
                                       <children>
-                                          <JFXTextField disable="true" promptText="ID">
+                                          <JFXTextField fx:id="tfSId" disable="true" promptText="ID">
                                               <font>
                                                   <Font size="18.0" />
                                               </font>
                                           </JFXTextField>
-                                          <JFXTextField promptText="Name">
+                                          <JFXTextField fx:id="tfSName" promptText="Name">
                                               <font>
                                                   <Font size="18.0" />
                                               </font>
                                           </JFXTextField>
-                                          <JFXTextField promptText="Price">
+                                          <JFXTextField fx:id="tfSPrice" promptText="Price">
                                               <font>
                                                   <Font size="18.0" />
                                               </font>
                                           </JFXTextField>
-                                 <JFXComboBox prefHeight="25.0" prefWidth="350.0" promptText="Select Service Category" />
-                                 <JFXComboBox layoutX="30.0" layoutY="253.0" prefHeight="25.0" prefWidth="350.0" promptText="Select Service State" />
-                                 <JFXTextArea prefHeight="139.0" prefWidth="328.0" promptText="Service Description" />
+                                 <JFXComboBox fx:id="cbSServiceCategory" prefHeight="25.0" prefWidth="350.0" promptText="Select Service Category" />
+                                 <JFXComboBox fx:id="cbSServiceState" layoutX="30.0" layoutY="253.0" prefHeight="25.0" prefWidth="350.0" promptText="Select Service State" />
+                                 <JFXTextArea fx:id="taSDescription" prefHeight="139.0" prefWidth="328.0" promptText="Service Description" />
                                           <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                               <children>
-                                                  <JFXButton style="-fx-background-color: #00b67a;" text="Create" />
-                                                  <Button mnemonicParsing="false" style="-fx-background-color: yellow;" text="Update" />
+                                                  <JFXButton fx:id="btnSCreate" style="-fx-background-color: #00b67a;" text="Create" />
+                                       <JFXButton fx:id="btnSUpdate" style="-fx-background-color: yellow;" text="Create" />
                                               </children>
                                               <padding>
                                                   <Insets right="10.0" />
@@ -432,7 +443,7 @@
                                           </AnchorPane>
                                           <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="563.0">
                                               <children>
-                                                  <JFXTextField fx:id="tfSearchTableData" focusColor="#1976d2" onMouseClicked="#SearchFunctionSC" prefHeight="25.0" prefWidth="273.0" promptText="Enter Search Term">
+                                                  <JFXTextField fx:id="tfSCSearchTableData" focusColor="#1976d2" onMouseClicked="#SearchFunctionSC" prefHeight="25.0" prefWidth="273.0" promptText="Enter Search Term">
                                                       <HBox.margin>
                                                           <Insets right="20.0" />
                                                       </HBox.margin>
@@ -489,6 +500,8 @@
                           </AnchorPane>
                       </content>
                   </Tab>
+
+                  
       
       
                   <padding>
