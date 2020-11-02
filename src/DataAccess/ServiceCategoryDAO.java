@@ -3,6 +3,7 @@ package DataAccess;
 import Models.ServiceCategory;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 
 import java.sql.Connection;
@@ -67,6 +68,22 @@ public class ServiceCategoryDAO {
         return serviceCategories;
     }
 
+    public List<String> getAllServiceCategoryNames() throws SQLException {
+        List<String> serviceCategoryNames = FXCollections.observableArrayList();
+        final String sql = "SELECT Name FROM servicecategory;";
+        try {
+            statement = conn.prepareStatement(sql);
+            result = statement.executeQuery();
+            while (result.next()) {
+               String name =  result.getString("name");
+               serviceCategoryNames.add(name);
+            }
+            return serviceCategoryNames;
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+        }
+        return serviceCategoryNames;
+    }
 
     public boolean updateServiceCategory(ServiceCategory model) throws SQLException {
         final String sql = "UPDATE servicecategory SET Name=?,Description =? WHERE Id=?;";
