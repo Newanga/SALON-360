@@ -3,19 +3,26 @@ package Controllers;
 import DataAccess.ConnectionResources;
 import DataAccess.DataSource;
 import DataAccess.ServiceCategoryDAO;
+import Helpers.DialogMessages;
+import Helpers.Export;
 import Models.ServiceCategory;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
+import Validation.ServiceCategoryForm;
+import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+
+import javafx.scene.layout.StackPane;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -25,25 +32,29 @@ import java.util.ResourceBundle;
 public class ServiceCategoryController implements Initializable {
 
 
-    //Form Fields
     @FXML
-    private JFXTextField tfId;
+    private Label lblTotalServiceCategories;
 
+    //Form
     @FXML
-    private JFXTextField tfName;
-
-    @FXML
-    private JFXTextField tfDescription;
+    private StackPane stackpane;
 
     @FXML
-    private JFXButton btnCreate;
+    private JFXTextField tfSCId;
 
     @FXML
-    private JFXButton btnUpdate;
+    private JFXTextField tfSCName;
 
+    @FXML
+    private JFXTextArea taSCDescription;
 
-    //Service category Table Fields
+    @FXML
+    private JFXButton btnSCCreate;
 
+    @FXML
+    private JFXButton btnSCUpdate;
+
+    //Service category Table
     @FXML
     private JFXTextField tfSearchTableData;
 
@@ -51,39 +62,40 @@ public class ServiceCategoryController implements Initializable {
     private TableView<ServiceCategory> tvServiceCategory;
 
     @FXML
-    private TableColumn<ServiceCategory,Integer> colId;
+    private TableColumn<ServiceCategory, Integer> colSCId;
 
     @FXML
-    private TableColumn<ServiceCategory,String> colName;
+    private TableColumn<ServiceCategory, String> colSCName;
     @FXML
-    private TableColumn<ServiceCategory,String> colDescription;
+    private TableColumn<ServiceCategory, String> colSCDescription;
 
     private ObservableList<ServiceCategory> serviceCategoryList;
 
 
-    private ServiceCategory model=null;
-    private DataSource db=null;
-    private Connection conn=null;
-    private ServiceCategoryDAO dao=null;
+    private ServiceCategory model = null;
+    private DataSource db = null;
+    private Connection conn = null;
+    private ServiceCategoryDAO dao = null;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             showServiceCategories();
+            LoadSCDashboardData();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
 
     private void showServiceCategories() throws SQLException {
-        try{
-            serviceCategoryList=LoadServiceCategoriesFromDB();
-            colId.setCellValueFactory(new PropertyValueFactory<ServiceCategory,Integer>("id"));
-            colName.setCellValueFactory(new PropertyValueFactory<ServiceCategory,String>("name"));
-            colDescription.setCellValueFactory(new PropertyValueFactory<ServiceCategory,String>("description"));
+        try {
+            serviceCategoryList = LoadServiceCategoriesFromDB();
+            colSCId.setCellValueFactory(new PropertyValueFactory<ServiceCategory, Integer>("id"));
+            colSCName.setCellValueFactory(new PropertyValueFactory<ServiceCategory, String>("name"));
+            colSCDescription.setCellValueFactory(new PropertyValueFactory<ServiceCategory, String>("description"));
             tvServiceCategory.setItems(serviceCategoryList);
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
@@ -93,45 +105,49 @@ public class ServiceCategoryController implements Initializable {
     private ObservableList<ServiceCategory> LoadServiceCategoriesFromDB() throws SQLException {
         ObservableList<ServiceCategory> list = FXCollections.observableArrayList();
 
-        DataSource db=new DataSource();
-        Connection conn =db.getConnection();
-        ServiceCategoryDAO dao=new ServiceCategoryDAO(conn);
-        list= dao.getAllServiceCategories();
-        //closing connection resources
-        dao.close();
-        ConnectionResources.close(conn);
-
+        try {
+            db = new DataSource();
+            conn = db.getConnection();
+            dao = new ServiceCategoryDAO(conn);
+            list = dao.getAllServiceCategories();
+            return list;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            //closing connection resources
+            dao.close();
+            ConnectionResources.close(conn);
+        }
         return list;
 
     }
 
     //Load Data from single table row to form to view or update
-    public void tvMouseClicked(MouseEvent event) {
-        ServiceCategory serviceCategory=null;
+    public void tvSCMouseClicked(MouseEvent event) {
+        ServiceCategory serviceCategory = null;
 
         //check for a double click on table to load to object
         if (event.getClickCount() == 2) {
             serviceCategory = tvServiceCategory.getSelectionModel().getSelectedItem();
-        }
-        else {
+        } else {
             return;
         }
 
         //validates whether the selected object(row) is null or not null
-        if(serviceCategory ==null) {
+        if (serviceCategory == null) {
             return;
-        }
-        else {
-            tfId.setText(String.valueOf(serviceCategory.getId()));
-            tfName.setText(String.valueOf(serviceCategory.getName()));
-            tfDescription.setText(String.valueOf(serviceCategory.getDescription()));
-            btnCreate.setDisable(true);
-            btnUpdate.setDisable(false);
+        } else {
+            tfSCId.setText(String.valueOf(serviceCategory.getId()));
+            tfSCName.setText(String.valueOf(serviceCategory.getName()));
+            taSCDescription.setText(String.valueOf(serviceCategory.getDescription()));
+            btnSCCreate.setDisable(true);
+            btnSCUpdate.setDisable(false);
         }
     }
 
 
-    public void SearchFunction(){
+    //DataTable Search Function
+    public void SearchFunctionSC() {
         // Wrap the ObservableList in a FilteredList (initially display all data).
         FilteredList<ServiceCategory> filteredData = new FilteredList<>(serviceCategoryList, b -> true);
 
@@ -145,12 +161,11 @@ public class ServiceCategoryController implements Initializable {
                 // Compare name and description of every category with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (serviceCategory.getName().toLowerCase().indexOf(lowerCaseFilter) != -1 ) {
+                if (serviceCategory.getName().toLowerCase().indexOf(lowerCaseFilter) != -1) {
                     return true; // Filter matches name.
                 } else if (serviceCategory.getDescription().toLowerCase().indexOf(lowerCaseFilter) != -1) {
                     return true; // Filter matches description name.
-                }
-                else if (String.valueOf(serviceCategory.getId()).indexOf(lowerCaseFilter)!=-1)
+                } else if (String.valueOf(serviceCategory.getId()).indexOf(lowerCaseFilter) != -1)
                     return true;
                 else
                     return false; // Does not match.
@@ -167,6 +182,113 @@ public class ServiceCategoryController implements Initializable {
         // 5. Add sorted (and filtered) data to the table.
         tvServiceCategory.setItems(sortedData);
 
+    }
+
+    public void btnSCUpdateClicked(MouseEvent mouseEvent) throws SQLException {
+        DialogMessages dm = new DialogMessages(stackpane);
+        try {
+            model = new ServiceCategory();
+            model.setId(Integer.parseInt(tfSCId.getText()));
+            model.setName(tfSCName.getText());
+            model.setDescription(taSCDescription.getText());
+
+
+            db = new DataSource();
+            conn = db.getConnection();
+            dao = new ServiceCategoryDAO(conn);
+
+            boolean valid= ServiceCategoryForm.validate(model);
+            if(!valid) {
+                dm.EmptyData();
+                return;
+            }
+
+            Boolean result = dao.updateServiceCategory(model);
+
+            if (result == true)
+                dm.UpdateSuccessDialogBox();
+            else
+                dm.UpdateFailedDialogBox();
+
+            clearSCTextFields();
+            showServiceCategories();
+            btnSCUpdate.setDisable(true);
+            btnSCCreate.setDisable(false);
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            //closing connection resources
+            dao.close();
+            ConnectionResources.close(conn);
+        }
+
+    }
+
+    public void btnSCCreateClicked(MouseEvent mouseEvent) {
+        DialogMessages dm = new DialogMessages(stackpane);
+
+        try {
+            model = new ServiceCategory();
+            model.setName(tfSCName.getText());
+            model.setDescription(taSCDescription.getText());
+
+            db = new DataSource();
+            conn = db.getConnection();
+            dao = new ServiceCategoryDAO(conn);
+
+            boolean valid= ServiceCategoryForm.validate(model);
+            if(!valid) {
+                dm.EmptyData();
+                return;
+            }
+
+            Boolean result = dao.createNewServiceCategory(model);
+            if (result == true)
+                dm.InsertSuccessDialogBox();
+            else
+                dm.InsertFailedDialogBox();
+
+
+            clearSCTextFields();
+            showServiceCategories();
+            btnSCCreate.setDisable(false);
+            btnSCUpdate.setDisable(true);
+            LoadSCDashboardData();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void clearSCTextFields() {
+        tfSCId.clear();
+        tfSCName.clear();
+        taSCDescription.clear();
+        tfSearchTableData.clear();
+        ;
+    }
+
+    public void btnSCExcelExportClicked(MouseEvent mouseEvent) {
+        Export<ServiceCategory> export = new Export<>();
+        export.excel(tvServiceCategory);
+    }
+
+    public void btnSCKeyClicked(KeyEvent event) {
+
+        if (event.getCode() == KeyCode.ESCAPE) {
+            clearSCTextFields();
+            tvServiceCategory.getSelectionModel().clearSelection();
+            btnSCCreate.setDisable(false);
+            btnSCUpdate.setDisable(true);
+        }
+
+    }
+
+    //Dashboard
+    public void LoadSCDashboardData(){
+        Long scListCount=serviceCategoryList.stream().count();
+        String count=Long.toString(scListCount);
+        lblTotalServiceCategories.setText(count);
     }
 
 

@@ -58,10 +58,6 @@ public class ServiceCategoryDAO {
             result = statement.executeQuery();
             while (result.next()) {
                 ServiceCategory sc = new ServiceCategory(result.getInt("Id"), result.getString("Name"), result.getString("Description"));
-                //Retrieve by column name
-//                sc.setId(result.getInt("id"));
-//                sc.setName(result.getString("name"));
-//                sc.setDescription(result.getString("description"));
                 serviceCategories.add(sc);
             }
             return serviceCategories;
@@ -90,8 +86,9 @@ public class ServiceCategoryDAO {
         try {
             ConnectionResources.close(result, statement, conn);
         } catch (SQLException ex) {
-
+            ex.printStackTrace();
         }
     }
+
 
 }
