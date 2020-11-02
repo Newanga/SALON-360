@@ -46,7 +46,7 @@ public class DialogMessages {
         dialogContent.setBody(new Text(content));
         JFXButton close = new JFXButton("Close");
         close.setButtonType(JFXButton.ButtonType.RAISED);
-        close.setStyle("-fx-background-color: #8f041b");
+        close.setStyle("-fx-background-color: #EF5350");
         dialogContent.setActions(close);
 
         JFXDialog dialog = new JFXDialog(stackpane,dialogContent,JFXDialog.DialogTransition.BOTTOM);
@@ -90,7 +90,73 @@ public class DialogMessages {
         dialogContent.setBody(new Text(content));
         JFXButton close = new JFXButton("Close");
         close.setButtonType(JFXButton.ButtonType.RAISED);
-        close.setStyle("-fx-background-color: #8f041b");
+        close.setStyle("-fx-background-color: #EF5350");
+        dialogContent.setActions(close);
+
+        JFXDialog dialog = new JFXDialog(stackpane,dialogContent,JFXDialog.DialogTransition.BOTTOM);
+
+        close.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+            }
+        });
+        dialog.show();
+    }
+
+    public void EmptyDataInForm() {
+        String title ="Operation Failed";
+        String content="Some or all of the fields contain missing data.";
+        dialogContent= new JFXDialogLayout();
+        dialogContent.setHeading(new Text(title));
+        dialogContent.setBody(new Text(content));
+        JFXButton close = new JFXButton("Close");
+        close.setButtonType(JFXButton.ButtonType.RAISED);
+        close.setStyle("-fx-background-color: #ef5350");
+        dialogContent.setActions(close);
+
+        JFXDialog dialog = new JFXDialog(stackpane,dialogContent,JFXDialog.DialogTransition.BOTTOM);
+
+        close.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+            }
+        });
+        dialog.show();
+    }
+
+    public void NoDataToExport(){
+        String title ="Export Failed";
+        String content="No Data in table to Export.";
+        dialogContent= new JFXDialogLayout();
+        dialogContent.setHeading(new Text(title));
+        dialogContent.setBody(new Text(content));
+        JFXButton close = new JFXButton("Close");
+        close.setButtonType(JFXButton.ButtonType.RAISED);
+        close.setStyle("-fx-background-color: #EF5350");
+        dialogContent.setActions(close);
+
+        JFXDialog dialog = new JFXDialog(stackpane,dialogContent,JFXDialog.DialogTransition.BOTTOM);
+
+        close.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+            }
+        });
+        dialog.show();
+    }
+
+    public void ExportSuccessful(){
+        String title ="Export Successful";
+        String content="Find the exported data at the saved location.";
+        dialogContent= new JFXDialogLayout();
+        dialogContent.setHeading(new Text(title));
+        dialogContent.setBody(new Text(content));
+        JFXButton close = new JFXButton("Close");
+        close.setButtonType(JFXButton.ButtonType.RAISED);
+        close.setStyle("-fx-background-color: #00bfff");
         dialogContent.setActions(close);
 
         JFXDialog dialog = new JFXDialog(stackpane,dialogContent,JFXDialog.DialogTransition.BOTTOM);

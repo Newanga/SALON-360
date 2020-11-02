@@ -199,7 +199,7 @@ public class ServiceCategoryController implements Initializable {
 
             boolean valid= ServiceCategoryForm.validate(model);
             if(!valid) {
-                dm.EmptyData();
+                dm.EmptyDataInForm();
                 return;
             }
 
@@ -239,7 +239,7 @@ public class ServiceCategoryController implements Initializable {
 
             boolean valid= ServiceCategoryForm.validate(model);
             if(!valid) {
-                dm.EmptyData();
+                dm.EmptyDataInForm();
                 return;
             }
 
@@ -269,8 +269,9 @@ public class ServiceCategoryController implements Initializable {
     }
 
     public void btnSCExcelExportClicked(MouseEvent mouseEvent) {
-        Export<ServiceCategory> export = new Export<>();
-        export.excel(tvServiceCategory);
+            Export ex=new Export(tvServiceCategory,stackpane);
+            ex.run();
+
     }
 
     public void btnSCKeyClicked(KeyEvent event) {

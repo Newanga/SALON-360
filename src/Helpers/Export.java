@@ -1,6 +1,7 @@
 package Helpers;
 
 import javafx.scene.control.TableView;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -10,8 +11,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class Export<T> {
-    public void excel(TableView<T> tableView){
+public class Export<T>  implements Runnable{
+    private TableView<T> tableView;
+    private StackPane sp;
+
+    public Export(TableView<T> tableView,StackPane sp) {
+        this.tableView = tableView;
+        this.sp=sp;
+    }
+
+    public void excel() {
 
         XSSFWorkbook xssfWorkbook=new XSSFWorkbook();
         XSSFSheet xssfSheet=  xssfWorkbook.createSheet("Sheet1");
@@ -45,6 +54,13 @@ public class Export<T> {
             }
 
         }
+        //Terminate process if an excel sheet is generated
+        int rowTotal = xssfSheet.getLastRowNum();
+        if(rowTotal==0){
+            DialogMessages dm= new DialogMessages(sp);
+            dm.NoDataToExport();
+            return;
+        }
 
         //Create mew file chooser
         FileChooser fileChooser = new FileChooser();
@@ -61,12 +77,20 @@ public class Export<T> {
             try (FileOutputStream outputStream = new FileOutputStream(file.getAbsolutePath())) {
                 xssfWorkbook.write(outputStream);
                 xssfWorkbook.close();
+                DialogMessages dm= new DialogMessages(sp);
+                dm.ExportSuccessful();
             }
             catch (IOException ex) {
 
             }
+
         }
 
 
+    }
+
+    @Override
+    public void run() {
+        excel();
     }
 }

@@ -13,5 +13,6 @@
     <orderEntry type="library" name="MysqlConnectorJJava8.0.18" level="project" />
     <orderEntry type="library" name="JFoenix" level="project" />
     <orderEntry type="library" name="Junit5" level="project" />
+    <orderEntry type="library" name="ApachePOI" level="project" />
   </component>
 </module>
