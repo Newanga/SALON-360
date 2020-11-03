@@ -75,6 +75,11 @@ public class ServiceController implements Initializable {
     @FXML
     private Label lblSWithdrawnServices;
 
+
+    //Dashboard Service category TAB
+    public void LoadSDashboardData() {
+        //Todo: stream and map data in the list
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         InitialLoad();
@@ -100,6 +105,7 @@ public class ServiceController implements Initializable {
     private ServiceStateDAO serviceStatedao;
     private ServiceDAO servicedao;
     private ObservableList<Service> servicesList;
+    private Service smodel = null;
 
     public void LoadServiceComboBoxData() throws SQLException {
         cbSServiceCategory.setItems(FXCollections.observableArrayList(loadServiceCategory()));
@@ -169,10 +175,17 @@ public class ServiceController implements Initializable {
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            //closing connection resources
-            if (servicedao != null)
-                servicedao.close();
-            ConnectionResources.close(conn);
+            try{
+                //closing connection resources
+                if (servicedao != null)
+                    servicedao.close();
+                if(conn!=null)
+                    ConnectionResources.close(conn);
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
         }
         return list;
 
@@ -215,68 +228,6 @@ public class ServiceController implements Initializable {
         tvServices.setItems(sortedData);
 
     }
-
-
-    public void btnSCreateClicked() throws SQLException {
-        DialogMessages dm = new DialogMessages(stackpane);
-        DataSource db = new DataSource();
-        conn = db.getConnection();
-        servicedao = new ServiceDAO(conn);
-
-        try {
-            // TODO: 11/3/2020 load services from table to form ,
-            // TODO: 11/3/2020 Add update logic
-            // TODO: 11/3/2020 Update all tables and combo boxes after any CRUD operations since both tabs have dependent data
-            Service model = new Service();
-
-
-            //Double validation in parsing and prevent crash
-            String price = tfSPrice.getText();
-            Boolean validPrice = ServiceFormValidation.ValidatePrice(price);
-            if (!validPrice) {
-                dm.InvalidPrice();
-                return;
-            } else {
-                model.setPrice(Double.parseDouble(price));
-            }
-
-            model.setName(tfSName.getText());
-            model.setDescription(taSDescription.getText());
-            model.setCategory(cbSServiceCategory.getValue());
-            model.setState(cbSServiceState.getValue());
-
-            //Check for empty data
-            boolean emptyData = ServiceFormValidation.validateEmptyData(model);
-            if (emptyData) {
-                dm.EmptyDataInForm();
-                return;
-            }
-
-            boolean success = servicedao.CreateNewService(model);
-            if (success)
-                dm.InsertSuccessDialogBox();
-            else
-                dm.InsertFailedDialogBox();
-        } catch (SQLException ex) {
-
-        }
-
-        //closing Connection resources
-        if (servicedao != null)
-            servicedao.close();
-        ConnectionResources.close(conn);
-
-
-        //clear from data
-        clearSTextFieldsAndComboBoxes();
-
-        btnSCreate.setDisable(false);
-        btnSUpdate.setDisable(true);
-
-        //Refresh Datatable for applied updates
-        InitialLoad();
-    }
-
 
     public void clearSTextFieldsAndComboBoxes() {
         tfSId.clear();
@@ -331,8 +282,138 @@ public class ServiceController implements Initializable {
 
     }
 
-    public void btnSUpdateClicked(MouseEvent mouseEvent) {
+    public void btnSCreateClicked() throws SQLException {
+        DialogMessages dm = new DialogMessages(stackpane);
+        DataSource db = new DataSource();
+        conn = db.getConnection();
+        servicedao = new ServiceDAO(conn);
+
+        try {
+            smodel = new Service();
+
+
+            //Double validation in parsing and prevent crash
+            String price = tfSPrice.getText();
+            Boolean validPrice = ServiceFormValidation.ValidatePrice(price);
+            if (!validPrice) {
+                dm.InvalidPrice();
+                return;
+            } else {
+                smodel.setPrice(Double.parseDouble(price));
+            }
+
+            smodel.setName(tfSName.getText());
+            smodel.setDescription(taSDescription.getText());
+            smodel.setCategory(cbSServiceCategory.getValue());
+            smodel.setState(cbSServiceState.getValue());
+
+            //Check for empty data
+            boolean emptyData = ServiceFormValidation.validateEmptyData(smodel);
+            if (emptyData) {
+                dm.EmptyDataInForm();
+                return;
+            }
+
+            boolean success = servicedao.CreateNewService(smodel);
+            if (success)
+                dm.InsertSuccessDialogBox();
+            else
+                dm.InsertFailedDialogBox();
+        } catch (SQLException ex) {
+
+        }
+
+       try{
+           //closing Connection resources
+           if (servicedao != null)
+               servicedao.close();
+           if (conn != null)
+               ConnectionResources.close(conn);
+       }
+       catch (Exception ex){
+           ex.printStackTrace();
+       }
+
+
+        //clear from data
+        clearSTextFieldsAndComboBoxes();
+
+        btnSCreate.setDisable(false);
+        btnSUpdate.setDisable(true);
+
+        //Refresh Datatable for applied updates
+        InitialLoad();
     }
+
+    public void btnSUpdateClicked(MouseEvent mouseEvent) throws SQLException {
+        DialogMessages dm = new DialogMessages(stackpane);
+
+        try {
+            db = new DataSource();
+            conn = db.getConnection();
+            ServiceCategorydao = new ServiceCategoryDAO(conn);
+
+            smodel = new Service();
+
+            //Double validation in parsing and prevent crash
+            String price = tfSPrice.getText();
+            Boolean validPrice = ServiceFormValidation.ValidatePrice(price);
+            if (!validPrice) {
+                dm.InvalidPrice();
+                return;
+            } else {
+                smodel.setPrice(Double.parseDouble(price));
+            }
+
+            smodel.setId(Integer.parseInt(tfSId.getText()));
+            smodel.setName(tfSName.getText());
+            smodel.setDescription(taSDescription.getText());
+            smodel.setCategory(cbSServiceCategory.getValue());
+            smodel.setState(cbSServiceState.getValue());
+
+            //Check for empty data
+            boolean emptyData = ServiceFormValidation.validateEmptyData(smodel);
+            if (emptyData) {
+                dm.EmptyDataInForm();
+                return;
+            }
+
+            Boolean result = servicedao.UpdateService(smodel);
+
+            if (result == true)
+                dm.UpdateSuccessDialogBox();
+            else
+                dm.UpdateFailedDialogBox();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        clearSTextFieldsAndComboBoxes();
+        InitialLoad();
+        btnSUpdate.setDisable(true);
+        btnSCreate.setDisable(false);
+
+        try{
+            //closing connection resources
+            if (servicedao != null)
+                servicedao.close();
+            if (conn != null)
+                ConnectionResources.close(conn);
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -488,7 +569,7 @@ public class ServiceController implements Initializable {
     private ObservableList<ServiceCategory> serviceCategoryList;
 
 
-    private ServiceCategory model = null;
+    private ServiceCategory scmodel = null;
     private DataSource db = null;
     private Connection conn = null;
     private ServiceCategoryDAO ServiceCategorydao = null;
@@ -524,7 +605,8 @@ public class ServiceController implements Initializable {
             //closing connection resources
             if (serviceStatedao != null)
                 ServiceCategorydao.close();
-            ConnectionResources.close(conn);
+            if(conn!=null)
+                ConnectionResources.close(conn);
         }
         return list;
 
@@ -596,23 +678,23 @@ public class ServiceController implements Initializable {
     public void btnSCUpdateClicked(MouseEvent mouseEvent) throws SQLException {
         DialogMessages dm = new DialogMessages(stackpane);
         try {
-            model = new ServiceCategory();
-            model.setId(Integer.parseInt(tfSCId.getText()));
-            model.setName(tfSCName.getText());
-            model.setDescription(taSCDescription.getText());
+            scmodel = new ServiceCategory();
+            scmodel.setId(Integer.parseInt(tfSCId.getText()));
+            scmodel.setName(tfSCName.getText());
+            scmodel.setDescription(taSCDescription.getText());
 
 
             db = new DataSource();
             conn = db.getConnection();
             ServiceCategorydao = new ServiceCategoryDAO(conn);
 
-            boolean valid = ServiceCategoryFormValidation.validate(model);
+            boolean valid = ServiceCategoryFormValidation.validate(scmodel);
             if (!valid) {
                 dm.EmptyDataInForm();
                 return;
             }
 
-            Boolean result = ServiceCategorydao.updateServiceCategory(model);
+            Boolean result = ServiceCategorydao.updateServiceCategory(scmodel);
 
             if (result == true)
                 dm.UpdateSuccessDialogBox();
@@ -627,10 +709,17 @@ public class ServiceController implements Initializable {
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            //closing connection resources
-            if (serviceStatedao != null)
-                ServiceCategorydao.close();
-            ConnectionResources.close(conn);
+            try{
+                //closing connection resources
+                if (serviceStatedao != null)
+                    ServiceCategorydao.close();
+                if(conn!=null)
+                    ConnectionResources.close(conn);
+            }
+            catch (Exception ex){
+                ex.printStackTrace();
+            }
+
         }
 
     }
@@ -640,21 +729,21 @@ public class ServiceController implements Initializable {
         DialogMessages dm = new DialogMessages(stackpane);
 
         try {
-            model = new ServiceCategory();
-            model.setName(tfSCName.getText());
-            model.setDescription(taSCDescription.getText());
+            scmodel = new ServiceCategory();
+            scmodel.setName(tfSCName.getText());
+            scmodel.setDescription(taSCDescription.getText());
 
             db = new DataSource();
             conn = db.getConnection();
             ServiceCategorydao = new ServiceCategoryDAO(conn);
 
-            boolean valid = ServiceCategoryFormValidation.validate(model);
+            boolean valid = ServiceCategoryFormValidation.validate(scmodel);
             if (!valid) {
                 dm.EmptyDataInForm();
                 return;
             }
 
-            Boolean result = ServiceCategorydao.createNewServiceCategory(model);
+            Boolean result = ServiceCategorydao.createNewServiceCategory(scmodel);
             if (result == true)
                 dm.InsertSuccessDialogBox();
             else
@@ -668,9 +757,16 @@ public class ServiceController implements Initializable {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (serviceStatedao != null)
-                serviceStatedao.close();
-            ConnectionResources.close(conn);
+            try{
+                if (serviceStatedao != null)
+                    serviceStatedao.close();
+                if(conn!=null)
+                    ConnectionResources.close(conn);
+            }
+            catch (Exception ex){
+                ex.printStackTrace();
+            }
+
         }
     }
 

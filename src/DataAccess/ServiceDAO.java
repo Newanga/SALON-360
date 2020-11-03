@@ -52,9 +52,57 @@ public class ServiceDAO {
     }
 
 
-//    public Boolean UpdateService(Service model) {
-//
-//    }
+    public Boolean UpdateService(Service model) throws SQLException {
+        DataSource db = new DataSource();
+        ServiceCategoryDAO scdao = null;
+        ServiceStateDAO ssdao = null;
+
+        final String sql = "UPDATE service SET Name=?,Price=?,Description=?,CategoryId=?,StateId=? where Id=?;";
+        //Implementing a transactions
+        try {
+            conn = db.getConnection();
+            conn.setAutoCommit(false);
+
+            //Get ID from Servicecatergory based on category name
+            scdao = new ServiceCategoryDAO(conn);
+            int serviceCategoryId = scdao.getServiceCategoryIdByName(model.getCategory());
+
+            //Get ID from servicestate based on state name
+            ssdao = new ServiceStateDAO(conn);
+            int serviceStateId = ssdao.getServiceStateIdByName(model.getState());
+
+            //USe the other properties of model and add new record tt service
+            statement = conn.prepareStatement(sql);
+            statement.setString(1, model.getName());
+            statement.setDouble(2, model.getPrice());
+            statement.setString(3, model.getDescription());
+            statement.setInt(4, serviceCategoryId);
+            statement.setInt(5, serviceStateId);
+            statement.setInt(6, model.getId());
+            statement.executeUpdate();
+            conn.commit();
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            conn.rollback();
+            return false;
+        } finally {
+            try{
+                conn.setAutoCommit(true);
+                if (scdao != null)
+                    scdao.close();
+                if (ssdao != null)
+                    ssdao.close();
+                if(conn!=null)
+                    ConnectionResources.close(conn);
+            }
+            catch (Exception ex){
+                ex.printStackTrace();
+            }
+
+        }
+    }
+
 
     public Boolean CreateNewService(Service model) throws SQLException {
         DataSource db = new DataSource();
@@ -91,14 +139,18 @@ public class ServiceDAO {
             conn.rollback();
             return false;
         } finally {
-            conn.setAutoCommit(true);
-            if (scdao != null)
-                scdao.close();
-            if(ssdao!=null)
-                ssdao.close();
-            ConnectionResources.close(conn);
-        }
+            try{
+                conn.setAutoCommit(true);
+                if (scdao != null)
+                    scdao.close();
+                if (ssdao != null)
+                    ssdao.close();
+                ConnectionResources.close(conn);
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
 
+        }
 
     }
 }
