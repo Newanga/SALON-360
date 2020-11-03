@@ -34,6 +34,22 @@ public class ServiceStateDAO {
         return serviceStateNames;
     }
 
+    public int getServiceStateIdByName(String name) throws SQLException {
+        final String sql = "SELECT Id FROM servicestate WHERE Name=?";
+        try {
+            statement = conn.prepareStatement(sql);
+            statement.setString(1, name);
+            result= statement.executeQuery();
+            // Navigate to first row
+            result.absolute(1);
+            //Get first row data
+            int id = result.getInt("id");
+            return id;
+        } catch (SQLException throwables) {
+            return 0;
+        }
+    }
+
     public void close() throws SQLException {
         try {
             ConnectionResources.close(result, statement, conn);

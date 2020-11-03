@@ -5,6 +5,7 @@ import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,7 +24,7 @@ public class ServiceCategoryDAO {
         this.conn = conn;
     }
 
-    public Boolean createNewServiceCategory(ServiceCategory model) throws SQLException {
+    public Boolean createNewServiceCategory(@NotNull ServiceCategory model) throws SQLException {
         String sql = "INSERT INTO servicecategory (name, description) VALUES (?, ?);";
         try {
             statement = conn.prepareStatement(sql);
@@ -39,15 +40,18 @@ public class ServiceCategoryDAO {
     }
 
     public int getServiceCategoryIdByName(String name) throws SQLException {
-        int id = 0;
         final String sql = "SELECT Id FROM servicecategory WHERE Name=?";
         try {
             statement = conn.prepareStatement(sql);
             statement.setString(1, name);
-            id = statement.executeUpdate();
+            result= statement.executeQuery();
+            // Navigate to first row
+            result.absolute(1);
+            //Get first row data
+            int id = result.getInt("id");
             return id;
         } catch (SQLException throwables) {
-            return id;
+            return 0;
         }
     }
 

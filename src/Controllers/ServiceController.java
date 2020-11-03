@@ -6,7 +6,10 @@ import Helpers.Export;
 import Models.Service;
 import Models.ServiceCategory;
 import Validation.ServiceCategoryForm;
+import Validation.ServiceForm;
 import com.jfoenix.controls.*;
+import com.sun.xml.bind.v2.TODO;
+import groovy.transform.Undefined;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -79,13 +82,12 @@ public class ServiceController implements Initializable {
         try {
             showServiceCategories();
             LoadSCDashboardData();
-
             //Load Service Dashboard
             LoadSCDashboardData();
 
+
             //Show Services
             ShowServices();
-
             //LoadComboBoxData
             LoadServiceComboBoxData();
         } catch (SQLException throwables) {
@@ -93,9 +95,8 @@ public class ServiceController implements Initializable {
         }
     }
 
-    private ServiceStateDAO ServiceStatedao;
-    private ServiceDAO Servicedao;
-
+    private ServiceStateDAO serviceStatedao;
+    private ServiceDAO servicedao;
     private ObservableList<Service> servicesList;
 
     public void LoadServiceComboBoxData() throws SQLException {
@@ -109,13 +110,13 @@ public class ServiceController implements Initializable {
 
             db = new DataSource();
             conn = db.getConnection();
-            ServiceStatedao = new ServiceStateDAO(conn);
-            list = ServiceStatedao.getAllServiceStateNames();
+            serviceStatedao = new ServiceStateDAO(conn);
+            list = serviceStatedao.getAllServiceStateNames();
 
         } catch (SQLException ex) {
-
+            ex.printStackTrace();
         }
-        ServiceStatedao.close();
+        serviceStatedao.close();
         ConnectionResources.close(conn);
         return list;
     }
@@ -130,7 +131,7 @@ public class ServiceController implements Initializable {
             list = ServiceCategorydao.getAllServiceCategoryNames();
 
         } catch (SQLException ex) {
-
+            ex.printStackTrace();
         }
         ServiceCategorydao.close();
         ConnectionResources.close(conn);
@@ -157,20 +158,19 @@ public class ServiceController implements Initializable {
         try {
             db = new DataSource();
             conn = db.getConnection();
-            Servicedao = new ServiceDAO(conn);
-            list = Servicedao.getAllServices();
+            servicedao = new ServiceDAO(conn);
+            list = servicedao.getAllServices();
             return list;
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
             //closing connection resources
-            Servicedao.close();
+            servicedao.close();
             ConnectionResources.close(conn);
         }
         return list;
 
     }
-
 
     //DataTable Search Function SC TAB
     public void SearchFunctionS() {
@@ -210,6 +210,53 @@ public class ServiceController implements Initializable {
         tvServices.setItems(sortedData);
 
     }
+
+
+    public void btnSCreateClicked() throws SQLException {
+        DialogMessages dm = new DialogMessages(stackpane);
+        DataSource db= new DataSource();
+        conn=db.getConnection();
+        servicedao=new ServiceDAO(conn);
+
+        // TODO: 11/3/2020 load services from table to form ,
+        // TODO: 11/3/2020 Add update logic
+        // TODO: 11/3/2020 Update all tables and combo boxes after any CRUD operations since both tabs have dependent data
+        Service model = new Service();
+
+
+        //Double validation in parsing and prevent crash
+        String price=tfSPrice.getText();
+        Boolean validPrice=ServiceForm.ValidatePrice(price);
+        if(!validPrice){
+            dm.InvalidPrice();
+            return;
+        }
+        else {
+            model.setPrice(Double.parseDouble(price));
+        }
+
+        model.setName(tfSName.getText());
+        model.setDescription(taSDescription.getText());
+        model.setCategory(cbSServiceCategory.getValue());
+        model.setState(cbSServiceState.getValue());
+
+        boolean emptyData= ServiceForm.validateEmptyData(model);
+        if(emptyData) {
+            dm.EmptyDataInForm();
+            return;
+        }
+
+        boolean success=servicedao.CreateNewService(model);
+
+        if(success)
+            dm.InsertSuccessDialogBox();
+        else
+            dm.InsertFailedDialogBox();
+
+        ShowServices();
+
+    }
+
 
 
 

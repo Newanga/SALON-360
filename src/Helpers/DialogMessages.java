@@ -169,4 +169,26 @@ public class DialogMessages {
         });
         dialog.show();
     }
+
+    public void InvalidPrice() {
+        String title ="Invalid Price";
+        String content="Price should be a value less than 10000.00";
+        dialogContent= new JFXDialogLayout();
+        dialogContent.setHeading(new Text(title));
+        dialogContent.setBody(new Text(content));
+        JFXButton close = new JFXButton("Close");
+        close.setButtonType(JFXButton.ButtonType.RAISED);
+        close.setStyle("-fx-background-color: #EF5350");
+        dialogContent.setActions(close);
+
+        JFXDialog dialog = new JFXDialog(stackpane,dialogContent,JFXDialog.DialogTransition.BOTTOM);
+
+        close.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+            }
+        });
+        dialog.show();
+    }
 }
