@@ -3,13 +3,13 @@ package Validation;
 import Models.Service;
 import Models.ServiceCategory;
 
-public class ServiceForm {
+public class ServiceFormValidation {
 
     public static Boolean validateEmptyData(Service model) {
         if (model.getName().isEmpty() || model.getDescription().isEmpty() || model.getPrice() == 0.0d)
-            return false;
-        else
             return true;
+        else
+            return false;
     }
 
     public static Boolean ValidatePrice(String price) {

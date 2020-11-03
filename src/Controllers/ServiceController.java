@@ -5,11 +5,9 @@ import Helpers.DialogMessages;
 import Helpers.Export;
 import Models.Service;
 import Models.ServiceCategory;
-import Validation.ServiceCategoryForm;
-import Validation.ServiceForm;
+import Validation.ServiceCategoryFormValidation;
+import Validation.ServiceFormValidation;
 import com.jfoenix.controls.*;
-import com.sun.xml.bind.v2.TODO;
-import groovy.transform.Undefined;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -39,17 +37,17 @@ public class ServiceController implements Initializable {
     @FXML
     private TableView<Service> tvServices;
     @FXML
-    private TableColumn<Service,Integer> colSId;
+    private TableColumn<Service, Integer> colSId;
     @FXML
-    private TableColumn<Service,String> colSName;
+    private TableColumn<Service, String> colSName;
     @FXML
-    private TableColumn<Service,Double> colSPrice;
+    private TableColumn<Service, Double> colSPrice;
     @FXML
-    private TableColumn<Service,String> colSCategory;
+    private TableColumn<Service, String> colSCategory;
     @FXML
-    private TableColumn<Service,String> colSState;
+    private TableColumn<Service, String> colSState;
     @FXML
-    private TableColumn<Service,String> colSDescription;
+    private TableColumn<Service, String> colSDescription;
 
 
     @FXML
@@ -79,9 +77,13 @@ public class ServiceController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        InitialLoad();
+    }
+
+    public void InitialLoad() {
         try {
             showServiceCategories();
-            LoadSCDashboardData();
+
             //Load Service Dashboard
             LoadSCDashboardData();
 
@@ -116,7 +118,9 @@ public class ServiceController implements Initializable {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        serviceStatedao.close();
+        //Close SQL Resources
+        if (servicedao != null)
+            serviceStatedao.close();
         ConnectionResources.close(conn);
         return list;
     }
@@ -133,14 +137,15 @@ public class ServiceController implements Initializable {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        ServiceCategorydao.close();
+        if (serviceStatedao != null)
+            ServiceCategorydao.close();
         ConnectionResources.close(conn);
 
         return list;
     }
 
     private void ShowServices() throws SQLException {
-        servicesList=LoadServicesFromDB();
+        servicesList = LoadServicesFromDB();
         colSId.setCellValueFactory(new PropertyValueFactory<Service, Integer>("id"));
         colSName.setCellValueFactory(new PropertyValueFactory<Service, String>("name"));
 
@@ -165,7 +170,8 @@ public class ServiceController implements Initializable {
             ex.printStackTrace();
         } finally {
             //closing connection resources
-            servicedao.close();
+            if (servicedao != null)
+                servicedao.close();
             ConnectionResources.close(conn);
         }
         return list;
@@ -193,8 +199,7 @@ public class ServiceController implements Initializable {
                     return true; // Filter matches price.
                 } else if (String.valueOf(service.getId()).indexOf(lowerCaseFilter) != -1) {
                     return true;
-                }
-                else
+                } else
                     return false; // Does not match.
             });
         });
@@ -214,48 +219,121 @@ public class ServiceController implements Initializable {
 
     public void btnSCreateClicked() throws SQLException {
         DialogMessages dm = new DialogMessages(stackpane);
-        DataSource db= new DataSource();
-        conn=db.getConnection();
-        servicedao=new ServiceDAO(conn);
+        DataSource db = new DataSource();
+        conn = db.getConnection();
+        servicedao = new ServiceDAO(conn);
 
-        // TODO: 11/3/2020 load services from table to form ,
-        // TODO: 11/3/2020 Add update logic
-        // TODO: 11/3/2020 Update all tables and combo boxes after any CRUD operations since both tabs have dependent data
-        Service model = new Service();
+        try {
+            // TODO: 11/3/2020 load services from table to form ,
+            // TODO: 11/3/2020 Add update logic
+            // TODO: 11/3/2020 Update all tables and combo boxes after any CRUD operations since both tabs have dependent data
+            Service model = new Service();
 
 
-        //Double validation in parsing and prevent crash
-        String price=tfSPrice.getText();
-        Boolean validPrice=ServiceForm.ValidatePrice(price);
-        if(!validPrice){
-            dm.InvalidPrice();
+            //Double validation in parsing and prevent crash
+            String price = tfSPrice.getText();
+            Boolean validPrice = ServiceFormValidation.ValidatePrice(price);
+            if (!validPrice) {
+                dm.InvalidPrice();
+                return;
+            } else {
+                model.setPrice(Double.parseDouble(price));
+            }
+
+            model.setName(tfSName.getText());
+            model.setDescription(taSDescription.getText());
+            model.setCategory(cbSServiceCategory.getValue());
+            model.setState(cbSServiceState.getValue());
+
+            //Check for empty data
+            boolean emptyData = ServiceFormValidation.validateEmptyData(model);
+            if (emptyData) {
+                dm.EmptyDataInForm();
+                return;
+            }
+
+            boolean success = servicedao.CreateNewService(model);
+            if (success)
+                dm.InsertSuccessDialogBox();
+            else
+                dm.InsertFailedDialogBox();
+        } catch (SQLException ex) {
+
+        }
+
+        //closing Connection resources
+        if (servicedao != null)
+            servicedao.close();
+        ConnectionResources.close(conn);
+
+
+        //clear from data
+        clearSTextFieldsAndComboBoxes();
+
+        btnSCreate.setDisable(false);
+        btnSUpdate.setDisable(true);
+
+        //Refresh Datatable for applied updates
+        InitialLoad();
+    }
+
+
+    public void clearSTextFieldsAndComboBoxes() {
+        tfSId.clear();
+        tfSName.clear();
+        tfSPrice.clear();
+        tfSSearchTableData.clear();
+        cbSServiceState.setItems(null);
+        cbSServiceCategory.setItems(null);
+    }
+
+    public void tvSMouseClicked(MouseEvent event) {
+        Service model = null;
+
+        //check for a double click on table to load to object
+        if (event.getClickCount() == 2) {
+            model = tvServices.getSelectionModel().getSelectedItem();
+        } else {
             return;
         }
-        else {
-            model.setPrice(Double.parseDouble(price));
-        }
 
-        model.setName(tfSName.getText());
-        model.setDescription(taSDescription.getText());
-        model.setCategory(cbSServiceCategory.getValue());
-        model.setState(cbSServiceState.getValue());
-
-        boolean emptyData= ServiceForm.validateEmptyData(model);
-        if(emptyData) {
-            dm.EmptyDataInForm();
+        //validates whether the selected object(row) is null or not null
+        if (model == null) {
             return;
+        } else {
+            tfSId.setText(String.valueOf(model.getId()));
+            tfSName.setText(model.getName());
+            tfSPrice.setText(String.valueOf(model.getPrice()));
+            taSDescription.setText(model.getDescription());
+            cbSServiceState.setValue(model.getState());
+            cbSServiceCategory.setValue(model.getCategory());
+            btnSCreate.setDisable(true);
+            btnSUpdate.setDisable(false);
         }
+    }
 
-        boolean success=servicedao.CreateNewService(model);
+    public void btnSKeyClicked(KeyEvent event) throws SQLException {
 
-        if(success)
-            dm.InsertSuccessDialogBox();
-        else
-            dm.InsertFailedDialogBox();
+        if (event.getCode() == KeyCode.ESCAPE) {
+            tvServices.getSelectionModel().clearSelection();
+            clearSTextFieldsAndComboBoxes();
+            btnSCreate.setDisable(false);
+            btnSUpdate.setDisable(true);
+            LoadServiceComboBoxData();
 
-        ShowServices();
+        }
 
     }
+
+    public void btnSExcelExportClicked(MouseEvent mouseEvent) {
+        Export ex = new Export(tvServices, stackpane);
+        ex.run();
+
+    }
+
+    public void btnSUpdateClicked(MouseEvent mouseEvent) {
+    }
+
 
 
 
@@ -444,7 +522,8 @@ public class ServiceController implements Initializable {
             ex.printStackTrace();
         } finally {
             //closing connection resources
-            ServiceCategorydao.close();
+            if (serviceStatedao != null)
+                ServiceCategorydao.close();
             ConnectionResources.close(conn);
         }
         return list;
@@ -467,8 +546,8 @@ public class ServiceController implements Initializable {
             return;
         } else {
             tfSCId.setText(String.valueOf(serviceCategory.getId()));
-            tfSCName.setText(String.valueOf(serviceCategory.getName()));
-            taSCDescription.setText(String.valueOf(serviceCategory.getDescription()));
+            tfSCName.setText(serviceCategory.getName());
+            taSCDescription.setText(serviceCategory.getDescription());
             btnSCCreate.setDisable(true);
             btnSCUpdate.setDisable(false);
         }
@@ -527,7 +606,7 @@ public class ServiceController implements Initializable {
             conn = db.getConnection();
             ServiceCategorydao = new ServiceCategoryDAO(conn);
 
-            boolean valid = ServiceCategoryForm.validate(model);
+            boolean valid = ServiceCategoryFormValidation.validate(model);
             if (!valid) {
                 dm.EmptyDataInForm();
                 return;
@@ -541,7 +620,7 @@ public class ServiceController implements Initializable {
                 dm.UpdateFailedDialogBox();
 
             clearSCTextFields();
-            showServiceCategories();
+            InitialLoad();
             btnSCUpdate.setDisable(true);
             btnSCCreate.setDisable(false);
 
@@ -549,14 +628,15 @@ public class ServiceController implements Initializable {
             ex.printStackTrace();
         } finally {
             //closing connection resources
-            ServiceCategorydao.close();
+            if (serviceStatedao != null)
+                ServiceCategorydao.close();
             ConnectionResources.close(conn);
         }
 
     }
 
     //SC TAB
-    public void btnSCCreateClicked(MouseEvent mouseEvent) {
+    public void btnSCCreateClicked(MouseEvent mouseEvent) throws SQLException {
         DialogMessages dm = new DialogMessages(stackpane);
 
         try {
@@ -568,7 +648,7 @@ public class ServiceController implements Initializable {
             conn = db.getConnection();
             ServiceCategorydao = new ServiceCategoryDAO(conn);
 
-            boolean valid = ServiceCategoryForm.validate(model);
+            boolean valid = ServiceCategoryFormValidation.validate(model);
             if (!valid) {
                 dm.EmptyDataInForm();
                 return;
@@ -582,12 +662,15 @@ public class ServiceController implements Initializable {
 
 
             clearSCTextFields();
-            showServiceCategories();
+            InitialLoad();
             btnSCCreate.setDisable(false);
             btnSCUpdate.setDisable(true);
-            LoadSCDashboardData();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } finally {
+            if (serviceStatedao != null)
+                serviceStatedao.close();
+            ConnectionResources.close(conn);
         }
     }
 
@@ -597,7 +680,6 @@ public class ServiceController implements Initializable {
         tfSCName.clear();
         taSCDescription.clear();
         tfSCSearchTableData.clear();
-        ;
     }
 
     //SC Tab

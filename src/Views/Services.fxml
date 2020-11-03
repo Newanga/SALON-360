@@ -26,7 +26,7 @@
                 <JFXTabPane cacheShape="false" centerShape="false" depthTest="DISABLE" focusTraversable="false" layoutY="50.0" prefHeight="954.0" prefWidth="1680.0" scaleShape="false">
                     <Tab text="Services">
                         <content>
-                            <AnchorPane prefHeight="841.0" prefWidth="1335.0">
+                            <AnchorPane onKeyPressed="#btnSKeyClicked" prefHeight="841.0" prefWidth="1335.0">
                                 <children>
                                     <HBox alignment="CENTER" layoutY="25.0" prefHeight="90.0" prefWidth="1680.0" spacing="100.0">
                                         <children>
@@ -270,7 +270,7 @@
                                                                     <Image url="@../Resources/Icons/pdf.png" />
                                                                 </image>
                                                             </ImageView>
-                                                            <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fitHeight="29.0" fitWidth="27.0" onMouseClicked="#btnSExcelExportClicked" pickOnBounds="true" preserveRatio="true">
                                                                 <image>
                                                                     <Image url="@../Resources/Icons/excel.png" />
                                                                 </image>
@@ -288,7 +288,7 @@
                                                     </JFXTextField>
                                                 </children>
                                             </HBox>
-                                            <TableView fx:id="tvServices" prefHeight="326.0" prefWidth="799.0" style="-fx-background-color: #FFFFFF;">
+                                            <TableView fx:id="tvServices" onMouseClicked="#tvSMouseClicked" prefHeight="326.0" prefWidth="799.0" style="-fx-background-color: #FFFFFF;">
                                                 <columns>
                                                     <TableColumn fx:id="colSId" prefWidth="75.0" text="ID #" />
                                                     <TableColumn fx:id="colSName" prefWidth="75.0" text="NAME" />
@@ -329,7 +329,7 @@
                                             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                                 <children>
                                                     <JFXButton fx:id="btnSCreate" onMouseClicked="#btnSCreateClicked" style="-fx-background-color: #00b67a;" text="Create" />
-                                                    <JFXButton fx:id="btnSUpdate" onMouseClicked="#btnSCUpdateClicked" style="-fx-background-color: yellow;" text="Create" />
+                                                    <JFXButton fx:id="btnSUpdate" disable="true" onMouseClicked="#btnSUpdateClicked" style="-fx-background-color: yellow;" text="Update" />
                                                 </children>
                                                 <padding>
                                                     <Insets right="10.0" />
