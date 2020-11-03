@@ -89,4 +89,32 @@ public class HomeController implements Initializable {
 
     }
 
+    public void btnCustomersClicked(ActionEvent actionEvent) {
+
+        VBox hb=new VBox();
+        JFXSpinner spinner=new JFXSpinner();
+        hb.getChildren().add(spinner);
+        hb.setAlignment(Pos.CENTER);
+        borderpane.setCenter(hb);
+
+        Task<Parent> loadUI = new Task<Parent>() {
+            @Override
+            public Parent call() throws IOException {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/" + "Customers" +".fxml"));
+                Parent root = loader.load();
+                spinner.setVisible(false);
+                return root ;
+            }
+        };
+
+        loadUI.setOnSucceeded(e -> {
+            Parent root = loadUI.getValue();
+            borderpane.getChildren().remove(borderpane.getCenter());
+            borderpane.setCenter(root);
+        });
+
+        Thread thread = new Thread(loadUI);
+        thread.start();
+
+    }
 }
