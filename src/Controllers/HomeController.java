@@ -89,8 +89,8 @@ public class HomeController implements Initializable {
 
     }
 
-    public void btnCustomersClicked(ActionEvent actionEvent) {
 
+    public void btnCustomersClicked(ActionEvent actionEvent) {
         VBox hb=new VBox();
         JFXSpinner spinner=new JFXSpinner();
         hb.getChildren().add(spinner);
@@ -115,6 +115,5 @@ public class HomeController implements Initializable {
 
         Thread thread = new Thread(loadUI);
         thread.start();
-
     }
 }

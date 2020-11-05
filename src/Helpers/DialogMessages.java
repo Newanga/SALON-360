@@ -191,4 +191,70 @@ public class DialogMessages {
         });
         dialog.show();
     }
+
+    public void InvalidDate() {
+        String title ="Invalid Date";
+        String content="Please select a date from date picker or enter a valid date in the format MM/DD/YYYY";
+        dialogContent= new JFXDialogLayout();
+        dialogContent.setHeading(new Text(title));
+        dialogContent.setBody(new Text(content));
+        JFXButton close = new JFXButton("Close");
+        close.setButtonType(JFXButton.ButtonType.RAISED);
+        close.setStyle("-fx-background-color: #EF5350");
+        dialogContent.setActions(close);
+
+        JFXDialog dialog = new JFXDialog(stackpane,dialogContent,JFXDialog.DialogTransition.BOTTOM);
+
+        close.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+            }
+        });
+        dialog.show();
+    }
+
+    public void InvalidContactNo() {
+        String title ="Invalid ContactNo";
+        String content="The contact No should only contain 10 digits.";
+        dialogContent= new JFXDialogLayout();
+        dialogContent.setHeading(new Text(title));
+        dialogContent.setBody(new Text(content));
+        JFXButton close = new JFXButton("Close");
+        close.setButtonType(JFXButton.ButtonType.RAISED);
+        close.setStyle("-fx-background-color: #EF5350");
+        dialogContent.setActions(close);
+
+        JFXDialog dialog = new JFXDialog(stackpane,dialogContent,JFXDialog.DialogTransition.BOTTOM);
+
+        close.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+            }
+        });
+        dialog.show();
+    }
+
+    public void InvalidEmail() {
+        String title ="Invalid Email";
+        String content="Please recheck the entered email address.";
+        dialogContent= new JFXDialogLayout();
+        dialogContent.setHeading(new Text(title));
+        dialogContent.setBody(new Text(content));
+        JFXButton close = new JFXButton("Close");
+        close.setButtonType(JFXButton.ButtonType.RAISED);
+        close.setStyle("-fx-background-color: #EF5350");
+        dialogContent.setActions(close);
+
+        JFXDialog dialog = new JFXDialog(stackpane,dialogContent,JFXDialog.DialogTransition.BOTTOM);
+
+        close.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+            }
+        });
+        dialog.show();
+    }
 }

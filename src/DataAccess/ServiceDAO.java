@@ -1,7 +1,6 @@
 package DataAccess;
 
 import Models.Service;
-import Models.ServiceCategory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -20,14 +19,6 @@ public class ServiceDAO {
         this.conn = conn;
     }
 
-
-    public void close() throws SQLException {
-        try {
-            ConnectionResources.close(result, statement, conn);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
 
     public ObservableList<Service> getAllServices() {
         ObservableList<Service> serviceCategories = FXCollections.observableArrayList();
@@ -71,7 +62,7 @@ public class ServiceDAO {
             ssdao = new ServiceStateDAO(conn);
             int serviceStateId = ssdao.getServiceStateIdByName(model.getState());
 
-            //USe the other properties of model and add new record tt service
+            //USe the other properties of model and add new record t0 service
             statement = conn.prepareStatement(sql);
             statement.setString(1, model.getName());
             statement.setDouble(2, model.getPrice());
@@ -152,5 +143,13 @@ public class ServiceDAO {
 
         }
 
+    }
+
+    public void close() throws SQLException {
+        try {
+            ConnectionResources.close(result, statement, conn);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 }

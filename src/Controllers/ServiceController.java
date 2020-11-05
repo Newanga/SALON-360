@@ -234,6 +234,7 @@ public class ServiceController implements Initializable {
         tfSName.clear();
         tfSPrice.clear();
         tfSSearchTableData.clear();
+        taSDescription.clear();
         cbSServiceState.setItems(null);
         cbSServiceCategory.setItems(null);
     }
