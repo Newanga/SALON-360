@@ -1,6 +1,6 @@
 package tests;
 
-import DataAccess.DataSource;
+import data_access.DataSource;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;

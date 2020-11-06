@@ -1,10 +1,9 @@
 package tests;
 
 
-import DataAccess.DataSource;
-import DataAccess.ServiceCategoryDAO;
-import Models.ServiceCategory;
-import org.junit.jupiter.api.BeforeAll;
+import data_access.DataSource;
+import data_access.ServiceCategoryDAO;
+import models.ServiceCategory;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
