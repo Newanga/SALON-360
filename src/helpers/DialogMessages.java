@@ -257,4 +257,26 @@ public class DialogMessages {
         });
         dialog.show();
     }
+
+      public void InvalidQuantity() {
+        String title ="Invalid Quantity";
+        String content="Quantity should be greater than 1 and max of 100";
+        dialogContent= new JFXDialogLayout();
+        dialogContent.setHeading(new Text(title));
+        dialogContent.setBody(new Text(content));
+        JFXButton close = new JFXButton("Close");
+        close.setButtonType(JFXButton.ButtonType.RAISED);
+        close.setStyle("-fx-background-color: #EF5350");
+        dialogContent.setActions(close);
+
+        JFXDialog dialog = new JFXDialog(stackpane,dialogContent,JFXDialog.DialogTransition.BOTTOM);
+
+        close.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+            }
+        });
+        dialog.show();
+    }
 }
