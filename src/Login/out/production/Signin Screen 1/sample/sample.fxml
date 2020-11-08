@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="533.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="78.0" layoutY="59.0" prefHeight="415.0" prefWidth="644.0" style="-fx-background-color: #fff; -fx-background-radius: 40px;">
+         <effect>
+            <DropShadow color="#9e9e9e" />
+         </effect>
+         <children>
+            <Label layoutX="285.0" layoutY="52.0" text="Sign in" textFill="#00b9ff">
+               <font>
+                  <Font name="Microsoft JhengHei UI Light" size="28.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="238.0" layoutY="89.0" prefHeight="37.0" prefWidth="179.0" text="Hello there , Lets Make a Style!" textAlignment="CENTER" textFill="#b2b2b2" wrapText="true">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Label>
+            <JFXTextField focusColor="#00b9ffe3" labelFloat="true" layoutX="220.0" layoutY="164.0" maxWidth="215.0" minWidth="196.0" prefHeight="31.0" prefWidth="215.0" promptText="Username" />
+            <JFXPasswordField focusColor="#07b0fa" labelFloat="true" layoutX="220.0" layoutY="221.0" maxWidth="215.0" minWidth="196.0" prefHeight="31.0" prefWidth="215.0" promptText="Password" />
+            <JFXButton buttonType="RAISED" layoutX="273.0" layoutY="280.0" prefHeight="37.0" prefWidth="110.0" ripplerFill="#0dc7e8" style="-fx-background-color: #00b9ff; -fx-background-radius: 50px;" text="Get started" textFill="WHITE" />
+            <Label alignment="CENTER" layoutX="209.0" layoutY="378.0" prefHeight="31.0" prefWidth="110.0" text="Forgor password" textAlignment="CENTER" textFill="#b2b2b2" wrapText="true">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="325.0" layoutY="378.0" prefHeight="31.0" prefWidth="110.0" text="Create a new account " textAlignment="CENTER" textFill="#b2b2b2" wrapText="true">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
