@@ -51,7 +51,7 @@
                                                     <children>
                                                         <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                             <image>
-                                                                <Image url="@resources/Icons/services.png" />
+                                                                <Image url="@resources/Icons/Home/services.png" />
                                                             </image>
                                                         </ImageView>
                                                     </children>
@@ -104,7 +104,7 @@
                                                     <children>
                                                         <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                             <image>
-                                                                <Image url="@resources/Icons/active.png" />
+                                                                <Image url="@resources/Icons/Common/active.png" />
                                                             </image>
                                                         </ImageView>
                                                     </children>
@@ -157,7 +157,7 @@
                                                     <children>
                                                         <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                             <image>
-                                                                <Image url="@resources/Icons/non-available.png" />
+                                                                <Image url="@resources/Icons/Services/non-available.png" />
                                                             </image>
                                                         </ImageView>
                                                     </children>
@@ -213,7 +213,7 @@
                                             <children>
                                                 <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
-                                                        <Image url="@resources/Icons/table.png" />
+                                                        <Image url="@resources/Icons/Common/table.png" />
                                                     </image>
                                                 </ImageView>
                                                 <Label text="Customers Table">
@@ -227,12 +227,12 @@
                                             <children>
                                                 <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
-                                                        <Image url="@resources/Icons/pdf.png" />
+                                                        <Image url="@resources/Icons/Common/pdf.png" />
                                                     </image>
                                                 </ImageView>
                                                 <ImageView fitHeight="29.0" fitWidth="27.0"  pickOnBounds="true" preserveRatio="true">
                                                     <image>
-                                                        <Image url="@resources/Icons/excel.png" />
+                                                        <Image url="@resources/Icons/Common/excel.png" />
                                                     </image>
                                                 </ImageView>
                                             </children>
