@@ -44,14 +44,12 @@ public class ServiceDAO {
 
 
     public Boolean UpdateService(Service model) throws SQLException {
-        DataSource db = new DataSource();
         ServiceCategoryDAO scdao = null;
         ServiceStateDAO ssdao = null;
 
         final String sql = "UPDATE service SET Name=?,Price=?,Description=?,CategoryId=?,StateId=? where Id=?;";
         //Implementing a transactions
         try {
-            conn = db.getConnection();
             conn.setAutoCommit(false);
 
             //Get ID from Servicecatergory based on category name
@@ -96,7 +94,6 @@ public class ServiceDAO {
 
 
     public Boolean CreateNewService(Service model) throws SQLException {
-        DataSource db = new DataSource();
         ServiceCategoryDAO scdao = null;
         ServiceStateDAO ssdao = null;
 
@@ -104,7 +101,6 @@ public class ServiceDAO {
 
         //Implementing a transactions
         try {
-            conn = db.getConnection();
             conn.setAutoCommit(false);
 
             //Get ID from Servicecatergory based on category name

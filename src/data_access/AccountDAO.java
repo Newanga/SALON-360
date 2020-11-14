@@ -18,9 +18,7 @@ public class AccountDAO {
     }
 
     public boolean UpdateAccount(Account model){
-        DataSource db = new DataSource();
         try{
-            conn=db.getConnection();
             final String sql="UPDATE Account SET Username=?,Password=? where Id=?;";
             statement = conn.prepareStatement(sql);
             statement.setString(1,model.getUsername());
@@ -36,7 +34,6 @@ public class AccountDAO {
 
     public ObservableList<Account> getAllAccounts() {
         ObservableList<Account> accounts = FXCollections.observableArrayList();
-        DataSource db = new DataSource();
 
 
         final String sql = "SELECT a.id,a.Username,a.Password,e.FirstName,e.LastName,es.Name as State ,er.Name as Role\n" +

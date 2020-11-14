@@ -18,7 +18,6 @@ public class EmployeeDAO {
 
     public ObservableList<Employee> getAllEmployees() throws SQLException {
         ObservableList<Employee> employees = FXCollections.observableArrayList();
-        DataSource db = new DataSource();
 
         final String sql = "SELECT e.Id,e.FirstName,e.LastName,e.DOB,e.Address,e.ContactNo,e.Email,g.Name as gender,es.Name as State,er.Name as role FROM \n" +
                 "employee as e\n" +
@@ -30,7 +29,6 @@ public class EmployeeDAO {
                 "on e.GenderId=g.Id;";
 
         try {
-            statement = conn.prepareStatement(sql);
             result = statement.executeQuery();
 
             while (result.next()) {
@@ -56,14 +54,12 @@ public class EmployeeDAO {
 
     //Update an existing Employee
     public boolean UpdateEmployee(Employee model) throws SQLException {
-        DataSource db = new DataSource();
         GenderDAO genderDAO = null;
         EmployeeStateDAO employeeStateDAO = null;
         EmployeeRoleDAO employeeRoleDAO = null;
 
         final String sql = "UPDATE Employee SET FirstName=?,LastName=?,DOB=?,Address=?,ContactNo=?,GenderId=?,Email=?,StateId=?,Image=?,RoleId=? WHERE Id=?;";
         try {
-            conn = db.getConnection();
             conn.setAutoCommit(false);
 
             //Get ID from Gender based on Gender type
@@ -118,14 +114,12 @@ public class EmployeeDAO {
     //Create New Employee
 
     public boolean CreateEmployee(Employee model) throws SQLException {
-        DataSource db = new DataSource();
         GenderDAO genderDAO = null;
         EmployeeStateDAO employeeStateDAO = null;
         EmployeeRoleDAO employeeRoleDAO = null;
 
         final String sql = "INSERT INTO Employee (FirstName,LastName,DOB,Address,ContactNo,GenderId,Email,StateId,Image,RoleId) Values(?,?,?,?,?,?,?,?,?,?);";
         try {
-            conn = db.getConnection();
             conn.setAutoCommit(false);
 
             //Get ID from Gender based on Gender type

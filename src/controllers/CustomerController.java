@@ -285,7 +285,7 @@ public class CustomerController implements Initializable {
             customerModel.setEmail(tfEmail.getText());
             customerModel.setContactNo(tfContactNo.getText());
 
-            //check fo empty data column
+            //check fo empty date column
             try{
                 Date date = Date.from(dpDOB.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
                 java.sql.Date sqlDate = new java.sql.Date(date.getTime());
@@ -294,6 +294,7 @@ public class CustomerController implements Initializable {
                 dm.InvalidDate();
                 return;
             }
+
             customerModel.setGender(cbGender.getValue());
             customerModel.setState(cbCustomerState.getValue());
 

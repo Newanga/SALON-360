@@ -18,7 +18,6 @@ public class CustomerDAO {
     //Load all customers from database
     public ObservableList<Customer> getAllCustomers() throws SQLException {
         ObservableList<Customer> customers = FXCollections.observableArrayList();
-        DataSource db = new DataSource();
 
         final String sql = "SELECT c.Id,c.FirstName,c.LastName,c.Address,c.ContactNo,c.DOB,c.Email,g.Name as gender,cs.Name as state  FROM customer as c\n" +
                 "inner join gender as g\n" +
@@ -45,13 +44,11 @@ public class CustomerDAO {
 
     //Update an existing customer
     public boolean UpdateCustomer(Customer model) throws SQLException {
-        DataSource db = new DataSource();
         GenderDAO genderDAO = null;
         CustomerStateDAO customerStateDAO = null;
 
         final String sql="UPDATE Customer SET FirstName=?,LastName=?,DOB=?,Address=?,ContactNo=?,GenderId=?,Email=?,StateId=? WHERE Id=?;";
         try{
-            conn = db.getConnection();
             conn.setAutoCommit(false);
 
             //Get ID from Gender based on Gender type
@@ -98,13 +95,11 @@ public class CustomerDAO {
 
     //Create a new customer.
     public boolean CreateCustomer(Customer model) throws SQLException {
-        DataSource db = new DataSource();
         GenderDAO genderDAO = null;
         CustomerStateDAO customerStateDAO = null;
 
         final String sql="INSERT INTO Customer (FirstName,LastName,DOB,Address,ContactNo,GenderId,Email,StateId) Values(?,?,?,?,?,?,?,?);";
         try{
-            conn = db.getConnection();
             conn.setAutoCommit(false);
 
             //Get ID from Gender based on Gender type

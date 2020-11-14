@@ -272,7 +272,6 @@ public class ServiceController implements Initializable {
             btnSCreate.setDisable(false);
             btnSUpdate.setDisable(true);
             LoadServiceComboBoxData();
-
         }
 
     }

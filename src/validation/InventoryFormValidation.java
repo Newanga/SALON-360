@@ -6,7 +6,7 @@ import models.Service;
 public class InventoryFormValidation {
 
     public static Boolean validateEmptyData(Inventory model) {
-        if (model.getName().isEmpty() || model.getDescription().isEmpty()|| model.getSpecialNote().isEmpty() || model.getQuantity()<1 || model.getPrice() == 0.0d )
+        if (model.getName().isEmpty() || model.getDescription().isEmpty() || model.getQuantity()<1 || model.getPrice() == 0.0d )
             return true;
         else
             return false;

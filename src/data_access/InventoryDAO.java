@@ -41,13 +41,11 @@ public class InventoryDAO {
     }
 
     public Boolean UpdateInventory(Inventory model) throws SQLException {
-        DataSource db = new DataSource();
         InventoryCategoryDAO icdao= null;
 
         final String sql = "UPDATE Inventory SET Name=?,Price=?,Quantity=?,Description=?,SpecialNote=?,CategoryId=? where Id=?;";
         //Implementing a transactions
         try {
-            conn = db.getConnection();
             conn.setAutoCommit(false);
 
             //Get ID from Inventorycatergory based on category name
@@ -87,7 +85,7 @@ public class InventoryDAO {
     }
 
     public Boolean CreateNewInventory(Inventory model) throws SQLException {
-        DataSource db = new DataSource();
+
         InventoryCategoryDAO icdao = null;
 
 
@@ -95,7 +93,6 @@ public class InventoryDAO {
 
         //Implementing a transactions
         try {
-            conn = db.getConnection();
             conn.setAutoCommit(false);
 
             //Get ID from inventorycatergory based on category name
