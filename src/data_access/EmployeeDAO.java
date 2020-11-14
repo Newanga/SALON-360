@@ -29,8 +29,8 @@ public class EmployeeDAO {
                 "on e.GenderId=g.Id;";
 
         try {
+            statement = conn.prepareStatement(sql);
             result = statement.executeQuery();
-
             while (result.next()) {
                 Employee emp = new Employee();
                 emp.setId(result.getInt("Id"));
