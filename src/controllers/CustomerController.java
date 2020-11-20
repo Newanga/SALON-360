@@ -1,8 +1,8 @@
 package controllers;
 
 import data_access.*;
-import helpers.DialogMessages;
-import helpers.Export;
+import helpers.dialog_messages.DialogMessages;
+import helpers.report_generation.ExportToExcel;
 import models.Customer;
 import validation.CustomerFormValidation;
 import com.jfoenix.controls.JFXButton;
@@ -230,7 +230,7 @@ public class CustomerController implements Initializable {
         Customer model = null;
 
         //check for a double click on table to load to object
-        if (event.getClickCount() == 1) {
+        if (event.getClickCount() == 2) {
             model = tvCustomer.getSelectionModel().getSelectedItem();
         } else {
             return;
@@ -440,7 +440,7 @@ public class CustomerController implements Initializable {
     }
 
     public void btnSExcelExportClicked(MouseEvent mouseEvent) {
-        Export ex = new Export(tvCustomer, stackpane);
+        ExportToExcel ex = new ExportToExcel(tvCustomer, stackpane);
         ex.run();
 
     }

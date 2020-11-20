@@ -1,8 +1,8 @@
 package controllers;
 
 import data_access.*;
-import helpers.DialogMessages;
-import helpers.Export;
+import helpers.dialog_messages.DialogMessages;
+import helpers.report_generation.ExportToExcel;
 import models.Service;
 import models.ServiceCategory;
 import validation.ServiceCategoryFormValidation;
@@ -277,7 +277,7 @@ public class ServiceController implements Initializable {
     }
 
     public void btnSExcelExportClicked(MouseEvent mouseEvent) {
-        Export ex = new Export(tvServices, stackpane);
+        ExportToExcel ex = new ExportToExcel(tvServices, stackpane);
         ex.run();
 
     }
@@ -780,7 +780,7 @@ public class ServiceController implements Initializable {
 
     //SC Tab
     public void btnSCExcelExportClicked(MouseEvent mouseEvent) {
-        Export ex = new Export(tvServiceCategory, stackpane);
+        ExportToExcel ex = new ExportToExcel(tvServiceCategory, stackpane);
         ex.run();
 
     }

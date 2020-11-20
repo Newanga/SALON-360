@@ -57,7 +57,7 @@
                               </ImageView>
                            </graphic>
                         </JFXButton>
-                        <JFXButton alignment="TOP_LEFT" buttonType="RAISED" prefHeight="53.0" prefWidth="214.0" styleClass="nav-button" text="   Appointments">
+                        <JFXButton alignment="TOP_LEFT" buttonType="RAISED" onAction="#btnAppointmentsClicked" prefHeight="53.0" prefWidth="214.0" styleClass="nav-button" text="   Appointments">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -141,7 +141,7 @@
                               <Font size="18.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton alignment="TOP_LEFT" buttonType="RAISED" prefHeight="53.0" prefWidth="214.0" styleClass="nav-button" text="   Marketing">
+                        <JFXButton alignment="TOP_LEFT" buttonType="RAISED" onAction="#btnMarketingClicked" prefHeight="53.0" prefWidth="214.0" styleClass="nav-button" text="   Marketing">
                            <font>
                               <Font size="18.0" />
                            </font>

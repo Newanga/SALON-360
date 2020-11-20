@@ -19,6 +19,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import java.net.URL;
+import java.security.Key;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
@@ -522,7 +523,7 @@ public class MarketingController implements Initializable {
         String fName = null;
 
         //check for a double click on table to load to object
-        if (event.getClickCount() == 1) {
+        if (event.getClickCount() == 2) {
             fName = tvSMSCustomer.getSelectionModel().getSelectedItem().getFirstName();
         } else {
             return;
@@ -828,7 +829,7 @@ public class MarketingController implements Initializable {
         for(Customer cust:bulkSMS.getCustomerlist()){
             String nonformattedContactNo = cust.getContactNo();
             String formattedContactNo = TwillioHelper.FormatSenderNumber(nonformattedContactNo);
-            String message=bulkSMS.getSmsTemplate().getMessage()
+            String message=bulkSMS.getSmsTemplate().getMessage();
             TwilioMain twilioMain=new TwilioMain(formattedContactNo,message);
             twilioMain.SendMessage();
             isSent = twilioMain.isSuccess();
@@ -848,4 +849,5 @@ public class MarketingController implements Initializable {
         }
         return false;
     }
+
 }

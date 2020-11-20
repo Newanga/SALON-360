@@ -5,8 +5,8 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import data_access.*;
-import helpers.DialogMessages;
-import helpers.Export;
+import helpers.dialog_messages.DialogMessages;
+import helpers.report_generation.ExportToExcel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -202,7 +202,6 @@ public class InventoryController implements Initializable {
                 dm.UpdateFailedDialogBox();
 
             clearICTextFields();
-            //TODO
             InitialLoad();
             btnICUpdate.setDisable(true);
             btnICCreate.setDisable(false);
@@ -269,7 +268,7 @@ public class InventoryController implements Initializable {
     }
 
     public void btnICExcelExportClicked(MouseEvent mouseEvent) {
-        Export ex = new Export(tvInventoryCategory, stackpane);
+        ExportToExcel ex = new ExportToExcel(tvInventoryCategory, stackpane);
         ex.run();
 
     }
@@ -487,7 +486,7 @@ public class InventoryController implements Initializable {
     }
 
     public void btnIExcelExportClicked(MouseEvent mouseEvent) {
-        Export ex = new Export(tvInventory, stackpane);
+        ExportToExcel ex = new ExportToExcel(tvInventory, stackpane);
         ex.run();
 
     }

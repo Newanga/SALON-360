@@ -2,8 +2,8 @@ package controllers;
 
 import com.jfoenix.controls.*;
 import data_access.*;
-import helpers.DialogMessages;
-import helpers.Export;
+import helpers.dialog_messages.DialogMessages;
+import helpers.report_generation.ExportToExcel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -18,7 +18,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import models.Service;
 import models.Voucher;
 import validation.VoucherFormValidation;
 
@@ -321,7 +320,7 @@ public class VoucherController implements Initializable {
     }
 
     public void btnExcelExportClicked(MouseEvent mouseEvent) {
-        Export ex = new Export(tvVouchers, stackpane);
+        ExportToExcel ex = new ExportToExcel(tvVouchers, stackpane);
         ex.run();
     }
 
@@ -361,7 +360,7 @@ public class VoucherController implements Initializable {
         Voucher model = null;
 
         //check for a double click on table to load to object
-        if (event.getClickCount() == 1) {
+        if (event.getClickCount() == 2) {
             model = tvVouchers.getSelectionModel().getSelectedItem();
         } else {
             return;

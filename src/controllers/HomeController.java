@@ -221,4 +221,58 @@ public class HomeController implements Initializable {
         Thread thread = new Thread(loadUI);
         thread.start();
     }
+
+    public void btnAppointmentsClicked(ActionEvent actionEvent) {
+        VBox hb=new VBox();
+        JFXSpinner spinner=new JFXSpinner();
+        hb.getChildren().add(spinner);
+        hb.setAlignment(Pos.CENTER);
+        borderpane.setCenter(hb);
+
+        Task<Parent> loadUI = new Task<Parent>() {
+            @Override
+            public Parent call() throws IOException {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/" + "Appointments" +".fxml"));
+                Parent root = loader.load();
+                spinner.setVisible(false);
+                return root ;
+            }
+        };
+
+        loadUI.setOnSucceeded(e -> {
+            Parent root = loadUI.getValue();
+            borderpane.getChildren().remove(borderpane.getCenter());
+            borderpane.setCenter(root);
+        });
+
+        Thread thread = new Thread(loadUI);
+        thread.start();
+    }
+
+    public void btnMarketingClicked(ActionEvent actionEvent) {
+        VBox hb=new VBox();
+        JFXSpinner spinner=new JFXSpinner();
+        hb.getChildren().add(spinner);
+        hb.setAlignment(Pos.CENTER);
+        borderpane.setCenter(hb);
+
+        Task<Parent> loadUI = new Task<Parent>() {
+            @Override
+            public Parent call() throws IOException {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/" + "Marketing" +".fxml"));
+                Parent root = loader.load();
+                spinner.setVisible(false);
+                return root ;
+            }
+        };
+
+        loadUI.setOnSucceeded(e -> {
+            Parent root = loadUI.getValue();
+            borderpane.getChildren().remove(borderpane.getCenter());
+            borderpane.setCenter(root);
+        });
+
+        Thread thread = new Thread(loadUI);
+        thread.start();
+    }
 }

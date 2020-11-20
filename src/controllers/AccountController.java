@@ -4,8 +4,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import data_access.*;
-import helpers.DialogMessages;
-import helpers.Export;
+import helpers.dialog_messages.DialogMessages;
+import helpers.report_generation.ExportToExcel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -21,7 +21,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import models.Account;
 import validation.AccountFormValidation;
-import validation.EmployeeFormValidation;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -280,7 +279,7 @@ public class AccountController implements Initializable {
         Account model = null;
 
         //check for a double click on table to load to object
-        if (event.getClickCount() == 1) {
+        if (event.getClickCount() == 2) {
             model = tvAccounts.getSelectionModel().getSelectedItem();
         } else {
             return;
@@ -317,7 +316,7 @@ public class AccountController implements Initializable {
     }
 
     public void btnSExcelExportClicked(MouseEvent mouseEvent) {
-        Export ex = new Export(tvAccounts, stackpane);
+        ExportToExcel ex = new ExportToExcel(tvAccounts, stackpane);
         ex.run();
 
     }

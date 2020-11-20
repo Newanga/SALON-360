@@ -145,6 +145,26 @@ public class CustomerDAO {
     }
 
 
+
+    public String getCustomerNameById(int id) throws SQLException {
+        String custName="";
+        final String sql="SELECT CONCAT(FirstName,\" \",LastName) AS name from customer where id=?;";
+        try {
+            statement = conn.prepareStatement(sql);
+            statement.setInt(1, id);
+            result= statement.executeQuery();
+            // Navigate to first row
+            result.absolute(1);
+            //Get first row data
+            custName = result.getString("name");
+            return custName;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+
     public void close() throws SQLException {
         try {
             ConnectionResources.close(result, statement, conn);

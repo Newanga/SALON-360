@@ -5,8 +5,8 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import data_access.*;
-import helpers.DialogMessages;
-import helpers.Export;
+import helpers.dialog_messages.DialogMessages;
+import helpers.report_generation.ExportToExcel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -26,9 +26,7 @@ import models.Employee;
 import validation.EmployeeFormValidation;
 
 
-import java.io.File;
 import java.net.URL;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.ZoneId;
@@ -270,7 +268,7 @@ public class EmployeeController implements Initializable {
         Employee model = null;
 
         //check for a double click on table to load to object
-        if (event.getClickCount() == 1) {
+        if (event.getClickCount() == 2) {
             model = tvEmployees.getSelectionModel().getSelectedItem();
         } else {
             return;
@@ -484,7 +482,7 @@ public class EmployeeController implements Initializable {
     }
 
     public void btnSExcelExportClicked(MouseEvent mouseEvent) {
-        Export ex = new Export(tvEmployees, stackpane);
+        ExportToExcel ex = new ExportToExcel(tvEmployees, stackpane);
         ex.run();
     }
 
