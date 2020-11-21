@@ -2,8 +2,11 @@ package controllers;
 
 import data_access.*;
 import helpers.dialog_messages.DialogMessages;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -12,6 +15,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -31,7 +35,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import models.Appointment;
-import models.Service;
 
 public class AppointmentController implements Initializable {
 
@@ -115,11 +118,13 @@ public class AppointmentController implements Initializable {
         try {
             ShowAllAppointmentsToday();
             LoadAppointmentComboBoxData();
+            ShowALlAppointments();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
     }
+
 
     private void LoadAppointmentComboBoxData() {
         try {
@@ -341,6 +346,8 @@ public class AppointmentController implements Initializable {
                 dm.InsertFailedDialogBox();
 
             ClearAndResetAllControls();
+            btnAppUpdate.setDisable(true);
+            btnAppCreate.setDisable(false);
             InitialLoad();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -466,48 +473,13 @@ public class AppointmentController implements Initializable {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public void ClearAndResetAll(KeyEvent event) {
+        if (event.getCode() == KeyCode.ESCAPE) {
+           ClearAndResetAllControls();
+           btnAppUpdate.setDisable(true);
+           btnAppCreate.setDisable(false);
+        }
+    }
 
 
     //////////////////////////////////////////////
@@ -516,10 +488,10 @@ public class AppointmentController implements Initializable {
 
 
     @FXML
-    private JFXTextField taAllAppIdSearch;
+    private JFXTextField tfAllAppIdSearch;
 
     @FXML
-    private JFXTextField taAllAppcCustIdSearch;
+    private JFXTextField tfAllAppcCustIdSearch;
 
     @FXML
     private JFXDatePicker dpAllAppFromSearch;
@@ -528,27 +500,142 @@ public class AppointmentController implements Initializable {
     private JFXDatePicker dpAllAppToSearch;
 
     @FXML
-    private TableView<?> tvAllAppointments;
+    private TableView<Appointment> tvAllAppointments;
 
     @FXML
-    private TableColumn<?, ?> colAllAppId;
+    private TableColumn<Appointment, Integer> colAllAppId;
 
     @FXML
-    private TableColumn<?, ?> colAllCustName;
+    private TableColumn<Appointment, String> colAllCustName;
 
     @FXML
-    private TableColumn<?, ?> colAllAppBookedDate;
+    private TableColumn<Appointment, Date> colAllAppBookedDate;
 
     @FXML
-    private TableColumn<?, ?> colAllAppDate;
+    private TableColumn<Appointment, Date> colAllAppDate;
 
     @FXML
-    private TableColumn<?, ?> colAllAppTime;
+    private TableColumn<Appointment, Time> colAllAppTime;
 
     @FXML
-    private TableColumn<?, ?> colAllAppState;
+    private TableColumn<Appointment, String> colAllAppState;
+
+    private ObservableList<Appointment> allAppointmentList;
 
 
+    private void ShowALlAppointments() {
+        try {
+            allAppointmentList = null;
+            allAppointmentList = LoadAllAppointmentsTFromDB();
+            colAllAppId.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("id"));
+            colAllCustName.setCellValueFactory(new PropertyValueFactory<Appointment, String>("CustomerName"));
+            colAllAppBookedDate.setCellValueFactory(new PropertyValueFactory<Appointment, Date>("BookedDate"));
+            colAllAppDate.setCellValueFactory(new PropertyValueFactory<Appointment, Date>("AppointmentDate"));
+            colAllAppTime.setCellValueFactory(new PropertyValueFactory<Appointment, Time>("AppointmentTime"));
+            colAllAppState.setCellValueFactory(new PropertyValueFactory<Appointment, String>("State"));
+            tvAllAppointments.setItems(allAppointmentList);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public ObservableList<Appointment> LoadAllAppointmentsTFromDB() throws SQLException {
+        ObservableList<Appointment> list = FXCollections.observableArrayList();
+
+        try {
+            db = new DataSource();
+            conn = db.getConnection();
+            appointmentDAO = new AppointmentDAO(conn);
+            list = appointmentDAO.getAllAppointments();
+            return list;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                //closing connection resources
+                if (appointmentDAO != null)
+                    appointmentDAO.close();
+                if (conn != null)
+                    ConnectionResources.close(conn);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+        }
+        return list;
+    }
+
+    public void SearchALLAppointmentsById() {
+        // Wrap the ObservableList in a FilteredList (initially display all data).
+        FilteredList<Appointment> filteredData = new FilteredList<>(allAppointmentList, b -> true);
+
+        // 2. Set the filter Predicate whenever the filter changes.
+        tfAllAppIdSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(Appointment -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                // Compare name and description of every category with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (String.valueOf(Appointment.getId()).indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                } else
+                    return false; // Does not match.
+            });
+        });
+
+        // 3. Wrap the FilteredList in a SortedList.
+        SortedList<Appointment> sortedData = new SortedList<>(filteredData);
+
+        // 4. Bind the SortedList comparator to the TableView comparator.
+        // 	  Otherwise, sorting the TableView would have no effect.
+        sortedData.comparatorProperty().bind(tvAllAppointments.comparatorProperty());
+
+        // 5. Add sorted (and filtered) data to the table.
+        tvAllAppointments.setItems(sortedData);
+
+    }
+
+    public void SearchALLAppointmentsByCustomerName() {
+        // Wrap the ObservableList in a FilteredList (initially display all data).
+        FilteredList<Appointment> filteredData = new FilteredList<>(allAppointmentList, b -> true);
+
+        // 2. Set the filter Predicate whenever the filter changes.
+        tfAllAppcCustIdSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(Appointment -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                // Compare name and description of every category with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (Appointment.getCustomerName().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                    return true; // Filter matches name.
+                } else
+                    return false; // Does not match.
+            });
+        });
+
+        // 3. Wrap the FilteredList in a SortedList.
+        SortedList<Appointment> sortedData = new SortedList<>(filteredData);
+
+        // 4. Bind the SortedList comparator to the TableView comparator.
+        // 	  Otherwise, sorting the TableView would have no effect.
+        sortedData.comparatorProperty().bind(tvAllAppointments.comparatorProperty());
+
+        // 5. Add sorted (and filtered) data to the table.
+        tvAllAppointments.setItems(sortedData);
+
+    }
+
+    //TODO:filter based on date range
+    public void SearchALLAppointmentsBasedOnDateRange() {
+
+
+    }
 
 }
 

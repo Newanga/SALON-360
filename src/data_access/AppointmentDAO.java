@@ -101,9 +101,7 @@ public class AppointmentDAO {
 
         try{
             statement = conn.prepareStatement(sql);
-            statement.setDate(1, Date.valueOf(LocalDate.now()));
             result = statement.executeQuery();
-
             while (result.next()){
                 Appointment app=new Appointment();
                 app.setId(result.getInt("Id"));
@@ -123,11 +121,12 @@ public class AppointmentDAO {
     }
 
     public Boolean CreateNewAppointment(Appointment model){
-        final String sql="INSERT INTO (BookedDate,AppointmentDate,AppointmentTime,StateId,CustomerId) VALUES (?,?,?,?,?);";
+        final String sql="INSERT INTO appointment (BookedDate,AppointmentDate,AppointmentTime,StateId,CustomerId) VALUES (?,?,?,?,?);";
         AppointmentStateDAO appointmentStateDAO=new AppointmentStateDAO(conn);
         int stateId=0;
         try{
 
+            conn.setAutoCommit(false);
             //get state id
             stateId=appointmentStateDAO.getAppointmentStateIdByName(model.getState());
 
@@ -137,10 +136,23 @@ public class AppointmentDAO {
             statement.setTime(3,model.getAppointmentTime());
             statement.setInt(4,stateId);
             statement.setInt(5,model.getCustomerId());
-            return statement.execute();
+            statement.executeUpdate();
+            conn.commit();
+            return true;
+
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
+        }finally {
+            try{
+                conn.setAutoCommit(true);
+                if (appointmentStateDAO != null)
+                    appointmentStateDAO.close();
+                ConnectionResources.close(conn);
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
+
         }
     }
 
