@@ -1,1 +1,1 @@
-# Saloon Management System 💇
+# SALOON 360 💇
