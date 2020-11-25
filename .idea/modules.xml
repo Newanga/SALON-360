@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SaloonManagementSystem.iml" filepath="$PROJECT_DIR$/SaloonManagementSystem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SALOON360.iml" filepath="$PROJECT_DIR$/SALOON360.iml" />
     </modules>
   </component>
 </project>

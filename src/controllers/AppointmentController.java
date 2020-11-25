@@ -329,7 +329,7 @@ public class AppointmentController implements Initializable {
         } else
             appointment.setState(cbAppState.getValue());
 
-        // TODO: GEt Today Date in sql
+        // GEt Today Date in sql
         Date date = java.util.Calendar.getInstance().getTime();
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
         appointment.setBookedDate(sqlDate);
@@ -341,6 +341,7 @@ public class AppointmentController implements Initializable {
             Boolean result = appointmentDAO.CreateNewAppointment(appointment);
 
             if (result == true)
+                //TODO: Send Appointment SMS
                 dm.InsertSuccessDialogBox();
             else
                 dm.InsertFailedDialogBox();
@@ -402,6 +403,7 @@ public class AppointmentController implements Initializable {
             Boolean result = appointmentDAO.UpdateAppointment(appointment);
 
             if (result == true)
+                // TODO : Appointment Update SMS
                 dm.UpdateSuccessDialogBox();
             else
                 dm.UpdateFailedDialogBox();

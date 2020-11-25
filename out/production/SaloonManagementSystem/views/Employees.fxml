@@ -224,7 +224,7 @@
                                 </AnchorPane>
                                 <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="563.0">
                                     <children>
-                                        <JFXTextField fx:id="tfSearchTerm" focusColor="#1976d2" onMousePressed="#SearchFunction" prefHeight="25.0" prefWidth="331.0">
+                                        <JFXTextField fx:id="tfSearchTerm" focusColor="#1976d2" onMousePressed="#SearchFunction" prefHeight="25.0" prefWidth="331.0" promptText="Enter Search Term">
                                             <HBox.margin>
                                                 <Insets right="20.0" />
                                             </HBox.margin>

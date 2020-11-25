@@ -1,0 +1,113 @@
+/*******************************************************************************
+ *                                                                             *
+ * Tables								                       				   *
+ *                                                                             *
+ ******************************************************************************/
+.table-view, .tree-table-view {
+    /* Constants used throughout the tableview. */
+    -fx-table-header-border-color: transparent;
+    -fx-table-cell-border-color: -fx-box-border; /* Horizontal Lines*/
+    -fx-background-color: transparent;
+}
+
+/* The column header row is made up of a number of column-header, one for each
+   TableColumn, and a 'filler' area that extends from the right-most column
+   to the edge of the tableview, or up to the 'column control' button. */
+.table-view .filler, .tree-table-view .filler, .table-view .column-header,
+.tree-table-view .column-header {
+    -fx-size: 65;
+    -fx-border-style: null;
+    -fx-border-color: -swatch-grey;
+    -fx-border-width: 0 0 2 0;
+    -fx-background-color: transparent;
+}
+
+.table-view .show-hide-columns-button, .tree-table-view .show-hide-columns-button
+{
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header .label, .table-view .filler .label,
+.table-view .column-drag-header .label, .tree-table-view .column-header .label,
+.tree-table-view .filler .label, .tree-table-view .column-drag-header .label
+{
+    -fx-alignment: CENTER_LEFT;
+}
+
+.table-view .column-header-background, .tree-table-view .column-header-background
+{
+    -fx-background-color: transparent;
+}
+
+.table-row-cell, .tree-table-row-cell {
+    -fx-cell-size: 40px;
+}
+
+.table-cell {
+    -fx-border-color: transparent; /* Vertical Lines*/
+    -fx-border-width: 1;
+}
+
+
+
+/*******************************************************************************
+ *                                                                             *
+ * Tabpane								                       				   *
+ *                                                                             *
+ ******************************************************************************/
+
+/*!*The whole tab Area including content*!*/
+/*. jfx-tab-pane {*/
+/*    -fx-padding: 0px;*/
+/*    -fx-background-color: white;*/
+/*}*/
+
+/*!*Arrow styling*!*/
+/*.jfx-tab-pane .control-buttons-tab{*/
+/*    visibility: false;*/
+/*}*/
+/*.jfx-tab-pane .control-buttons-tab .tab-down-button{*/
+/*    visibility: false;*/
+/*}*/
+/*.jfx-tab-pane .control-buttons-tab .jfx-rippler{*/
+/*    visibility: false;*/
+/*}*/
+
+
+/*The regions where tabs are available */
+.jfx-tab-pane .headers-region {
+    -fx-background-color: #FFFFFF;
+}
+
+/*The empty region where tabs are unavailable*/
+.jfx-tab-pane .tab-header-background {
+    -fx-background-color: #FFFFFF;
+}
+
+/*!*Ripple effect on selecting tab*!*/
+/*.jfx-tab-pane .tab-header-area .jfx-rippler{*/
+/*    -jfx-rippler-fill :#FFFFFF;*/
+/*}*/
+
+/*Line under a tab on selection*/
+.jfx-tab-pane .tab-selected-line {
+    -fx-background-color: #99abb4;
+}
+
+/*Font color within the table*/
+.tab-label {
+    -fx-text-fill: #5C4AC7 ;
+}
+
+/*Formatting of a single tab*/
+.tab {
+    /*-fx-background-insets: 0 1 0 1,0,0;*/
+    -fx-background-color: #FFFFFF;
+    -fx-font-size: 12pt;
+    -fx-border-color:#FFFFFF;
+    -fx-border-width:1px 50px;
+}
+
+.nav-button:hover{
+    -fx-text-fill: #1976D2;
+}

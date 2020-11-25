@@ -145,7 +145,6 @@ public class CustomerDAO {
     }
 
 
-
     public String getCustomerNameById(int id) throws SQLException {
         String custName="";
         final String sql="SELECT CONCAT(FirstName,\" \",LastName) AS name from customer where id=?;";
