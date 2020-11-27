@@ -1,4 +1,4 @@
-package view_models;
+package view_models_dashboard;
 
 public class EmployeeVM {
 
