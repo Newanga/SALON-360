@@ -22,7 +22,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import models.Account;
 import validation.AccountFormValidation;
-import view_models.AccountVM;
+import view_models_dashboard.AccountVM;
 
 import java.net.URL;
 import java.sql.Connection;

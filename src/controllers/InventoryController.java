@@ -25,7 +25,7 @@ import models.Inventory;
 import models.InventoryCategory;
 import validation.InventoryCategoryFormValidation;
 import validation.InventoryFormValidation;
-import view_models.InventoryVM;
+import view_models_dashboard.InventoryVM;
 
 import java.net.URL;
 import java.sql.Connection;

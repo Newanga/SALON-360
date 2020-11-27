@@ -2,7 +2,6 @@ package controllers;
 
 import data_access.*;
 import helpers.dialog_messages.DialogMessages;
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -16,7 +15,6 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -36,8 +34,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import models.Appointment;
-import view_models.AccountVM;
-import view_models.AppointmentVM;
+import view_models_dashboard.AppointmentVM;
 
 public class AppointmentController implements Initializable {
 

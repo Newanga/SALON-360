@@ -2,9 +2,8 @@ package data_access;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import models.Customer;
 import models.Employee;
-import view_models.EmployeeVM;
+import view_models_dashboard.EmployeeVM;
 
 import java.sql.*;
 

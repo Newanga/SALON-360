@@ -23,7 +23,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 import javafx.scene.layout.StackPane;
-import view_models.ServiceVM;
+import view_models_dashboard.ServiceVM;
 
 import java.net.URL;
 import java.sql.Connection;

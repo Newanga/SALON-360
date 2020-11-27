@@ -21,7 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import models.Voucher;
 import validation.VoucherFormValidation;
-import view_models.VoucherVM;
+import view_models_dashboard.VoucherVM;
 
 import java.net.URL;
 import java.sql.Connection;

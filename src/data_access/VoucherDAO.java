@@ -3,7 +3,7 @@ package data_access;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.Voucher;
-import view_models.VoucherVM;
+import view_models_dashboard.VoucherVM;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

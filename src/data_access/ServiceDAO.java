@@ -3,8 +3,7 @@ package data_access;
 import models.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import scala.util.control.Exception;
-import view_models.ServiceVM;
+import view_models_dashboard.ServiceVM;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

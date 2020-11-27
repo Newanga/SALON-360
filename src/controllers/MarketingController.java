@@ -20,7 +20,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import java.net.URL;
-import java.security.Key;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
@@ -39,7 +38,7 @@ import models.Customer;
 import models.SingleSMS;
 import models.SMSTemplate;
 import validation.SMSTemplateFormValidations;
-import view_models.MarketingVM;
+import view_models_dashboard.MarketingVM;
 
 
 public class MarketingController implements Initializable {

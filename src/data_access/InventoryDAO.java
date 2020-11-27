@@ -3,7 +3,7 @@ package data_access;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.Inventory;
-import view_models.InventoryVM;
+import view_models_dashboard.InventoryVM;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

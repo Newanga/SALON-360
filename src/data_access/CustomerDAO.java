@@ -3,11 +3,9 @@ package data_access;
 import models.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import scala.util.control.Exception;
-import view_models.CustomerVM;
+import view_models_dashboard.CustomerVM;
 
 import java.sql.*;
-import java.util.Calendar;
 
 public class CustomerDAO {
     private Connection conn;

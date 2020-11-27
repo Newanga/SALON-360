@@ -25,7 +25,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import models.Employee;
 import validation.EmployeeFormValidation;
-import view_models.EmployeeVM;
+import view_models_dashboard.EmployeeVM;
 
 
 import java.net.URL;

@@ -24,8 +24,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import view_models.AppointmentVM;
-import view_models.CustomerVM;
+import view_models_dashboard.CustomerVM;
 
 import java.net.URL;
 import java.sql.Connection;

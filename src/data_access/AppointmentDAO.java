@@ -3,9 +3,7 @@ package data_access;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.Appointment;
-import models.Customer;
-import scala.App;
-import view_models.AppointmentVM;
+import view_models_dashboard.AppointmentVM;
 
 import java.sql.*;
 import java.time.LocalDate;

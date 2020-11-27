@@ -3,10 +3,9 @@ package data_access;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.Customer;
-import models.SMS;
 import models.SingleSMS;
 import models.SMSTemplate;
-import view_models.MarketingVM;
+import view_models_dashboard.MarketingVM;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
