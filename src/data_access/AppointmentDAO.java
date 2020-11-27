@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import models.Appointment;
 import models.Customer;
 import scala.App;
+import view_models.AppointmentVM;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -184,6 +185,43 @@ public class AppointmentDAO {
             ConnectionResources.close(result, statement, conn);
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public AppointmentVM getDashBoardData() throws SQLException {
+        AppointmentVM appointmentVM=new AppointmentVM();
+
+        final String queryAllAppoinments="SELECT COUNT(ap.id) as Total\n" +
+                "FROM appointment as ap\n" +
+                "inner join appointmentstate as aps\n" +
+                "on ap.StateId=aps.Id\n" +
+                "inner join customer as c\n" +
+                "on ap.CustomerId=c.Id;";
+
+        final String queryAppointmentsToday="SELECT COUNT(ap.id) as Today\n" +
+                "FROM appointment as ap\n" +
+                "inner join appointmentstate as aps\n" +
+                "on ap.StateId=aps.Id\n" +
+                "inner join customer as c\n" +
+                "on ap.CustomerId=c.Id\n" +
+                "where ap.AppointmentDate=?;";
+        try{
+            statement = conn.prepareStatement(queryAllAppoinments);
+            result = statement.executeQuery();
+            result.absolute(1);
+            int total = result.getInt("Total");
+            appointmentVM.setTotalAppointments(total);
+
+            statement = conn.prepareStatement(queryAppointmentsToday);
+            statement.setDate(1, Date.valueOf(LocalDate.now()));
+            result = statement.executeQuery();
+            int today = result.getInt("Today");
+            appointmentVM.setTotalAppointmentsToday(today);
+
+            return appointmentVM;
+        }catch (SQLException ex){
+            ex.printStackTrace();
+            return appointmentVM;
         }
     }
 }

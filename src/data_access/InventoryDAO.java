@@ -3,6 +3,7 @@ package data_access;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.Inventory;
+import view_models.InventoryVM;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,15 +23,15 @@ public class InventoryDAO {
     public ObservableList<Inventory> getAllInventory() {
         ObservableList<Inventory> inventory = FXCollections.observableArrayList();
         final String sql = "SELECT i.Id,i.Name,i.Price,i.Quantity,i.Description,i.SpecialNote,ic.Name as Category\n" +
-                            "FROM inventory as i\n" +
-                            "inner join inventorycategory as ic\n" +
-                            "on i.CategoryId=ic.Id;";
+                "FROM inventory as i\n" +
+                "inner join inventorycategory as ic\n" +
+                "on i.CategoryId=ic.Id;";
 
         try {
             statement = conn.prepareStatement(sql);
             result = statement.executeQuery();
             while (result.next()) {
-                Inventory item = new Inventory(result.getInt("Id"), result.getString("Name"), result.getDouble("Price"),result.getInt("Quantity"), result.getString("Description"),result.getString("SpecialNote"),result.getString("Category"));
+                Inventory item = new Inventory(result.getInt("Id"), result.getString("Name"), result.getDouble("Price"), result.getInt("Quantity"), result.getString("Description"), result.getString("SpecialNote"), result.getString("Category"));
                 inventory.add(item);
             }
             return inventory;
@@ -41,7 +42,7 @@ public class InventoryDAO {
     }
 
     public Boolean UpdateInventory(Inventory model) throws SQLException {
-        InventoryCategoryDAO icdao= null;
+        InventoryCategoryDAO icdao = null;
 
         final String sql = "UPDATE Inventory SET Name=?,Price=?,Quantity=?,Description=?,SpecialNote=?,CategoryId=? where Id=?;";
         //Implementing a transactions
@@ -70,14 +71,13 @@ public class InventoryDAO {
             conn.rollback();
             return false;
         } finally {
-            try{
+            try {
                 conn.setAutoCommit(true);
                 if (icdao != null)
                     icdao.close();
-                if(conn!=null)
+                if (conn != null)
                     ConnectionResources.close(conn);
-            }
-            catch (Exception ex){
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
@@ -116,12 +116,12 @@ public class InventoryDAO {
             conn.rollback();
             return false;
         } finally {
-            try{
+            try {
                 conn.setAutoCommit(true);
                 if (icdao != null)
                     icdao.close();
                 ConnectionResources.close(conn);
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
@@ -135,5 +135,37 @@ public class InventoryDAO {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public InventoryVM getDashBoardData() {
+        InventoryVM inventoryVM = new InventoryVM();
+
+        final String queryTotalInventoryCategory = "SELECT COUNT(Name) as TotalCategory \n" +
+                "FROM inventorycategory;";
+
+
+        final String queryTotalNoOfItems = "SELECT SUM(Quantity) as Total\n" +
+                "FROM inventory;";
+
+        try {
+            statement = conn.prepareStatement(queryTotalInventoryCategory);
+            result = statement.executeQuery();
+            result.absolute(1);
+            int totalCategory = result.getInt("TotalCategory");
+            inventoryVM.setTotalInventoryCategory(totalCategory);
+
+            statement = conn.prepareStatement(queryTotalNoOfItems);
+            result = statement.executeQuery();
+            result.absolute(1);
+            int totalNoOfItems = result.getInt("Total");
+            inventoryVM.setTotalNoOfItems(totalNoOfItems);
+
+
+            return inventoryVM;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return inventoryVM;
+        }
+
     }
 }

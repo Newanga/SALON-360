@@ -23,6 +23,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 import javafx.scene.layout.StackPane;
+import view_models.ServiceVM;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -66,20 +67,26 @@ public class ServiceController implements Initializable {
     private JFXButton btnSCreate;
     @FXML
     private JFXButton btnSUpdate;
+
     @FXML
-    private Label lblSTotalServices;
+    private Label lblTotalServices;
+
     @FXML
-    private Label lblSAvailableServices;
+    private Label lblAvailableServices;
+
     @FXML
-    private Label lblSNonAvailableServices;
+    private Label lblNonAvailableServices;
+
     @FXML
-    private Label lblSWithdrawnServices;
+    private Label lblDiscontinuedServices;
+
+    @FXML
+    private Label lblTotalServiceCategories;
 
 
-    //Dashboard Service category TAB
-    public void LoadSDashboardData() {
-        //Todo: stream and map data in the list
-    }
+
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         InitialLoad();
@@ -89,16 +96,33 @@ public class ServiceController implements Initializable {
         try {
             showServiceCategories();
 
-            //Load Service Dashboard
-            LoadSCDashboardData();
-
-
             //Show Services
             ShowServices();
             //LoadComboBoxData
             LoadServiceComboBoxData();
+
+            //Load Dashboard
+            LoadDashboardData();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+    }
+
+    private void LoadDashboardData() {
+        ServiceVM serviceVM;
+
+        try {
+            DataSource db=new DataSource();
+            conn=db.getConnection();
+            servicedao=new ServiceDAO(conn);
+            serviceVM=servicedao.getDashBoardData();
+            lblAvailableServices.setText(String.valueOf(serviceVM.getAvailableServices()));
+            lblDiscontinuedServices.setText(String.valueOf(serviceVM.getDiscontinuedServices()));
+            lblNonAvailableServices.setText(String.valueOf(serviceVM.getNonAvailableServices()));
+            lblTotalServices.setText(String.valueOf(serviceVM.getTotalService()));
+            lblTotalServiceCategories.setText(String.valueOf(serviceVM.getServiceCategory()));
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -529,9 +553,6 @@ public class ServiceController implements Initializable {
 
 
 
-    @FXML
-    private Label lblTotalServiceCategories;
-
     //Form
     @FXML
     private StackPane stackpane;
@@ -795,13 +816,6 @@ public class ServiceController implements Initializable {
             btnSCUpdate.setDisable(true);
         }
 
-    }
-
-    //Dashboard Service category TAB
-    public void LoadSCDashboardData() {
-        Long scListCount = serviceCategoryList.stream().count();
-        String count = Long.toString(scListCount);
-        lblTotalServiceCategories.setText(count);
     }
 
 

@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.Customer;
 import models.Employee;
+import view_models.EmployeeVM;
 
 import java.sql.*;
 
@@ -205,5 +206,50 @@ public class EmployeeDAO {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public EmployeeVM getDashBoardData() {
+        EmployeeVM employeeVM=new EmployeeVM();
+
+        final String queryTotalEmployees="Select COUNT(employee.Id) as Total\n" +
+                                            "from employee;";
+
+        final String queryActiveEmployees="SELECT COUNT(e.Id) as Active\n" +
+                                            "FROM employee as e\n" +
+                                            "inner join employeestate as es\n" +
+                                            "on e.StateId=es.Id\n" +
+                                            "where es.Name=\"Employeed\";";
+
+        final String queryInactiveEmployees="SELECT COUNT(e.Id) as Inactive\n" +
+                                            "FROM employee as e\n" +
+                                            "inner join employeestate as es\n" +
+                                            "on e.StateId=es.Id\n" +
+                                            "where es.Name=\"Left\";";
+
+        try {
+            statement= conn.prepareStatement(queryTotalEmployees);
+            result =statement.executeQuery();
+            result.absolute(1);
+            int total = result.getInt("Total");
+            employeeVM.setTotalEmployees(total);
+
+            statement= conn.prepareStatement(queryActiveEmployees);
+            result =statement.executeQuery();
+            result.absolute(1);
+            int active = result.getInt("Active");
+            employeeVM.setActiveEmployees(active);
+
+            statement= conn.prepareStatement(queryInactiveEmployees);
+            result =statement.executeQuery();
+            result.absolute(1);
+            int inactive = result.getInt("Inactive");
+            employeeVM.setInactiveEmployees(inactive);
+
+            return employeeVM;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return employeeVM;
+        }
+
     }
 }

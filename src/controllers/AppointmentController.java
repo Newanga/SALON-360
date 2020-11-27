@@ -9,6 +9,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
@@ -35,6 +36,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import models.Appointment;
+import view_models.AccountVM;
+import view_models.AppointmentVM;
 
 public class AppointmentController implements Initializable {
 
@@ -42,6 +45,13 @@ public class AppointmentController implements Initializable {
     //////////////////////////////////////////////
     // Appointments //
     //////////////////////////////////////////////
+
+    @FXML
+    private Label lblAppointmentsToday;
+
+    @FXML
+    private Label lblAllAppointments;
+
 
 
     @FXML
@@ -119,10 +129,26 @@ public class AppointmentController implements Initializable {
             ShowAllAppointmentsToday();
             LoadAppointmentComboBoxData();
             ShowALlAppointments();
+            LoadDashBoardData();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
+    }
+
+    private void LoadDashBoardData() throws SQLException {
+        AppointmentVM appointmentVM;
+        try{
+            db = new DataSource();
+            conn = db.getConnection();
+            appointmentDAO = new AppointmentDAO(conn);
+            appointmentVM=appointmentDAO.getDashBoardData();
+            lblAllAppointments.setText(String.valueOf(appointmentVM.getTotalAppointments()));
+            lblAppointmentsToday.setText(String.valueOf(appointmentVM.getTotalAppointmentsToday()));
+        }
+        catch (SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
 

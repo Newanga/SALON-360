@@ -28,8 +28,8 @@ public class ServiceStateDAO {
                 serviceStateNames.add(name);
             }
             return serviceStateNames;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
         return serviceStateNames;
     }
@@ -45,7 +45,8 @@ public class ServiceStateDAO {
             //Get first row data
             int id = result.getInt("id");
             return id;
-        } catch (SQLException throwables) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return 0;
         }
     }

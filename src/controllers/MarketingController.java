@@ -14,6 +14,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -38,6 +39,7 @@ import models.Customer;
 import models.SingleSMS;
 import models.SMSTemplate;
 import validation.SMSTemplateFormValidations;
+import view_models.MarketingVM;
 
 
 public class MarketingController implements Initializable {
@@ -56,8 +58,7 @@ public class MarketingController implements Initializable {
             LoadSMSComboBoxData();
 
             ShowSMSTemplates();
-
-            //Load two dashboards
+            LoadSMSDashboard();
 
 
         } catch (SQLException throwables) {
@@ -222,10 +223,6 @@ public class MarketingController implements Initializable {
 
     }
 
-    //Todo :SMS Template Dashboard
-    public void LoadSMSTemplateDashboardData() {
-
-    }
 
     public void btnSMSTemplateUpdateClicked(MouseEvent mouseEvent) throws SQLException {
         DialogMessages dm = new DialogMessages(stackpane);
@@ -385,6 +382,12 @@ public class MarketingController implements Initializable {
     @FXML
     private TableColumn<SingleSMS, Date> colSMSDate;
 
+    @FXML
+    private Label lblTotalSMSSent;
+
+    @FXML
+    private Label  lblTotalSMSTemplate;
+
 
     private ObservableList<Customer> customerslist;
     private ObservableList<SingleSMS> singleSmsSentlist;
@@ -392,9 +395,19 @@ public class MarketingController implements Initializable {
     private SMSModeDAO smsModeDAO = null;
 
 
-    //Todo : SMS Dashboard
     public void LoadSMSDashboard() {
-
+        MarketingVM marketingVM;
+        try {
+            db = new DataSource();
+            conn = db.getConnection();
+            smsDAO = new SMSDAO(conn);
+            marketingVM=smsDAO.getDashBoardData();
+            lblTotalSMSSent.setText(String.valueOf(marketingVM.getTotalSMSSent()));
+            lblTotalSMSTemplate.setText(String.valueOf(marketingVM.getTotalSMSTemplate()));
+        }
+        catch (SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
     private void ShowCustomers() throws SQLException {

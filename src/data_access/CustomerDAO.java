@@ -3,8 +3,11 @@ package data_access;
 import models.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import scala.util.control.Exception;
+import view_models.CustomerVM;
 
 import java.sql.*;
+import java.util.Calendar;
 
 public class CustomerDAO {
     private Connection conn;
@@ -86,7 +89,7 @@ public class CustomerDAO {
                 if(conn!=null)
                     ConnectionResources.close(conn);
             }
-            catch (Exception ex){
+            catch (SQLException ex){
                 ex.printStackTrace();
             }
 
@@ -136,7 +139,7 @@ public class CustomerDAO {
                 if(conn!=null)
                     ConnectionResources.close(conn);
             }
-            catch (Exception ex){
+            catch (SQLException ex){
                 ex.printStackTrace();
             }
 
@@ -172,4 +175,70 @@ public class CustomerDAO {
         }
     }
 
+
+    public CustomerVM getDashBoardData() {
+        CustomerVM customerVM=new CustomerVM();
+
+        final String queryTotalCustomers="SELECT COUNT(ID) as Total\n" +
+                                            "from Customer;";
+
+        final String queryMaleCustomers="SELECT COUNT(c.ID) as Male\n" +
+                                        " FROM customer as c\n" +
+                                        "inner join gender as g\n" +
+                                        "on c.GenderId=g.Id\n" +
+                                        "inner join customerstate as cs\n" +
+                                        "on c.StateId=cs.Id\n" +
+                                        "where cs.Name=\"Active\"\n" +
+                                        "And g.Name=\"Male\";";
+
+
+        final String queryFemaleCustomers="SELECT COUNT(c.ID) as Female\n" +
+                                            " FROM customer as c\n" +
+                                            "inner join gender as g\n" +
+                                            "on c.GenderId=g.Id\n" +
+                                            "inner join customerstate as cs\n" +
+                                            "on c.StateId=cs.Id\n" +
+                                            "where cs.Name=\"Active\"\n" +
+                                            "And g.Name=\"Female\";";
+
+        final String queryInactiveCustomers="SELECT COUNT(cs.Name) as Inactive\n" +
+                                        " FROM customer as c\n" +
+                                        "inner join customerstate as cs\n" +
+                                        "on c.StateId=cs.Id\n" +
+                                        "where cs.Name=\"Inactive\";";
+
+        try{
+            statement = conn.prepareStatement(queryTotalCustomers);
+            result = statement.executeQuery();
+            result.absolute(1);
+            int total = result.getInt("Total");
+            customerVM.setTotalCustomers(total);
+
+            statement = conn.prepareStatement(queryMaleCustomers);
+            result = statement.executeQuery();
+            result.absolute(1);
+            int male = result.getInt("Male");
+            customerVM.setMaleCustomers(male);
+
+            statement = conn.prepareStatement(queryFemaleCustomers);
+            result = statement.executeQuery();
+            result.absolute(1);
+            int female = result.getInt("Female");
+            customerVM.setFemaleCustomers(female);
+
+            statement = conn.prepareStatement(queryInactiveCustomers);
+            result = statement.executeQuery();
+            result.absolute(1);
+            int inactive = result.getInt("Inactive");
+            customerVM.setInactiveCustomers(inactive);
+
+            return customerVM;
+        }catch(SQLException ex){
+            ex.printStackTrace();
+            return customerVM;
+        }
+
+
+
+    }
 }

@@ -131,12 +131,12 @@ public class POSDAO {
             statement.execute();
 
 
-            //If A voucher code is used in the transaction, Then update voucher state and trancation id
-            if(model.getVocuherId()!=0){
+            //If A voucher code is used in the transaction, Then update voucher state and transcation id
+            if(model.getVoucherId()!=0){
                 final String queryUpdateVoucherState="UPDATE voucher set TrancsactionId=?,StateId=2 where Id=?";
                 statement=conn.prepareStatement(queryUpdateVoucherState);
                 statement.setInt(1,transactionId);
-                statement.setInt(2,model.getVocuherId());
+                statement.setInt(2,model.getVoucherId());
                 statement.execute();
             }
             conn.setAutoCommit(true);

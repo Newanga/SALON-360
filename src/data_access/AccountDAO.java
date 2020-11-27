@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.Account;
 import models.Employee;
+import view_models.AccountVM;
 
 import java.sql.*;
 
@@ -68,6 +69,55 @@ public class AccountDAO {
 
     }
 
+    public AccountVM getDashBoardData() throws SQLException {
+        AccountVM accountVM=new AccountVM();
+        final String queryTotalAccounts="SELECT COUNT(account.Id) as Total\n" +
+                "FROM account;";
+
+        final String queryActiveAccounts="SELECT COUNT(a.Id) as Active\n" +
+                "FROM account as a\n" +
+                "inner join employee as e\n" +
+                "on a.EmployeeId=e.Id\n" +
+                "inner join employeestate as es\n" +
+                "on e.StateId=es.id\n" +
+                "where es.Name=\"Employeed\";";
+
+        final String queryInactiveAccounts="SELECT COUNT(a.Id) as Inactive\n" +
+                "FROM account as a\n" +
+                "inner join employee as e\n" +
+                "on a.EmployeeId=e.Id\n" +
+                "inner join employeestate as es\n" +
+                "on e.StateId=es.id\n" +
+                "where es.Name=\"LEFT\";";
+
+        try{
+            statement = conn.prepareStatement(queryTotalAccounts);
+            result=statement.executeQuery();
+            result.absolute(1);
+            int total = result.getInt("Total");
+            accountVM.setTotalAccounts(total);
+
+            statement = conn.prepareStatement(queryActiveAccounts);
+            result=statement.executeQuery();
+            result.absolute(1);
+            int active = result.getInt("Active");
+            accountVM.setActiveAccounts(active);
+
+
+            statement = conn.prepareStatement(queryInactiveAccounts);
+            result=statement.executeQuery();
+            result.absolute(1);
+            int inactive = result.getInt("Inactive");
+            accountVM.setInactiveAccounts(inactive);
+
+            return accountVM;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return  accountVM;
+        }
+
+    }
+
     public void close() throws SQLException {
         try {
             ConnectionResources.close(result, statement, conn);
@@ -75,4 +125,6 @@ public class AccountDAO {
             ex.printStackTrace();
         }
     }
+
+
 }

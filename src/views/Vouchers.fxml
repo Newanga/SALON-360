@@ -50,7 +50,7 @@
                                                 </HBox>
                                                 <HBox alignment="CENTER_RIGHT" prefHeight="69.0" prefWidth="143.0">
                                                     <children>
-                                                        <Label text="4" textFill="#00b67a">
+                                                        <Label fx:id="lblActiveVouchers" text="4" textFill="#00b67a">
                                                             <font>
                                                                 <Font size="48.0" />
                                                             </font>

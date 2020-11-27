@@ -25,6 +25,7 @@ import models.Inventory;
 import models.InventoryCategory;
 import validation.InventoryCategoryFormValidation;
 import validation.InventoryFormValidation;
+import view_models.InventoryVM;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -39,7 +40,10 @@ public class InventoryController implements Initializable {
     private StackPane stackpane;
 
     @FXML
-    private Label lblTotalIc;
+    private Label lblTotalNoOfItems;
+
+    @FXML
+    private Label lblTotalCategory;
 
     @FXML
     private JFXTextField tfICSearchTerm;
@@ -296,16 +300,33 @@ public class InventoryController implements Initializable {
         try {
             ShowInventoryCategories();
 
-            //Load Service Dashboard
-           // LoadSCDashboardData();
-
             //Show Inventory
             ShowInventory();
+
             //LoadComboBoxData
-           LoadInventoryComboBoxData();
+            LoadInventoryComboBoxData();
+
+
+            LoadDashboardData();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    private void LoadDashboardData() {
+        InventoryVM inventoryVM;
+        try {
+            db = new DataSource();
+            conn = db.getConnection();
+            inventoryDAO = new InventoryDAO(conn);
+            inventoryVM=inventoryDAO.getDashBoardData();
+            lblTotalCategory.setText(String.valueOf(inventoryVM.getTotalInventoryCategory()));
+            lblTotalNoOfItems.setText(String.valueOf(inventoryVM.getTotalNoOfItems()));
+        }
+        catch (SQLException ex){
+            ex.printStackTrace();
+        }
+
     }
 
 

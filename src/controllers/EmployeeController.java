@@ -14,6 +14,7 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -24,6 +25,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import models.Employee;
 import validation.EmployeeFormValidation;
+import view_models.EmployeeVM;
 
 
 import java.net.URL;
@@ -38,6 +40,16 @@ public class EmployeeController implements Initializable {
 
     @FXML
     private StackPane stackpane;
+
+
+    @FXML
+    private Label lblTotalEmployees;
+
+    @FXML
+    private Label lblActiveEmployees;
+
+    @FXML
+    private Label lblInactiveEmployees;
 
     @FXML
     private JFXTextField tfSearchTerm;
@@ -124,7 +136,6 @@ public class EmployeeController implements Initializable {
     private ObservableList<Employee> employeeList;
     private Employee employeeModel = null;
 
-    //Todo : implement dahsboard code
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -138,6 +149,23 @@ public class EmployeeController implements Initializable {
     private void InitialLoad() throws SQLException {
         LoadEmployeeComboBoxData();
         ShowEmployees();
+        LoadDashBoardData();
+    }
+
+    private void LoadDashBoardData(){
+        EmployeeVM employeeVM=new EmployeeVM();
+        try{
+            db = new DataSource();
+            conn = db.getConnection();
+            employeeDAO = new EmployeeDAO(conn);
+            employeeVM=employeeDAO.getDashBoardData();
+            lblTotalEmployees.setText(String.valueOf(employeeVM.getTotalEmployees()));
+            lblActiveEmployees.setText(String.valueOf(employeeVM.getActiveEmployees()));
+            lblInactiveEmployees.setText(String.valueOf(employeeVM.getInactiveEmployees()));
+
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
     private void LoadEmployeeComboBoxData() {

@@ -12,6 +12,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -21,6 +22,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import models.Account;
 import validation.AccountFormValidation;
+import view_models.AccountVM;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -32,6 +34,16 @@ public class AccountController implements Initializable {
 
     @FXML
     private StackPane stackpane;
+
+    @FXML
+    private Label lblTotalAccounts;
+
+    @FXML
+    private Label lblActiveAccounts;
+
+    @FXML
+    private Label lblInActiveAccounts;
+
 
     @FXML
     private JFXTextField tfSearchTerm;
@@ -92,15 +104,35 @@ public class AccountController implements Initializable {
     private AccountDAO accountDAO;
     private Account accountModel = null;
 
-//Todo :DashBoard Data
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        InitialLoad();
+        try {
+            InitialLoad();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
-    private void InitialLoad() {
+    private void InitialLoad() throws SQLException {
         LoadAccountComboBoxData();
         ShowAccounts();
+        LoadDashBoardData();
+    }
+
+    private void LoadDashBoardData() throws SQLException {
+        AccountVM accountVM;
+        try{
+            db = new DataSource();
+            conn = db.getConnection();
+            accountDAO = new AccountDAO(conn);
+            accountVM=accountDAO.getDashBoardData();
+            lblActiveAccounts.setText(String.valueOf(accountVM.getActiveAccounts()));
+            lblInActiveAccounts.setText(String.valueOf(accountVM.getInactiveAccounts()));
+            lblTotalAccounts.setText(String.valueOf(accountVM.getTotalAccounts()));
+        }
+        catch (SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
 
@@ -199,7 +231,7 @@ public class AccountController implements Initializable {
         return list;
     }
 
-    public void clearSTextFieldsAndComboBoxes() {
+    private void clearSTextFieldsAndComboBoxes() {
         tfId.clear();
         tfFirstName.clear();
         tfLastName.clear();
@@ -275,7 +307,7 @@ public class AccountController implements Initializable {
         }
     }
 
-    public void tvMouseClicked(MouseEvent event) throws SQLException {
+    public void tvMouseClicked(MouseEvent event) {
         Account model = null;
 
         //check for a double click on table to load to object
@@ -302,7 +334,7 @@ public class AccountController implements Initializable {
         }
     }
 
-    public void btnKeyClicked(KeyEvent event) throws SQLException {
+    public void btnKeyClicked(KeyEvent event) {
 
         if (event.getCode() == KeyCode.ESCAPE) {
             tvAccounts.getSelectionModel().clearSelection();

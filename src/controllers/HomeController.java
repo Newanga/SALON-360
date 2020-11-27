@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HomeController implements Initializable {
+public class HomeController  {
 
     @FXML
     public void minimize(MouseEvent mouseEvent) {
@@ -37,27 +37,13 @@ public class HomeController implements Initializable {
     private JFXSpinner spinner;
     private boolean isLoaderActive=false;
     private String currentWindow;
-    private Parent LoadUI(String view) {
 
-        Parent root = null;
-        try{
-            root= FXMLLoader.load(getClass().getResource("/views/" + view + ".fxml"));
-        }catch (IOException ex){
-
-        }
-        return root;
-    }
-
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
 
     private boolean CurrentViewState(String view) {
-        if(isLoaderActive ==true ||currentWindow==view)
+        if(isLoaderActive ==true ||currentWindow == view)
             return false;
         else {
+            //Remove the current active view
             borderpane.getChildren().remove(borderpane.getCenter());
             return true;
         }
@@ -65,6 +51,7 @@ public class HomeController implements Initializable {
     }
 
     private void StartLoader(){
+        //Set loader state to true
         isLoaderActive =true;
         VBox hb=new VBox();
         spinner=new JFXSpinner();
@@ -96,6 +83,7 @@ public class HomeController implements Initializable {
             currentWindow=view;
         });
 
+        //Start the process in background thread.
         Thread thread = new Thread(loadUI);
         thread.start();
     }

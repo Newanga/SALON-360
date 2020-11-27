@@ -6,6 +6,7 @@ import models.Customer;
 import models.SMS;
 import models.SingleSMS;
 import models.SMSTemplate;
+import view_models.MarketingVM;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -111,6 +112,35 @@ public class SMSDAO {
             statement.setDate(4,sqlDate);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+    }
+
+    public MarketingVM getDashBoardData() {
+        MarketingVM marketingVM= new MarketingVM();
+
+        final String queryTotalSMSSent="select COUNT(SMS.Id) as TotalSMS\n" +
+                "from SMS;";
+
+        final String queryTotalSMSTemplates="select COUNT(SMSTemplate.Id) as TotalSMSTemplates\n" +
+                                            "from SMSTemplate;";
+
+        try{
+            statement = conn.prepareStatement(queryTotalSMSSent);
+            result=statement.executeQuery();
+            result.absolute(1);
+            int totalSMSSent = result.getInt("TotalSMS");
+            marketingVM.setTotalSMSSent(totalSMSSent);
+
+            statement = conn.prepareStatement(queryTotalSMSTemplates);
+            result=statement.executeQuery();
+            result.absolute(1);
+            int totalSMSTemplates = result.getInt("TotalSMSTemplates");
+            marketingVM.setTotalSMSTemplate(totalSMSTemplates);
+
+            return marketingVM;
+        }catch (SQLException ex){
+            ex.printStackTrace();
+            return marketingVM;
         }
     }
 }

@@ -103,11 +103,11 @@ public class POSController implements Initializable {
     @FXML
     private ImageView imgVoucher;
 
-    private DataSource db = null;
-    private Connection conn = null;
-    private POSDAO posDao = null;
-    private ServiceCategoryDAO serviceCategoryDAO = null;
-    private ObservableList<Service> allServicesList = null;
+    private DataSource db ;
+    private Connection conn ;
+    private POSDAO posDao;
+    private ServiceCategoryDAO serviceCategoryDAO ;
+    private ObservableList<Service> allServicesList;
     private ObservableList<Service> purchaseServicesList = FXCollections.observableArrayList();
 
 
@@ -549,7 +549,7 @@ public class POSController implements Initializable {
 
         if (tfVoucherCode.getText().isEmpty() == false) {
             int voucherCode = Integer.parseInt(tfVoucherCode.getText());
-            newTransactionData.setVocuherId(voucherCode);
+            newTransactionData.setVoucherId(voucherCode);
         }
 
         //Get cash Amount

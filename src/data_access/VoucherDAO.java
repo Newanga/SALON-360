@@ -3,6 +3,7 @@ package data_access;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.Voucher;
+import view_models.VoucherVM;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -124,6 +125,28 @@ public class VoucherDAO {
             ConnectionResources.close(result, statement, conn);
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public VoucherVM getDashBoardData() {
+        VoucherVM voucherVM=new VoucherVM();
+
+        final String activeVoucher="SELECT COUNT(v.Id) as Valid\n" +
+                                    "FROM voucher as v\n" +
+                                    "inner join voucherstate as vs\n" +
+                                    "on v.StateId=vs.Id\n" +
+                                    "where vs.Name=\"Valid\";";
+
+        try{
+            statement= conn.prepareStatement(activeVoucher);
+            result =statement.executeQuery();
+            result.absolute(1);
+            int totalValid = result.getInt("Valid");
+            voucherVM.setActiveVouchers(totalValid);
+            return voucherVM;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return voucherVM;
         }
     }
 }

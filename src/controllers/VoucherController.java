@@ -11,6 +11,7 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -20,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import models.Voucher;
 import validation.VoucherFormValidation;
+import view_models.VoucherVM;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -78,6 +80,9 @@ public class VoucherController implements Initializable {
     @FXML
     private JFXButton btnUpdate;
 
+    @FXML
+    private Label lblActiveVouchers;
+
 
     private DataSource db;
     private Connection conn;
@@ -100,6 +105,21 @@ public class VoucherController implements Initializable {
         LoadVoucherComboBoxData();
         ShowVouchers();
         DefaultFormValues();
+        LoadDashBoardData();
+    }
+
+    private void LoadDashBoardData() {
+        VoucherVM voucherVM;
+
+        try {
+            DataSource db = new DataSource();
+            conn = db.getConnection();
+            voucherDAO = new VoucherDAO(conn);
+            voucherVM = voucherDAO.getDashBoardData();
+            lblActiveVouchers.setText(String.valueOf(voucherVM.getActiveVouchers()));
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void DefaultFormValues() {

@@ -3,6 +3,8 @@ package data_access;
 import models.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import scala.util.control.Exception;
+import view_models.ServiceVM;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -36,8 +38,8 @@ public class ServiceDAO {
                 serviceCategories.add(service);
             }
             return serviceCategories;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
         return serviceCategories;
     }
@@ -85,7 +87,7 @@ public class ServiceDAO {
                 if(conn!=null)
                     ConnectionResources.close(conn);
             }
-            catch (Exception ex){
+            catch (SQLException ex){
                 ex.printStackTrace();
             }
 
@@ -133,7 +135,7 @@ public class ServiceDAO {
                 if (ssdao != null)
                     ssdao.close();
                 ConnectionResources.close(conn);
-            }catch (Exception ex){
+            }catch (SQLException ex){
                 ex.printStackTrace();
             }
 
@@ -147,5 +149,75 @@ public class ServiceDAO {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public ServiceVM getDashBoardData() {
+        ServiceVM serviceVM=new ServiceVM();
+
+        final String queryTotalServices="select COUNT(s.Id) as Services\n" +
+                                        "from service as s;";
+
+        final String queryTotalServiceCategory="select COUNT(ID) as ServiceCategory\n" +
+                                                "from serviceCategory;";
+
+        final String queryAvailableServices = "select COUNT(s.Id) as Available\n" +
+                                                "from service as s\n" +
+                                                "inner join servicestate as ss\n" +
+                                                "on s.StateId=ss.Id\n" +
+                                                "where ss.Name=\"Available\";";
+
+        final String queryNonAvailableServices="select COUNT(s.Id) as NonAvailable\n" +
+                                                "from service as s\n" +
+                                                "inner join servicestate as ss\n" +
+                                                "on s.StateId=ss.Id\n" +
+                                                "where ss.Name=\"Non-Available\";";
+
+        final String queryDiscontinuedServices="select COUNT(s.Id) as Withdrawn\n" +
+                                                "from service as s\n" +
+                                                "inner join servicestate as ss\n" +
+                                                "on s.StateId=ss.Id\n" +
+                                                "where ss.Name=\"Withdrawn\";";
+
+        try{
+            statement = conn.prepareStatement(queryTotalServices);
+            result = statement.executeQuery();
+            result.absolute(1);
+            int totalServices = result.getInt("Services");
+            serviceVM.setTotalService(totalServices);
+
+            statement = conn.prepareStatement(queryTotalServiceCategory);
+            result = statement.executeQuery();
+            result.absolute(1);
+            int totalServiceCategory = result.getInt("ServiceCategory");
+            serviceVM.setServiceCategory(totalServiceCategory);
+
+
+            statement = conn.prepareStatement(queryAvailableServices);
+            result = statement.executeQuery();
+            result.absolute(1);
+            int totalAvailable = result.getInt("Available");
+            serviceVM.setAvailableServices(totalAvailable);
+
+
+            statement = conn.prepareStatement(queryNonAvailableServices);
+            result = statement.executeQuery();
+            result.absolute(1);
+            int totalNonAvailable = result.getInt("NonAvailable");
+            serviceVM.setNonAvailableServices(totalNonAvailable);
+
+
+            statement = conn.prepareStatement(queryDiscontinuedServices);
+            result = statement.executeQuery();
+            result.absolute(1);
+            int totalDiscontinued = result.getInt("Withdrawn");
+            serviceVM.setDiscontinuedServices(totalDiscontinued);
+            return serviceVM;
+        }catch(SQLException ex){
+            ex.printStackTrace();
+            return serviceVM;
+        }
+
+
+
     }
 }

@@ -3,6 +3,7 @@ package controllers;
 import data_access.*;
 import helpers.dialog_messages.DialogMessages;
 import helpers.report_generation.ExportToExcel;
+import javafx.scene.control.Label;
 import models.Customer;
 import validation.CustomerFormValidation;
 import com.jfoenix.controls.JFXButton;
@@ -23,6 +24,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import view_models.AppointmentVM;
+import view_models.CustomerVM;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -36,6 +39,21 @@ public class CustomerController implements Initializable {
 
     @FXML
     private StackPane stackpane;
+
+
+
+
+    @FXML
+    private Label lblTotalCsstomers;
+
+    @FXML
+    private Label lblCustomersMale;
+
+    @FXML
+    private Label lblCustomersFemale;
+
+    @FXML
+    private Label lblCustomersInactive;
 
     @FXML
     private JFXTextField tfSearchTerm;
@@ -124,6 +142,24 @@ public class CustomerController implements Initializable {
     public void InitialLoad() throws SQLException {
         LoadCustomerComboBoxData();
         ShowCustomers();
+        LoadDashboardData();
+    }
+
+    private void LoadDashboardData() {
+        CustomerVM customerVM;
+        try{
+            db = new DataSource();
+            conn = db.getConnection();
+            customerdao = new CustomerDAO(conn);
+            customerVM=customerdao.getDashBoardData();
+            lblTotalCsstomers.setText(String.valueOf(customerVM.getTotalCustomers()));
+            lblCustomersMale.setText(String.valueOf(customerVM.getMaleCustomers()));
+            lblCustomersFemale.setText(String.valueOf(customerVM.getFemaleCustomers()));
+            lblCustomersInactive.setText(String.valueOf(customerVM.getInactiveCustomers()));
+        }
+        catch (SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
     private void ShowCustomers() throws SQLException {
@@ -168,10 +204,10 @@ public class CustomerController implements Initializable {
     }
 
     public void LoadCustomerComboBoxData() throws SQLException {
-        try{
+        try {
             cbCustomerState.setItems(FXCollections.observableArrayList(loadCustomerStates()));
             cbGender.setItems(FXCollections.observableArrayList(loadGenders()));
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
@@ -189,12 +225,12 @@ public class CustomerController implements Initializable {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        try{
+        try {
             //Close SQL Resources
             if (genderdao != null)
                 genderdao.close();
             ConnectionResources.close(conn);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
@@ -213,13 +249,12 @@ public class CustomerController implements Initializable {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        try{
+        try {
             //Close SQL Resources
             if (customerdao != null)
                 customerdao.close();
             ConnectionResources.close(conn);
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
@@ -270,10 +305,10 @@ public class CustomerController implements Initializable {
 
     public void btnUpdateClicked() throws SQLException {
         DialogMessages dm = new DialogMessages(stackpane);
-        try{
+        try {
             db = new DataSource();
             conn = db.getConnection();
-            customerdao=new CustomerDAO(conn);
+            customerdao = new CustomerDAO(conn);
 
             customerModel = new Customer();
 
@@ -286,11 +321,11 @@ public class CustomerController implements Initializable {
             customerModel.setContactNo(tfContactNo.getText());
 
             //check fo empty date column
-            try{
+            try {
                 Date date = Date.from(dpDOB.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
                 java.sql.Date sqlDate = new java.sql.Date(date.getTime());
                 customerModel.setDob(sqlDate);
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 dm.InvalidDate();
                 return;
             }
@@ -299,24 +334,24 @@ public class CustomerController implements Initializable {
             customerModel.setState(cbCustomerState.getValue());
 
             //Check for empty data
-            boolean isDataEmpty=CustomerFormValidation.validateEmptyData(customerModel);
-            if(isDataEmpty){
+            boolean isDataEmpty = CustomerFormValidation.validateEmptyData(customerModel);
+            if (isDataEmpty) {
                 dm.EmptyDataInForm();
                 return;
             }
 
             //check for valid contact no
-            boolean isValid=CustomerFormValidation.validateContactNo(customerModel.getContactNo());
+            boolean isValid = CustomerFormValidation.validateContactNo(customerModel.getContactNo());
 
-            if(!isValid){
+            if (!isValid) {
                 dm.InvalidContactNo();
                 return;
             }
 
             //check email
-            boolean isEMailValid=CustomerFormValidation.ValidateEmail(customerModel.getEmail());
+            boolean isEMailValid = CustomerFormValidation.ValidateEmail(customerModel.getEmail());
 
-            if(!isEMailValid){
+            if (!isEMailValid) {
                 dm.InvalidEmail();
                 return;
             }
@@ -337,24 +372,23 @@ public class CustomerController implements Initializable {
         btnUpdate.setDisable(true);
         btnCreate.setDisable(false);
 
-        try{
+        try {
             //closing connection resources
             if (customerdao != null)
                 customerdao.close();
             if (conn != null)
                 ConnectionResources.close(conn);
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     public void btnCreateClicked(ActionEvent actionEvent) throws SQLException {
         DialogMessages dm = new DialogMessages(stackpane);
-        try{
+        try {
             db = new DataSource();
             conn = db.getConnection();
-            customerdao=new CustomerDAO(conn);
+            customerdao = new CustomerDAO(conn);
 
             customerModel = new Customer();
 
@@ -365,11 +399,11 @@ public class CustomerController implements Initializable {
             customerModel.setContactNo(tfContactNo.getText());
 
             //check fo empty data column
-            try{
+            try {
                 Date date = Date.from(dpDOB.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
                 java.sql.Date sqlDate = new java.sql.Date(date.getTime());
                 customerModel.setDob(sqlDate);
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 dm.InvalidDate();
                 return;
             }
@@ -377,24 +411,24 @@ public class CustomerController implements Initializable {
             customerModel.setState(cbCustomerState.getValue());
 
             //Check for empty data
-            boolean isDataEmpty=CustomerFormValidation.validateEmptyData(customerModel);
-            if(isDataEmpty){
+            boolean isDataEmpty = CustomerFormValidation.validateEmptyData(customerModel);
+            if (isDataEmpty) {
                 dm.EmptyDataInForm();
                 return;
             }
 
             //check for valid contact no
-            boolean isValid=CustomerFormValidation.validateContactNo(customerModel.getContactNo());
+            boolean isValid = CustomerFormValidation.validateContactNo(customerModel.getContactNo());
 
-            if(!isValid){
+            if (!isValid) {
                 dm.InvalidContactNo();
                 return;
             }
 
             //check email
-            boolean isEMailValid=CustomerFormValidation.ValidateEmail(customerModel.getEmail());
+            boolean isEMailValid = CustomerFormValidation.ValidateEmail(customerModel.getEmail());
 
-            if(!isEMailValid){
+            if (!isEMailValid) {
                 dm.InvalidEmail();
                 return;
             }
@@ -415,14 +449,13 @@ public class CustomerController implements Initializable {
         btnUpdate.setDisable(true);
         btnCreate.setDisable(false);
 
-        try{
+        try {
             //closing connection resources
             if (customerdao != null)
                 customerdao.close();
             if (conn != null)
                 ConnectionResources.close(conn);
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -461,11 +494,11 @@ public class CustomerController implements Initializable {
 
                 if (Customer.getFirstName().toLowerCase().indexOf(lowerCaseFilter) != -1) {
                     return true; // Filter matches name.
-                }else if (String.valueOf(Customer.getLastName()).indexOf(lowerCaseFilter) != -1) {
+                } else if (String.valueOf(Customer.getLastName()).indexOf(lowerCaseFilter) != -1) {
                     return true; // Filter matches price.
                 } else if (String.valueOf(Customer.getContactNo()).indexOf(lowerCaseFilter) != -1) {
                     return true; // Filter matches price.
-                }else if (String.valueOf(Customer.getEmail()).indexOf(lowerCaseFilter) != -1) {
+                } else if (String.valueOf(Customer.getEmail()).indexOf(lowerCaseFilter) != -1) {
                     return true; // Filter matches price.
                 } else if (String.valueOf(Customer.getId()).indexOf(lowerCaseFilter) != -1) {
                     return true;
