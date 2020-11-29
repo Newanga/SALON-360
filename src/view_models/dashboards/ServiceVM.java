@@ -1,4 +1,4 @@
-package view_models_dashboard;
+package view_models.dashboards;
 
 public class ServiceVM {
 
