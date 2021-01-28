@@ -1,4 +1,4 @@
-package helpers.report_generation;
+package helpers.exports;
 
 import helpers.dialog_messages.DialogMessages;
 import javafx.scene.control.TableView;
@@ -21,7 +21,7 @@ public class ExportToExcel<T>  implements Runnable{
         this.sp=sp;
     }
 
-    public void excel() {
+    public void ExportToExcel() {
 
         XSSFWorkbook xssfWorkbook=new XSSFWorkbook();
         XSSFSheet xssfSheet=  xssfWorkbook.createSheet("Sheet1");
@@ -92,6 +92,6 @@ public class ExportToExcel<T>  implements Runnable{
 
     @Override
     public void run() {
-        excel();
+        ExportToExcel();
     }
 }
