@@ -7,12 +7,12 @@ import java.sql.SQLException;
 public class DataSource {
 
     //Declare the environment (Production or Development)
-    private static final String SERVER = "Development";
+    private static final String SERVER = "Pro";
 
     //Development DB Access details.
-    private static final String DEV_URL = "jdbc:mysql://localHost:3306/saloon";
-    private static final String DEV_USERNAME = "root";
-    private static final String DEV_PASSWORD = "MyNewPass";
+    private static final String DEV_URL = "";
+    private static final String DEV_USERNAME = "";
+    private static final String DEV_PASSWORD = "";
 
     //Production DB Access details.
     private static final String PRO_URL = "";
@@ -23,7 +23,7 @@ public class DataSource {
         Connection conn = null;
 
         //Create Production connection
-        if (SERVER == "Production") {
+        if (SERVER == "Pro") {
             try {
                 conn = DriverManager.getConnection(PRO_URL, PRO_USERNAME, PRO_PASSWORD);
                 return conn;
@@ -33,7 +33,7 @@ public class DataSource {
         }
 
         //Create Development connection
-        if (SERVER == "Development") {
+        if (SERVER == "Dev") {
             try {
                 conn = DriverManager.getConnection(DEV_URL, DEV_USERNAME, DEV_PASSWORD);
                 return conn;
@@ -43,5 +43,7 @@ public class DataSource {
         }
         return conn;
     }
+
+
 }
 

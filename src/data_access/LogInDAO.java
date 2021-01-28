@@ -18,7 +18,7 @@ public class LogInDAO {
         this.conn=conn;
     }
 
-    public Boolean ValidateUser(String username,String pass){
+    public Boolean ValidateUser(String username,String pass) throws SQLException{
         String passHash= SHA512.encryptThisString(pass);
         final String sql="Select a.id as accId,e.Id as empId,e.Email,er.Name as role ,concat(e.FirstName,' ',e.LastName) as FullName\n" +
                 "from account as a\n" +

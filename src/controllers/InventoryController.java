@@ -6,7 +6,7 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import data_access.*;
 import helpers.dialog_messages.DialogMessages;
-import helpers.report_generation.ExportToExcel;
+import helpers.exports.ExportToExcel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -25,7 +25,7 @@ import models.Inventory;
 import models.InventoryCategory;
 import validation.InventoryCategoryFormValidation;
 import validation.InventoryFormValidation;
-import view_models_dashboard.InventoryVM;
+import view_models.dashboards.InventoryVM;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -84,9 +84,9 @@ public class InventoryController implements Initializable {
     private InventoryCategoryDAO inventoryCategorydao = null;
 
 
-    private void ShowInventoryCategories() throws SQLException {
+    private void showInventoryCategories() throws SQLException {
         try {
-            inventoryCategoryList = LoadInventoryCategoriesFromDB();
+            inventoryCategoryList = loadInventoryCategoriesFromDB();
             coICId.setCellValueFactory(new PropertyValueFactory<InventoryCategory, Integer>("id"));
             colICName.setCellValueFactory(new PropertyValueFactory<InventoryCategory, String>("name"));
             colICDescription.setCellValueFactory(new PropertyValueFactory<InventoryCategory, String>("description"));
@@ -97,7 +97,7 @@ public class InventoryController implements Initializable {
 
     }
 
-    private ObservableList<InventoryCategory> LoadInventoryCategoriesFromDB() throws SQLException {
+    private ObservableList<InventoryCategory> loadInventoryCategoriesFromDB() throws SQLException {
         ObservableList<InventoryCategory> list = FXCollections.observableArrayList();
 
         try {
@@ -142,7 +142,7 @@ public class InventoryController implements Initializable {
         }
     }
 
-    public void SearchFunctionIC() {
+    public void searchFunctionIC() {
         // Wrap the ObservableList in a FilteredList (initially display all data).
         FilteredList<InventoryCategory> filteredData = new FilteredList<>(inventoryCategoryList, b -> true);
 
@@ -192,7 +192,7 @@ public class InventoryController implements Initializable {
             conn = db.getConnection();
             inventoryCategorydao = new InventoryCategoryDAO(conn);
 
-            boolean valid = InventoryCategoryFormValidation.validate(icmodel);
+            boolean valid = InventoryCategoryFormValidation.validateEmptyData(icmodel);
             if (!valid) {
                 dm.EmptyDataInForm();
                 return;
@@ -206,7 +206,7 @@ public class InventoryController implements Initializable {
                 dm.UpdateFailedDialogBox();
 
             clearICTextFields();
-            InitialLoad();
+            initialLoad();
             btnICUpdate.setDisable(true);
             btnICCreate.setDisable(false);
 
@@ -239,7 +239,7 @@ public class InventoryController implements Initializable {
             conn = db.getConnection();
             inventoryCategorydao = new InventoryCategoryDAO(conn);
 
-            boolean valid = InventoryCategoryFormValidation.validate(icmodel);
+            boolean valid = InventoryCategoryFormValidation.validateEmptyData(icmodel);
             if (!valid) {
                 dm.EmptyDataInForm();
                 return;
@@ -253,7 +253,7 @@ public class InventoryController implements Initializable {
 
 
             clearICTextFields();
-            InitialLoad();
+            initialLoad();
             btnICCreate.setDisable(false);
             btnICUpdate.setDisable(true);
         } catch (SQLException throwables) {
@@ -271,12 +271,14 @@ public class InventoryController implements Initializable {
         }
     }
 
+    //Excel icon clicked to export data
     public void btnICExcelExportClicked(MouseEvent mouseEvent) {
         ExportToExcel ex = new ExportToExcel(tvInventoryCategory, stackpane);
         ex.run();
 
     }
 
+    //Esc key event to reset all the data in window
     public void btnICKeyClicked(KeyEvent event) {
 
         if (event.getCode() == KeyCode.ESCAPE) {
@@ -288,7 +290,7 @@ public class InventoryController implements Initializable {
 
     }
 
-    public void clearICTextFields() {
+    private void clearICTextFields() {
         tfICid.clear();
         tfICName.clear();
         taICDescription.clear();
@@ -296,9 +298,9 @@ public class InventoryController implements Initializable {
     }
 
 
-    public void InitialLoad() {
+    private void initialLoad() {
         try {
-            ShowInventoryCategories();
+            showInventoryCategories();
 
             //Show Inventory
             ShowInventory();
@@ -307,13 +309,13 @@ public class InventoryController implements Initializable {
             LoadInventoryComboBoxData();
 
 
-            LoadDashboardData();
+            loadDashboardData();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
 
-    private void LoadDashboardData() {
+    private void loadDashboardData() {
         InventoryVM inventoryVM;
         try {
             db = new DataSource();
@@ -328,6 +330,9 @@ public class InventoryController implements Initializable {
         }
 
     }
+
+
+
 
 
     @FXML
@@ -581,7 +586,7 @@ public class InventoryController implements Initializable {
         btnIUpdate.setDisable(true);
 
         //Refresh Datatable for applied updates
-        InitialLoad();
+        initialLoad();
     }
 
     public void btnIUpdateClicked(MouseEvent mouseEvent) throws SQLException {
@@ -655,10 +660,10 @@ public class InventoryController implements Initializable {
         btnIUpdate.setDisable(true);
 
         //Refresh Datatable for applied updates
-        InitialLoad();
+        initialLoad();
     }
 
-    public void SearchFunctionI() {
+    public void searchFunctionI() {
         // Wrap the ObservableList in a FilteredList (initially display all data).
         FilteredList<Inventory> filteredData = new FilteredList<>(inventoryList, b -> true);
 
@@ -696,6 +701,6 @@ public class InventoryController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        InitialLoad();
+        initialLoad();
     }
 }

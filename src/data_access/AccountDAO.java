@@ -1,9 +1,10 @@
 package data_access;
 
+import helpers.Encryption.SHA512;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.Account;
-import view_models_dashboard.AccountVM;
+import view_models.dashboards.AccountVM;
 
 import java.sql.*;
 
@@ -17,12 +18,13 @@ public class AccountDAO {
         this.conn = conn;
     }
 
-    public boolean UpdateAccount(Account model){
+    public boolean UpdateAccount(Account model) throws SQLException{
         try{
             final String sql="UPDATE Account SET Username=?,Password=? where Id=?;";
             statement = conn.prepareStatement(sql);
             statement.setString(1,model.getUsername());
-            statement.setString(2,model.getPassword());
+            String passHash= SHA512.encryptThisString(model.getPassword());
+            statement.setString(2,passHash);
             statement.setInt(3,model.getId());
             statement.executeUpdate();
             return true;
@@ -32,7 +34,7 @@ public class AccountDAO {
         }
     }
 
-    public ObservableList<Account> getAllAccounts() {
+    public ObservableList<Account> getAllAccounts() throws SQLException {
         ObservableList<Account> accounts = FXCollections.observableArrayList();
 
 

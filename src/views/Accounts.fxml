@@ -10,7 +10,7 @@
 
 <StackPane fx:id="stackpane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AccountController">
     <children>
-        <AnchorPane onKeyPressed="#btnKeyClicked" prefHeight="900.0" prefWidth="1680.0" style="-fx-background-color: #EEF5F9;" stylesheets="@../resources/CSS/Home.css">
+        <AnchorPane onKeyPressed="#btnKeyClicked" prefHeight="900.0" prefWidth="1680.0" style="-fx-background-color: #EEF5F9;" stylesheets="@../resources/css/Home.css">
             <children>
 
                 <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="1680.0" style="-fx-background-color: #FFFFFF;">
@@ -37,7 +37,7 @@
                                                     <children>
                                                         <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                             <image>
-                                                                <Image url="@../resources/Icons/Accounts/totalaccounts.png" />
+                                                                <Image url="@../resources/icons/accounts/totalaccounts.png" />
                                                             </image>
                                                         </ImageView>
                                                     </children>
@@ -50,7 +50,7 @@
                                                 </HBox>
                                                 <HBox alignment="CENTER_RIGHT" prefHeight="69.0" prefWidth="143.0">
                                                     <children>
-                                                        <Label text="150" textFill="#58b5fb">
+                                                        <Label fx:id="lblTotalAccounts" text="150" textFill="#58b5fb">
                                                             <font>
                                                                 <Font size="48.0" />
                                                             </font>
@@ -90,7 +90,7 @@
                                                     <children>
                                                         <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                             <image>
-                                                                <Image url="@../resources/Icons/Common/active.png" />
+                                                                <Image url="@../resources/icons/common/active.png" />
                                                             </image>
                                                         </ImageView>
                                                     </children>
@@ -103,7 +103,7 @@
                                                 </HBox>
                                                 <HBox alignment="CENTER_RIGHT" prefHeight="69.0" prefWidth="143.0">
                                                     <children>
-                                                        <Label text="150" textFill="#00b67a">
+                                                        <Label fx:id="lblActiveAccounts" text="150" textFill="#00b67a">
                                                             <font>
                                                                 <Font size="48.0" />
                                                             </font>
@@ -143,7 +143,7 @@
                                                     <children>
                                                         <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                             <image>
-                                                                <Image url="@../resources/Icons/Common/inactive.png" />
+                                                                <Image url="@../resources/icons/common/inactive.png" />
                                                             </image>
                                                         </ImageView>
                                                     </children>
@@ -156,7 +156,7 @@
                                                 </HBox>
                                                 <HBox alignment="CENTER_RIGHT" prefHeight="69.0" prefWidth="143.0">
                                                     <children>
-                                                        <Label text="150" textFill="#ef5350">
+                                                        <Label fx:id="lblInActiveAccounts" text="150" textFill="#ef5350">
                                                             <font>
                                                                 <Font size="48.0" />
                                                             </font>
@@ -199,7 +199,7 @@
                                             <children>
                                                 <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
-                                                        <Image url="@../resources/Icons/Common/table.png" />
+                                                        <Image url="@../resources/icons/common/table.png" />
                                                     </image>
                                                 </ImageView>
                                                 <Label text="Accounts Table">
@@ -209,16 +209,11 @@
                                                 </Label>
                                             </children>
                                         </HBox>
-                                        <HBox alignment="CENTER" layoutX="918.0" layoutY="8.0" prefHeight="27.0" prefWidth="124.0" spacing="20.0">
+                                        <HBox alignment="CENTER_RIGHT" layoutX="856.0" layoutY="8.0" prefHeight="27.0" prefWidth="124.0" spacing="20.0">
                                             <children>
-                                                <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                                                    <image>
-                                                        <Image url="@../resources/Icons/Common/pdf.png" />
-                                                    </image>
-                                                </ImageView>
                                                 <ImageView fitHeight="29.0" fitWidth="27.0" onMouseClicked="#btnSExcelExportClicked" pickOnBounds="true" preserveRatio="true">
                                                     <image>
-                                                        <Image url="@../resources/Icons/Common/excel.png" />
+                                                        <Image url="@../resources/icons/common/excel.png" />
                                                     </image>
                                                 </ImageView>
                                             </children>
@@ -227,7 +222,7 @@
                                 </AnchorPane>
                                 <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="563.0">
                                     <children>
-                                        <JFXTextField fx:id="tfSearchTerm" focusColor="#1976d2" onMouseClicked="#SearchFunction" prefHeight="25.0" prefWidth="331.0" promptText="Enter Search Term">
+                                        <JFXTextField fx:id="tfSearchTerm" focusColor="#1976d2" onMouseClicked="#searchFunction" prefHeight="25.0" prefWidth="331.0" promptText="Enter Search Term">
                                             <HBox.margin>
                                                 <Insets right="20.0" />
                                             </HBox.margin>

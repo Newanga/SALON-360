@@ -3,7 +3,7 @@ package data_access;
 import models.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import view_models_dashboard.CustomerVM;
+import view_models.dashboards.CustomerVM;
 
 import java.sql.*;
 
@@ -148,7 +148,7 @@ public class CustomerDAO {
 
     public String getCustomerNameById(int id) throws SQLException {
         String custName="";
-        final String sql="SELECT CONCAT(FirstName,\" \",LastName) AS name from customer where id=?;";
+        final String sql="SELECT CONCAT(FirstName,\" \",LastName) AS name from customer where id=? and StateId=1;";
         try {
             statement = conn.prepareStatement(sql);
             statement.setInt(1, id);
@@ -157,6 +157,24 @@ public class CustomerDAO {
             result.absolute(1);
             //Get first row data
             custName = result.getString("name");
+            return custName;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getCustomerContactNoById(int id) throws SQLException{
+        String custName="";
+        final String sql="SELECT ContactNo from customer where id=?;";
+        try {
+            statement = conn.prepareStatement(sql);
+            statement.setInt(1, id);
+            result= statement.executeQuery();
+            // Navigate to first row
+            result.absolute(1);
+            //Get first row data
+            custName = result.getString("ContactNo");
             return custName;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -174,7 +192,7 @@ public class CustomerDAO {
     }
 
 
-    public CustomerVM getDashBoardData() {
+    public CustomerVM getDashBoardData()throws SQLException {
         CustomerVM customerVM=new CustomerVM();
 
         final String queryTotalCustomers="SELECT COUNT(ID) as Total\n" +

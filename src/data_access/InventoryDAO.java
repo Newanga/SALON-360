@@ -2,8 +2,9 @@ package data_access;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import main.CurrentUserData;
 import models.Inventory;
-import view_models_dashboard.InventoryVM;
+import view_models.dashboards.InventoryVM;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,7 +21,7 @@ public class InventoryDAO {
         this.conn = conn;
     }
 
-    public ObservableList<Inventory> getAllInventory() {
+    public ObservableList<Inventory> getAllInventory()  throws SQLException{
         ObservableList<Inventory> inventory = FXCollections.observableArrayList();
         final String sql = "SELECT i.Id,i.Name,i.Price,i.Quantity,i.Description,i.SpecialNote,ic.Name as Category\n" +
                 "FROM inventory as i\n" +
@@ -35,8 +36,8 @@ public class InventoryDAO {
                 inventory.add(item);
             }
             return inventory;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return inventory;
     }
@@ -89,7 +90,7 @@ public class InventoryDAO {
         InventoryCategoryDAO icdao = null;
 
 
-        final String sql = "INSERT INTO Inventory (Name,Price,Quantity,Description,SpecialNote,CategoryId) values (?,?,?,?,?,?);";
+        final String sql = "INSERT INTO Inventory (Name,Price,Quantity,Description,SpecialNote,CategoryId,EmployeeId) values (?,?,?,?,?,?,?);";
 
         //Implementing a transactions
         try {
@@ -99,6 +100,8 @@ public class InventoryDAO {
             icdao = new InventoryCategoryDAO(conn);
             int inventoryCategoryId = icdao.getInventoryCategoryIdByName(model.getCategory());
 
+            //Get Current Logged User Employee Id
+            int employeeId=Integer.parseInt(CurrentUserData.getEmpId());
 
             //USe the other properties of model and add new record tt service
             statement = conn.prepareStatement(sql);
@@ -108,6 +111,7 @@ public class InventoryDAO {
             statement.setString(4, model.getDescription());
             statement.setString(5, model.getSpecialNote());
             statement.setInt(6, inventoryCategoryId);
+            statement.setInt(7, employeeId);
             statement.executeUpdate();
             conn.commit();
             return true;
@@ -159,8 +163,6 @@ public class InventoryDAO {
             result.absolute(1);
             int totalNoOfItems = result.getInt("Total");
             inventoryVM.setTotalNoOfItems(totalNoOfItems);
-
-
             return inventoryVM;
         } catch (SQLException ex) {
             ex.printStackTrace();

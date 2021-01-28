@@ -16,7 +16,5 @@ public class VoucherFormValidation {
         }
     }
 
-//    public static boolean validateEmptyData(Voucher voucherModel) {
-//        if(voucherModel.getAmount())
-//    }
+
 }

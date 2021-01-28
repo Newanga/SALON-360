@@ -3,7 +3,7 @@ package data_access;
 import models.ServiceCategory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.jetbrains.annotations.NotNull;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +21,7 @@ public class ServiceCategoryDAO {
         this.conn = conn;
     }
 
-    public Boolean createNewServiceCategory(@NotNull ServiceCategory model) throws SQLException {
+    public Boolean createNewServiceCategory( ServiceCategory model) throws SQLException {
         String sql = "INSERT INTO servicecategory (name, description) VALUES (?, ?);";
         try {
             statement = conn.prepareStatement(sql);
@@ -31,7 +31,8 @@ public class ServiceCategoryDAO {
             statement.setString(2, description);
             statement.executeUpdate();
             return true;
-        } catch (SQLException throwables) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return false;
         }
     }
@@ -47,7 +48,8 @@ public class ServiceCategoryDAO {
             //Get first row data
             int id = result.getInt("id");
             return id;
-        } catch (SQLException throwables) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return 0;
         }
     }
@@ -80,8 +82,8 @@ public class ServiceCategoryDAO {
                serviceCategoryNames.add(name);
             }
             return serviceCategoryNames;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return serviceCategoryNames;
     }
@@ -95,7 +97,8 @@ public class ServiceCategoryDAO {
             statement.setInt(3, model.getId());
             statement.executeUpdate();
             return true;
-        } catch (SQLException throwables) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return false;
         }
     }

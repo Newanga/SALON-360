@@ -24,7 +24,7 @@
 <?import com.jfoenix.controls.JFXTextArea?>
 <StackPane fx:id="stackpane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" >
     <children>
-        <AnchorPane prefHeight="1005.0" prefWidth="1680.0" style="-fx-background-color: #EEF5F9;" stylesheets="@resources/CSS/Home.css">
+        <AnchorPane prefHeight="1005.0" prefWidth="1680.0" style="-fx-background-color: #EEF5F9;" stylesheets="@resources/css/Home.css">
             <children>
                 <JFXTabPane cacheShape="false" centerShape="false" depthTest="DISABLE" focusTraversable="false" layoutY="50.0" prefHeight="954.0" prefWidth="1680.0" scaleShape="false">
                     <Tab text="Services">
@@ -41,7 +41,7 @@
                                                                 <children>
                                                                     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                         <image>
-                                                                            <Image url="@resources/Icons/Home/services.png" />
+                                                                            <Image url="@resources/icons/home/services.png" />
                                                                         </image>
                                                                     </ImageView>
                                                                 </children>
@@ -94,7 +94,7 @@
                                                                 <children>
                                                                     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                         <image>
-                                                                            <Image url="@resources/Icons/Common/active.png" />
+                                                                            <Image url="@resources/icons/common/active.png" />
                                                                         </image>
                                                                     </ImageView>
                                                                 </children>
@@ -147,7 +147,7 @@
                                                                 <children>
                                                                     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                         <image>
-                                                                            <Image url="@resources/Icons/Services/non-available.png" />
+                                                                            <Image url="@resources/icons/services/non-available.png" />
                                                                         </image>
                                                                     </ImageView>
                                                                 </children>
@@ -200,7 +200,7 @@
                                                                 <children>
                                                                     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                         <image>
-                                                                            <Image url="@resources/Icons/discontinued.png" />
+                                                                            <Image url="@resources/icons/discontinued.png" />
                                                                         </image>
                                                                     </ImageView>
                                                                 </children>
@@ -256,7 +256,7 @@
                                                         <children>
                                                             <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                                                 <image>
-                                                                    <Image url="@resources/Icons/Common/table.png" />
+                                                                    <Image url="@resources/icons/common/table.png" />
                                                                 </image>
                                                             </ImageView>
                                                             <Label text="Service Table">
@@ -270,12 +270,12 @@
                                                         <children>
                                                             <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                                                 <image>
-                                                                    <Image url="@resources/Icons/Common/pdf.png" />
+                                                                    <Image url="@resources/icons/common/pdf.png" />
                                                                 </image>
                                                             </ImageView>
                                                             <ImageView fitHeight="29.0" fitWidth="27.0"  pickOnBounds="true" preserveRatio="true">
                                                                 <image>
-                                                                    <Image url="@resources/Icons/Common/excel.png" />
+                                                                    <Image url="@resources/icons/common/excel.png" />
                                                                 </image>
                                                             </ImageView>
                                                         </children>
@@ -362,7 +362,7 @@
                                                                 <children>
                                                                     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                         <image>
-                                                                            <Image url="@resources/Icons/Common/servicecategory.png" />
+                                                                            <Image url="@resources/icons/common/servicecategory.png" />
                                                                         </image>
                                                                     </ImageView>
                                                                 </children>
@@ -418,7 +418,7 @@
                                                         <children>
                                                             <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                                                 <image>
-                                                                    <Image url="@resources/Icons/Common/table.png" />
+                                                                    <Image url="@resources/icons/common/table.png" />
                                                                 </image>
                                                             </ImageView>
                                                             <Label prefHeight="27.0" prefWidth="215.0" text="Service Category Table">
@@ -432,12 +432,12 @@
                                                         <children>
                                                             <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                                                 <image>
-                                                                    <Image url="@resources/Icons/Common/pdf.png" />
+                                                                    <Image url="@resources/icons/common/pdf.png" />
                                                                 </image>
                                                             </ImageView>
                                                             <ImageView fitHeight="29.0" fitWidth="27.0"  pickOnBounds="true" preserveRatio="true">
                                                                 <image>
-                                                                    <Image url="@resources/Icons/Common/excel.png" />
+                                                                    <Image url="@resources/icons/common/excel.png" />
                                                                 </image>
                                                             </ImageView>
                                                         </children>

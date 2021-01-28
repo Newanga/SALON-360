@@ -18,7 +18,7 @@ public class AppointmentStateDAO {
         this.conn = conn;
     }
 
-    public int getAppointmentStateIdByName(String name) {
+    public int getAppointmentStateIdByName(String name) throws SQLException {
         final String sql = "SELECT Id FROM AppointmentState WHERE Name=?";
         try {
             statement = conn.prepareStatement(sql);

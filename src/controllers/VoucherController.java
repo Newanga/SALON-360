@@ -3,7 +3,7 @@ package controllers;
 import com.jfoenix.controls.*;
 import data_access.*;
 import helpers.dialog_messages.DialogMessages;
-import helpers.report_generation.ExportToExcel;
+import helpers.exports.ExportToExcel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -21,7 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import models.Voucher;
 import validation.VoucherFormValidation;
-import view_models_dashboard.VoucherVM;
+import view_models.dashboards.VoucherVM;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -95,20 +95,20 @@ public class VoucherController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            InitialLoad();
+            initialLoad();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    private void InitialLoad() throws SQLException {
-        LoadVoucherComboBoxData();
-        ShowVouchers();
-        DefaultFormValues();
-        LoadDashBoardData();
+    private void initialLoad() throws SQLException {
+        loadVoucherComboBoxData();
+        showVouchers();
+        defaultFormValues();
+        loadDashBoardData();
     }
 
-    private void LoadDashBoardData() {
+    private void loadDashBoardData() {
         VoucherVM voucherVM;
 
         try {
@@ -122,13 +122,13 @@ public class VoucherController implements Initializable {
         }
     }
 
-    private void DefaultFormValues() {
-        SetDateColumn();
-        SetCBStateValue();
+    private void defaultFormValues() {
+        setDateColumn();
+        setCBStateValue();
     }
 
-    private void ShowVouchers() {
-        voucherList = LoadVouchersFromDB();
+    private void showVouchers() {
+        voucherList = loadVouchersFromDB();
         colID.setCellValueFactory(new PropertyValueFactory<Voucher, Integer>("id"));
         colAmount.setCellValueFactory(new PropertyValueFactory<Voucher, Integer>("amount"));
         colDateAdded.setCellValueFactory(new PropertyValueFactory<Voucher, Date>("dateAdded"));
@@ -138,16 +138,16 @@ public class VoucherController implements Initializable {
     }
 
 
-    private void SetDateColumn() {
+    private void setDateColumn() {
         dpDateAdded.setValue(LocalDate.now());
     }
 
-    private void SetCBStateValue() {
+    private void setCBStateValue() {
         cbState.setValue("Valid");
     }
 
 
-    private void LoadVoucherComboBoxData() {
+    private void loadVoucherComboBoxData() {
         try {
             cbState.setItems(FXCollections.observableArrayList(loadVoucherStates()));
         } catch (Exception ex) {
@@ -180,7 +180,7 @@ public class VoucherController implements Initializable {
     }
 
 
-    private ObservableList<Voucher> LoadVouchersFromDB() {
+    private ObservableList<Voucher> loadVouchersFromDB() {
         ObservableList<Voucher> list = FXCollections.observableArrayList();
 
         try {
@@ -246,7 +246,7 @@ public class VoucherController implements Initializable {
         }
 
         clearTextFieldsAndComboBoxes();
-        InitialLoad();
+        initialLoad();
         btnUpdate.setDisable(true);
         btnCreate.setDisable(false);
 
@@ -284,11 +284,7 @@ public class VoucherController implements Initializable {
                 voucherModel.setAmount(Integer.parseInt(amount));
             }
 
-//            //Get Date from date picker
-//            Date date = Date.from(dpDateAdded.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-//            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-//            voucherModel.setDateAdded(sqlDate);
-
+            //Get Date from dtae picker
             try {
                 Date date = Date.from(dpDateAdded.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
                 java.sql.Date sqlDate = new java.sql.Date(date.getTime());
@@ -313,7 +309,7 @@ public class VoucherController implements Initializable {
         clearTextFieldsAndComboBoxes();
         btnUpdate.setDisable(true);
         btnCreate.setDisable(false);
-        InitialLoad();
+        initialLoad();
 
         try {
             //closing connection resources
@@ -327,14 +323,15 @@ public class VoucherController implements Initializable {
     }
 
 
+    //Esc key to reset all the data
     public void btnKeyClicked(KeyEvent event) {
         if (event.getCode() == KeyCode.ESCAPE) {
             tvVouchers.getSelectionModel().clearSelection();
             clearTextFieldsAndComboBoxes();
             btnCreate.setDisable(false);
             btnUpdate.setDisable(true);
-            LoadVoucherComboBoxData();
-            DefaultFormValues();
+            loadVoucherComboBoxData();
+            defaultFormValues();
         }
 
     }
@@ -376,6 +373,7 @@ public class VoucherController implements Initializable {
         tvVouchers.setItems(sortedData);
     }
 
+    //Doubel click on the table row
     public void tvMouseClicked(MouseEvent event) {
         Voucher model = null;
 

@@ -21,7 +21,7 @@ public class SMSTemplateDAO {
         this.conn = conn;
     }
 
-    public boolean CreateNewSMSTemplate(SMSTemplate model){
+    public boolean CreateNewSMSTemplate(SMSTemplate model) throws SQLException{
         String sql = "INSERT INTO smstemplate (name, message) VALUES (?, ?);";
         try {
             statement = conn.prepareStatement(sql);
@@ -31,7 +31,8 @@ public class SMSTemplateDAO {
             statement.setString(2, description);
             statement.executeUpdate();
             return true;
-        } catch (SQLException throwables) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return false;
         }
     }
@@ -47,7 +48,8 @@ public class SMSTemplateDAO {
             //Get first row data
             int id = result.getInt("id");
             return id;
-        } catch (SQLException throwables) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return 0;
         }
     }
@@ -63,7 +65,8 @@ public class SMSTemplateDAO {
             //Get first row data
             String message = result.getString("Message");
             return message;
-        } catch (SQLException throwables) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return null;
         }
 
@@ -83,8 +86,8 @@ public class SMSTemplateDAO {
                 smsTemplates.add(template);
             }
             return smsTemplates;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return smsTemplates;
     }
@@ -100,8 +103,8 @@ public class SMSTemplateDAO {
                 smsTemplateNames.add(name);
             }
             return smsTemplateNames;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return smsTemplateNames;
     }
@@ -115,7 +118,8 @@ public class SMSTemplateDAO {
             statement.setInt(3, model.getId());
             statement.executeUpdate();
             return true;
-        } catch (SQLException throwables) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return false;
         }
     }

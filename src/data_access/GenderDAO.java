@@ -18,7 +18,7 @@ public class GenderDAO {
         this.conn = conn;
     }
 
-    public int getGenderIdByName(String name){
+    public int getGenderIdByName(String name)  throws SQLException{
         final String sql = "SELECT Id FROM Gender WHERE Name=?";
         try {
             statement = conn.prepareStatement(sql);
@@ -29,7 +29,8 @@ public class GenderDAO {
             //Get first row data
             int id = result.getInt("id");
             return id;
-        } catch (SQLException throwables) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return 0;
         }
     }
@@ -45,8 +46,8 @@ public class GenderDAO {
                 genders.add(name);
             }
             return genders;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return genders;
     }

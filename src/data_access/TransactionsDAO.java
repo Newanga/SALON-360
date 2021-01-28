@@ -30,7 +30,7 @@ public class TransactionsDAO {
         }
     }
 
-    public ObservableList<TransactionVM> getAllTransactions() {
+    public ObservableList<TransactionVM> getAllTransactions() throws SQLException {
         ObservableList<TransactionVM> transactionVM = FXCollections.observableArrayList();
 
         final String sql = "SELECT t.id as transactionId, t.AppointmentId as appointmentId ,t.Date,t.Cash,t.Balance, COALESCE( v.amount ,0)as discount, (t.Cash-t.Balance) + COALESCE( v.amount ,0)  as amount\n" +

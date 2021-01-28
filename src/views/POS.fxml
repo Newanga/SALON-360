@@ -10,7 +10,7 @@
 
 <StackPane fx:id="stackpane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.POSController">
     <children>
-        <AnchorPane prefHeight="900.0" prefWidth="1680.0" style="-fx-background-color: #EEF5F9;" stylesheets="@../resources/CSS/Home.css">
+        <AnchorPane prefHeight="900.0" prefWidth="1680.0" style="-fx-background-color: #EEF5F9;" stylesheets="@../resources/css/Home.css">
             <children>
 
                 <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="1680.0" style="-fx-background-color: #FFFFFF;">
@@ -25,7 +25,7 @@
                     </font>
                 </Label>
 
-                <AnchorPane layoutY="58.0" prefHeight="955.0" prefWidth="1680.0">
+                <AnchorPane layoutY="58.0" onKeyPressed="#btnKeyClicked" prefHeight="955.0" prefWidth="1680.0">
                     <children>
 
                         <VBox layoutX="62.0" layoutY="208.0" prefHeight="679.0" prefWidth="751.0" style="-fx-background-color: #FFFFFF;">
@@ -36,7 +36,7 @@
                                             <children>
                                                 <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
-                                                        <Image url="@../resources/Icons/Common/table.png" />
+                                                        <Image url="@../resources/icons/common/table.png" />
                                                     </image>
                                                 </ImageView>
                                                 <Label text="ALL SERVICES ">
@@ -46,14 +46,10 @@
                                                 </Label>
                                             </children>
                                         </HBox>
-                              <HBox layoutX="427.0" layoutY="8.0" prefHeight="27.0" prefWidth="298.0" spacing="20.0">
-                                 <children>
-                                    <JFXComboBox fx:id="cbCategory" disable="true" prefHeight="27.0" prefWidth="268.0" promptText="Category" />
-                                 </children>
-                              </HBox>
+                              <HBox layoutX="427.0" layoutY="8.0" prefHeight="27.0" prefWidth="298.0" spacing="20.0" />
                                     </children>
                                 </AnchorPane>
-                                <TableView fx:id="tvAllServices" disable="true" onMouseClicked="#AllServicesTableDoubleCLicked" prefHeight="555.0" prefWidth="1016.0" style="-fx-background-color: #FFFFFF;">
+                                <TableView fx:id="tvAllServices" disable="true" onMouseClicked="#allServicesTableDoubleCLicked" prefHeight="555.0" prefWidth="1016.0" style="-fx-background-color: #FFFFFF;">
                                     <columns>
                                         <TableColumn fx:id="colAllServicesId" prefWidth="75.0" text="SERVICE ID #" />
                                         <TableColumn fx:id="colAllServicesName" prefWidth="75.0" text="SERVICE NAME" />
@@ -97,7 +93,7 @@
                               </JFXTextField>
                               <HBox alignment="CENTER_RIGHT" prefHeight="56.0" prefWidth="118.0" spacing="20.0">
                                  <children>
-                                    <JFXButton onMouseClicked="#AppointmentSearch" prefHeight="35.0" prefWidth="85.0" style="-fx-background-color: #00b67a;" text="Search" />
+                                    <JFXButton onMouseClicked="#appointmentSearch" prefHeight="35.0" prefWidth="85.0" style="-fx-background-color: #00b67a;" text="Search" />
                                  </children>
                                  <padding>
                                     <Insets right="10.0" />
@@ -115,7 +111,7 @@
                                  <children>
                                     <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../resources/Icons/Common/table.png" />
+                                          <Image url="@../resources/icons/common/table.png" />
                                        </image>
                                     </ImageView>
                                     <Label prefHeight="27.0" prefWidth="186.0" text="PURCHASE  SERVICES">
@@ -127,7 +123,7 @@
                               </HBox>
                            </children>
                         </AnchorPane>
-                        <TableView fx:id="tvPurchaseServices" disable="true" onKeyPressed="#DeleteServiceFromPurchaseTable" prefHeight="555.0" prefWidth="1016.0" style="-fx-background-color: #FFFFFF;">
+                        <TableView fx:id="tvPurchaseServices" disable="true" onKeyPressed="#deleteServiceFromPurchaseTable" prefHeight="555.0" prefWidth="1016.0" style="-fx-background-color: #FFFFFF;">
                            <columns>
                               <TableColumn fx:id="colPurchaseServicesName" prefWidth="75.0" text="NAME" />
                               <TableColumn fx:id="colPurchaseServicesPrice" prefWidth="75.0" text="PRICE" />
@@ -161,7 +157,7 @@
                                     </JFXTextField>
                                     <ImageView fx:id="imgVoucher" disable="true" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#RemoveVoucherClicked" pickOnBounds="true" preserveRatio="true" visible="false">
                                        <image>
-                                          <Image url="@../resources/Icons/Common/inactive.png" />
+                                          <Image url="@../resources/icons/common/inactive.png" />
                                        </image></ImageView>
                                  </children>
                               </HBox>

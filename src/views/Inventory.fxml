@@ -10,7 +10,7 @@
 
 <StackPane fx:id="stackpane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.InventoryController">
     <children>
-        <AnchorPane prefHeight="1005.0" prefWidth="1680.0" style="-fx-background-color: #EEF5F9;" stylesheets="@../resources/CSS/Home.css">
+        <AnchorPane prefHeight="1005.0" prefWidth="1588.0" style="-fx-background-color: #EEF5F9;" stylesheets="@../resources/css/Home.css">
             <children>
                 <JFXTabPane cacheShape="false" centerShape="false" depthTest="DISABLE" focusTraversable="false" layoutY="50.0" prefHeight="954.0" prefWidth="1680.0" scaleShape="false">
                     <Tab text="Inventory">
@@ -27,7 +27,7 @@
                                                                 <children>
                                                                     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                         <image>
-                                                                            <Image url="@../resources/Icons/Inventory/total_inventory.png" />
+                                                                            <Image url="@../resources/icons/inventory/total_inventory.png" />
                                                                         </image>
                                                                     </ImageView>
                                                                 </children>
@@ -40,60 +40,7 @@
                                                             </HBox>
                                                             <HBox alignment="CENTER_RIGHT" prefHeight="69.0" prefWidth="143.0">
                                                                 <children>
-                                                                    <Label text="150" textFill="#58b5fb">
-                                                                        <font>
-                                                                            <Font size="48.0" />
-                                                                        </font>
-                                                                        <HBox.margin>
-                                                                            <Insets right="28.0" />
-                                                                        </HBox.margin>
-                                                                    </Label>
-                                                                </children>
-                                                                <opaqueInsets>
-                                                                    <Insets />
-                                                                </opaqueInsets>
-                                                                <HBox.margin>
-                                                                    <Insets />
-                                                                </HBox.margin>
-                                                            </HBox>
-                                                        </children>
-                                                    </HBox>
-                                                    <HBox alignment="TOP_RIGHT" prefHeight="55.0" prefWidth="270.0">
-                                                        <children>
-                                                            <Label text="TOTAL INVENTORY" textFill="#99abb4">
-                                                                <font>
-                                                                    <Font size="14.0" />
-                                                                </font>
-                                                                <padding>
-                                                                    <Insets right="28.0" />
-                                                                </padding>
-                                                            </Label>
-                                                        </children>
-                                                    </HBox>
-                                                </children>
-                                            </VBox>
-                                            <VBox prefHeight="90.0" prefWidth="270.0" style="-fx-background-color: #FFFFFF;">
-                                                <children>
-                                                    <HBox prefHeight="118.0" prefWidth="270.0">
-                                                        <children>
-                                                            <HBox alignment="CENTER" prefHeight="78.0" prefWidth="129.0">
-                                                                <children>
-                                                                    <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                        <image>
-                                                                            <Image url="@../resources/Icons/Inventory/items.png" />
-                                                                        </image>
-                                                                    </ImageView>
-                                                                </children>
-                                                                <opaqueInsets>
-                                                                    <Insets />
-                                                                </opaqueInsets>
-                                                                <padding>
-                                                                    <Insets right="10.0" />
-                                                                </padding>
-                                                            </HBox>
-                                                            <HBox alignment="CENTER_RIGHT" prefHeight="69.0" prefWidth="143.0">
-                                                                <children>
-                                                                    <Label text="150" textFill="#00b67a">
+                                                                    <Label fx:id="lblTotalNoOfItems" text="150" textFill="#58b5fb">
                                                                         <font>
                                                                             <Font size="48.0" />
                                                                         </font>
@@ -136,7 +83,7 @@
                                                         <children>
                                                             <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                                                 <image>
-                                                                    <Image url="@../resources/Icons/Common/table.png" />
+                                                                    <Image url="@../resources/icons/common/table.png" />
                                                                 </image>
                                                             </ImageView>
                                                             <Label text="Inventory Table">
@@ -146,16 +93,11 @@
                                                             </Label>
                                                         </children>
                                                     </HBox>
-                                                    <HBox alignment="CENTER" layoutX="812.0" layoutY="8.0" prefHeight="27.0" prefWidth="124.0" spacing="20.0">
+                                                    <HBox alignment="CENTER_RIGHT" layoutX="812.0" layoutY="8.0" prefHeight="27.0" prefWidth="124.0" spacing="20.0">
                                                         <children>
-                                                            <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                                                                <image>
-                                                                    <Image url="@../resources/Icons/Common/pdf.png" />
-                                                                </image>
-                                                            </ImageView>
                                                             <ImageView fitHeight="29.0" fitWidth="27.0" onMouseClicked="#btnIExcelExportClicked" pickOnBounds="true" preserveRatio="true">
                                                                 <image>
-                                                                    <Image url="@../resources/Icons/Common/excel.png" />
+                                                                    <Image url="@../resources/icons/common/excel.png" />
                                                                 </image>
                                                             </ImageView>
                                                         </children>
@@ -164,7 +106,7 @@
                                             </AnchorPane>
                                             <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="563.0">
                                                 <children>
-                                                    <JFXTextField fx:id="tfISearchTerm" focusColor="#1976d2" onMouseClicked="#SearchFunctionI" prefHeight="25.0" prefWidth="330.0" promptText="Enter Search Term">
+                                                    <JFXTextField fx:id="tfISearchTerm" focusColor="#1976d2" onMouseClicked="#searchFunctionI" prefHeight="25.0" prefWidth="330.0" promptText="Enter Search Term">
                                                         <HBox.margin>
                                                             <Insets right="20.0" />
                                                         </HBox.margin>
@@ -248,7 +190,7 @@
                                                                 <children>
                                                                     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                         <image>
-                                                                            <Image url="@../resources/Icons/Common/servicecategory.png" />
+                                                                            <Image url="@../resources/icons/common/servicecategory.png" />
                                                                         </image>
                                                                     </ImageView>
                                                                 </children>
@@ -261,7 +203,7 @@
                                                             </HBox>
                                                             <HBox alignment="CENTER_RIGHT" prefHeight="69.0" prefWidth="143.0">
                                                                 <children>
-                                                                    <Label fx:id="lblTotalIc" text="150" textFill="#58b5fb">
+                                                                    <Label fx:id="lblTotalCategory" text="150" textFill="#58b5fb">
                                                                         <font>
                                                                             <Font size="48.0" />
                                                                         </font>
@@ -304,7 +246,7 @@
                                                         <children>
                                                             <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                                                 <image>
-                                                                    <Image url="@../resources/Icons/Common/table.png" />
+                                                                    <Image url="@../resources/icons/common/table.png" />
                                                                 </image>
                                                             </ImageView>
                                                             <Label prefHeight="27.0" prefWidth="215.0" text="Inventory Category Table">
@@ -314,16 +256,11 @@
                                                             </Label>
                                                         </children>
                                                     </HBox>
-                                                    <HBox alignment="CENTER" layoutX="816.0" layoutY="8.0" prefHeight="27.0" prefWidth="124.0" spacing="20.0">
+                                                    <HBox alignment="CENTER_RIGHT" layoutX="816.0" layoutY="8.0" prefHeight="27.0" prefWidth="124.0" spacing="20.0">
                                                         <children>
-                                                            <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                                                                <image>
-                                                                    <Image url="@../resources/Icons/Common/pdf.png" />
-                                                                </image>
-                                                            </ImageView>
                                                             <ImageView fitHeight="29.0" fitWidth="27.0" onMouseClicked="#btnICExcelExportClicked" pickOnBounds="true" preserveRatio="true">
                                                                 <image>
-                                                                    <Image url="@../resources/Icons/Common/excel.png" />
+                                                                    <Image url="@../resources/icons/common/excel.png" />
                                                                 </image>
                                                             </ImageView>
                                                         </children>
@@ -332,7 +269,7 @@
                                             </AnchorPane>
                                             <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="563.0">
                                                 <children>
-                                                    <JFXTextField fx:id="tfICSearchTerm" focusColor="#1976d2" onMouseClicked="#SearchFunctionIC" prefHeight="25.0" prefWidth="273.0" promptText="Enter Search Term">
+                                                    <JFXTextField fx:id="tfICSearchTerm" focusColor="#1976d2" onMouseClicked="#searchFunctionIC" prefHeight="25.0" prefWidth="273.0" promptText="Enter Search Term">
                                                         <HBox.margin>
                                                             <Insets right="20.0" />
                                                         </HBox.margin>

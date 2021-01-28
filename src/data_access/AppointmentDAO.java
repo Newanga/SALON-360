@@ -1,9 +1,11 @@
 package data_access;
 
+import com.twilio.rest.chat.v1.service.User;
+import helpers.sms.AppointmentSMS;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.Appointment;
-import view_models_dashboard.AppointmentVM;
+import view_models.dashboards.AppointmentVM;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -18,7 +20,7 @@ public class AppointmentDAO {
         this.conn = conn;
     }
 
-    public ObservableList<Appointment> getAllAppointmentsToday(){
+    public ObservableList<Appointment> getAllAppointmentsToday() throws SQLException{
         ObservableList<Appointment> appointmentsTodayList = FXCollections.observableArrayList();
 
         final String sql="SELECT ap.id,ap.AppointmentDate,ap.AppointmentTime,concat(c.FirstName,\" \",c.LastName) as CustomerName, aps.Name as state\n" +
@@ -44,14 +46,14 @@ public class AppointmentDAO {
                 appointmentsTodayList.add(app);
             }
             return appointmentsTodayList;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
         return appointmentsTodayList;
 
     }
 
-    public ObservableList<Appointment> getAllAppointmentsByDateAndTime(Date searchDate, Time searchTime) {
+    public ObservableList<Appointment> getAllAppointmentsByDateAndTime(Date searchDate, Time searchTime) throws SQLException {
         ObservableList<Appointment> appointmentsFilteredList = FXCollections.observableArrayList();
 
 
@@ -119,7 +121,7 @@ public class AppointmentDAO {
 
     }
 
-    public Boolean CreateNewAppointment(Appointment model){
+    public Boolean CreateNewAppointment(Appointment model) throws SQLException {
         final String sql="INSERT INTO appointment (BookedDate,AppointmentDate,AppointmentTime,StateId,CustomerId) VALUES (?,?,?,?,?);";
         AppointmentStateDAO appointmentStateDAO=new AppointmentStateDAO(conn);
         int stateId=0;
@@ -129,7 +131,7 @@ public class AppointmentDAO {
             //get state id
             stateId=appointmentStateDAO.getAppointmentStateIdByName(model.getState());
 
-            statement=conn.prepareStatement(sql);
+            statement=conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
             statement.setDate(1,model.getBookedDate());
             statement.setDate(2,model.getAppointmentDate());
             statement.setTime(3,model.getAppointmentTime());
@@ -137,10 +139,22 @@ public class AppointmentDAO {
             statement.setInt(5,model.getCustomerId());
             statement.executeUpdate();
             conn.commit();
+
+            //Get appointment id of above insertion
+            final  String query="SELECT MAX(ID) as id from appointment;";
+            statement =conn.prepareStatement(query);
+            result = statement.executeQuery();
+            // Navigate to first row
+            result.absolute(1);
+            //Get first row data
+            int appointmentId = result.getInt("id");
+
+            AppointmentSMS.Confirm(model,appointmentId);
             return true;
 
         } catch (SQLException ex) {
             ex.printStackTrace();
+            conn.rollback();
             return false;
         }finally {
             try{
@@ -155,12 +169,12 @@ public class AppointmentDAO {
         }
     }
 
-    public Boolean UpdateAppointment(Appointment model){
+    public Boolean UpdateAppointment(Appointment model) throws SQLException {
         final String sql="UPDATE Appointment Set AppointmentDate=?,AppointmentTime=?,StateId=? where Id=?;";
         AppointmentStateDAO appointmentStateDAO=new AppointmentStateDAO(conn);
         int stateId=0;
         try{
-
+            conn.setAutoCommit(false);
             //get state id
             stateId=appointmentStateDAO.getAppointmentStateIdByName(model.getState());
 
@@ -170,10 +184,19 @@ public class AppointmentDAO {
             statement.setInt(3,stateId);
             statement.setInt(4,model.getId());
             statement.executeUpdate();
+            conn.setAutoCommit(true);
+
             return true;
         } catch (SQLException ex) {
+            conn.rollback();
             ex.printStackTrace();
             return false;
+        }finally {
+            conn.setAutoCommit(true);
+            if(appointmentStateDAO!=null){
+                appointmentStateDAO.close();
+            }
+
         }
     }
 
@@ -213,6 +236,7 @@ public class AppointmentDAO {
             statement = conn.prepareStatement(queryAppointmentsToday);
             statement.setDate(1, Date.valueOf(LocalDate.now()));
             result = statement.executeQuery();
+            result.absolute(1);
             int today = result.getInt("Today");
             appointmentVM.setTotalAppointmentsToday(today);
 

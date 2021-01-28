@@ -6,10 +6,7 @@ import models.Service;
 import models.Transaction;
 import models.TransactionItem;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class POSDAO {
 
@@ -21,7 +18,7 @@ public class POSDAO {
         this.conn = conn;
     }
 
-    public ObservableList<Service> getAllServices() {
+    public ObservableList<Service> getAllServices() throws SQLException {
         ObservableList<Service> serviceCategories = FXCollections.observableArrayList();
         final String sql = "select s.Id,s.Name,s.Price,sc.Name as category  from service as s\n" +
                 "inner join servicecategory as sc \n" +
@@ -42,13 +39,13 @@ public class POSDAO {
                 serviceCategories.add(service);
             }
             return serviceCategories;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return serviceCategories;
     }
 
-    public String CheckAppointmentValidity(int id) {
+    public String CheckAppointmentValidity(int id) throws SQLException {
         String custName =null;
         final String sql = "select CONCAT(FirstName,\" \",LastName) AS name\n" +
                 "from appointment as a\n" +
@@ -72,7 +69,7 @@ public class POSDAO {
         return null;
     }
 
-    public int CheckVoucherValidity(int id) {
+    public int CheckVoucherValidity(int id) throws SQLException {
         int amount = 0;
         final String sql = "SELECT Amount \n" +
                 "FROM voucher \n" +
@@ -109,8 +106,16 @@ public class POSDAO {
             statement.setTime(3,model.getTime());
             statement.setDouble(4,model.getCash());
             statement.setDouble(5,model.getBalance());
-            int transactionId=statement.executeUpdate();
+            statement.executeUpdate();
 
+            //Get Transaction Insert ID from DB
+            final  String query="SELECT MAX(ID) as id from Transaction;";
+            statement =conn.prepareStatement(query);
+            result = statement.executeQuery();
+            // Navigate to first row
+            result.absolute(1);
+            //Get first row data
+            int transactionId = result.getInt("id");
 
             //Insert Transaction Items
             final  String queryInsertTransaction="INSERT INTO transactionitem (TransactionId,ServiceId,Price) VALUES (?,?,?);";
@@ -131,9 +136,9 @@ public class POSDAO {
             statement.execute();
 
 
-            //If A voucher code is used in the transaction, Then update voucher state and transcation id
+            //If A voucher code is used in the transaction, Then update voucher state and transaction id
             if(model.getVoucherId()!=0){
-                final String queryUpdateVoucherState="UPDATE voucher set TrancsactionId=?,StateId=2 where Id=?";
+                final String queryUpdateVoucherState="UPDATE voucher set TransactionId=?,StateId=2 where Id=?";
                 statement=conn.prepareStatement(queryUpdateVoucherState);
                 statement.setInt(1,transactionId);
                 statement.setInt(2,model.getVoucherId());
@@ -143,14 +148,15 @@ public class POSDAO {
             return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
-            conn.setAutoCommit(true);
+            conn.rollback();
             return false;
-        }
-        finally {
+        }finally {
+            conn.setAutoCommit(true);
             if(conn!=null){
-                conn.close();
+                ConnectionResources.close(conn);
             }
         }
+
     }
 
     public void close() throws SQLException {

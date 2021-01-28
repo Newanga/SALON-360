@@ -28,7 +28,8 @@ public class CustomerStateDAO {
             //Get first row data
             int id = result.getInt("id");
             return id;
-        } catch (SQLException throwables) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return 0;
         }
     }
@@ -44,8 +45,8 @@ public class CustomerStateDAO {
                 CustomerStateNames.add(name);
             }
             return CustomerStateNames;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return CustomerStateNames;
     }

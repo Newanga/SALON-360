@@ -6,7 +6,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import data_access.*;
 import helpers.dialog_messages.DialogMessages;
-import helpers.report_generation.ExportToExcel;
+import helpers.exports.ExportToExcel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -25,7 +25,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import models.Employee;
 import validation.EmployeeFormValidation;
-import view_models_dashboard.EmployeeVM;
+import view_models.dashboards.EmployeeVM;
 
 
 import java.net.URL;
@@ -140,19 +140,19 @@ public class EmployeeController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            InitialLoad();
+            initialLoad();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
 
-    private void InitialLoad() throws SQLException {
-        LoadEmployeeComboBoxData();
-        ShowEmployees();
-        LoadDashBoardData();
+    private void initialLoad() throws SQLException {
+        loadEmployeeComboBoxData();
+        s();
+        loadDashBoardData();
     }
 
-    private void LoadDashBoardData(){
+    private void loadDashBoardData(){
         EmployeeVM employeeVM=new EmployeeVM();
         try{
             db = new DataSource();
@@ -168,7 +168,7 @@ public class EmployeeController implements Initializable {
         }
     }
 
-    private void LoadEmployeeComboBoxData() {
+    private void loadEmployeeComboBoxData() {
         try {
             cbState.setItems(FXCollections.observableArrayList(loadEmployeeStates()));
             cbGender.setItems(FXCollections.observableArrayList(loadGenders()));
@@ -250,8 +250,8 @@ public class EmployeeController implements Initializable {
         return list;
     }
 
-    private void ShowEmployees() throws SQLException {
-        employeeList = LoadEmployeesFromDB();
+    private void s() throws SQLException {
+        employeeList = loadEmployeesFromDB();
         colId.setCellValueFactory(new PropertyValueFactory<Employee, Integer>("id"));
         colFirstName.setCellValueFactory(new PropertyValueFactory<Employee, String>("firstName"));
         colLastName.setCellValueFactory(new PropertyValueFactory<Employee, String>("lastName"));
@@ -265,7 +265,7 @@ public class EmployeeController implements Initializable {
         tvEmployees.setItems(employeeList);
     }
 
-    public ObservableList<Employee> LoadEmployeesFromDB() throws SQLException {
+    public ObservableList<Employee> loadEmployeesFromDB() throws SQLException {
         ObservableList<Employee> list = FXCollections.observableArrayList();
 
         try {
@@ -292,6 +292,7 @@ public class EmployeeController implements Initializable {
 
     }
 
+    //Double CLick on the table row
     public void tvMouseClicked(MouseEvent event) throws SQLException {
         Employee model = null;
 
@@ -401,7 +402,7 @@ public class EmployeeController implements Initializable {
         }
 
         clearSTextFieldsAndComboBoxes();
-        InitialLoad();
+        initialLoad();
         btnUpdate.setDisable(true);
         btnCreate.setDisable(false);
 
@@ -481,7 +482,7 @@ public class EmployeeController implements Initializable {
         }
 
         clearSTextFieldsAndComboBoxes();
-        InitialLoad();
+        initialLoad();
         btnUpdate.setDisable(true);
         btnCreate.setDisable(false);
 
@@ -504,7 +505,7 @@ public class EmployeeController implements Initializable {
             clearSTextFieldsAndComboBoxes();
             btnCreate.setDisable(false);
             btnUpdate.setDisable(true);
-            LoadEmployeeComboBoxData();
+            loadEmployeeComboBoxData();
         }
 
     }
@@ -514,7 +515,7 @@ public class EmployeeController implements Initializable {
         ex.run();
     }
 
-    public void SearchFunction() {
+    public void searchFunction() {
         // Wrap the ObservableList in a FilteredList (initially display all data).
         FilteredList<Employee> filteredData = new FilteredList<>(employeeList, b -> true);
 

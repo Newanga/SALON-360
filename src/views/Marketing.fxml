@@ -10,7 +10,7 @@
 
 <StackPane fx:id="stackpane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MarketingController">
     <children>
-        <AnchorPane prefHeight="1005.0" prefWidth="1680.0" style="-fx-background-color: #EEF5F9;" stylesheets="@../resources/CSS/Home.css">
+        <AnchorPane prefHeight="1005.0" prefWidth="1680.0" style="-fx-background-color: #EEF5F9;" stylesheets="@../resources/css/Home.css">
             <children>
                 <JFXTabPane cacheShape="false" centerShape="false" depthTest="DISABLE" focusTraversable="false" layoutY="50.0" prefHeight="954.0" prefWidth="1680.0" scaleShape="false">
                     <Tab text="SMS">
@@ -27,7 +27,7 @@
                                                                 <children>
                                                                     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                         <image>
-                                                                            <Image url="@../resources/Icons/Marketing/sms.png" />
+                                                                            <Image url="@../resources/icons/marketing/sms.png" />
                                                                         </image>
                                                                     </ImageView>
                                                                 </children>
@@ -40,7 +40,7 @@
                                                             </HBox>
                                                             <HBox alignment="CENTER_RIGHT" prefHeight="69.0" prefWidth="143.0">
                                                                 <children>
-                                                                    <Label text="0" textFill="#58b5fb">
+                                                                    <Label fx:id="lblTotalSMSSent" text="0" textFill="#58b5fb">
                                                                         <font>
                                                                             <Font size="48.0" />
                                                                         </font>
@@ -83,7 +83,7 @@
                                                         <children>
                                                             <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                                                 <image>
-                                                                    <Image url="@../resources/Icons/Common/table.png" />
+                                                                    <Image url="@../resources/icons/common/table.png" />
                                                                 </image>
                                                             </ImageView>
                                                             <Label prefHeight="27.0" prefWidth="232.0" text="Customer Table">
@@ -158,7 +158,7 @@
                                           <children>
                                              <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                                 <image>
-                                                   <Image url="@../resources/Icons/Common/table.png" />
+                                                   <Image url="@../resources/icons/common/table.png" />
                                                 </image>
                                              </ImageView>
                                              <Label prefHeight="27.0" prefWidth="232.0" text="SMS Sent Table">
@@ -216,7 +216,7 @@
                                                                 <children>
                                                                     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                                         <image>
-                                                                            <Image url="@../resources/Icons/Common/servicecategory.png" />
+                                                                            <Image url="@../resources/icons/common/servicecategory.png" />
                                                                         </image>
                                                                     </ImageView>
                                                                 </children>
@@ -229,7 +229,7 @@
                                                             </HBox>
                                                             <HBox alignment="CENTER_RIGHT" prefHeight="69.0" prefWidth="143.0">
                                                                 <children>
-                                                                    <Label text="4" textFill="#58b5fb">
+                                                                    <Label fx:id="lblTotalSMSTemplate" text="4" textFill="#58b5fb">
                                                                         <font>
                                                                             <Font size="48.0" />
                                                                         </font>
@@ -294,7 +294,7 @@
                                           <children>
                                              <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                                 <image>
-                                                   <Image url="@../resources/Icons/Common/table.png" />
+                                                   <Image url="@../resources/icons/common/table.png" />
                                                 </image>
                                              </ImageView>
                                              <Label prefHeight="27.0" prefWidth="232.0" text="SMS Template Table">

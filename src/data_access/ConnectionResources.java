@@ -14,7 +14,7 @@ public class ConnectionResources {
             if (conn != null)
                 conn.close();
         } catch (SQLException ex) {
-
+            ex.printStackTrace();
         }
     }
 
@@ -22,11 +22,10 @@ public class ConnectionResources {
         try {
             if (statement != null) {
                 statement.clearParameters();
-                ;
                 statement.close();
             }
         } catch (SQLException ex) {
-
+            ex.printStackTrace();
         }
     }
 
@@ -35,18 +34,17 @@ public class ConnectionResources {
             if (set != null)
                 set.close();
         } catch (SQLException ex) {
-
+            ex.printStackTrace();
         }
 
 
         try {
             if (statement != null) {
                 statement.clearParameters();
-                ;
                 statement.close();
             }
         } catch (SQLException ex) {
-
+            ex.printStackTrace();
         }
 
     }
@@ -65,7 +63,6 @@ public class ConnectionResources {
         try {
             if (statement != null) {
                 statement.clearParameters();
-                ;
                 statement.close();
             }
         } catch (SQLException ex) {

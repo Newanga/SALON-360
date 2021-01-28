@@ -5,7 +5,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import data_access.*;
 import helpers.dialog_messages.DialogMessages;
-import helpers.report_generation.ExportToExcel;
+import helpers.exports.ExportToExcel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -22,7 +22,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import models.Account;
 import validation.AccountFormValidation;
-import view_models_dashboard.AccountVM;
+import view_models.dashboards.AccountVM;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -107,19 +107,19 @@ public class AccountController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            InitialLoad();
+            initialLoad();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    private void InitialLoad() throws SQLException {
-        LoadAccountComboBoxData();
+    private void initialLoad() throws SQLException {
+        loadAccountComboBoxData();
         ShowAccounts();
-        LoadDashBoardData();
+        loadDashBoardData();
     }
 
-    private void LoadDashBoardData() throws SQLException {
+    private void loadDashBoardData() throws SQLException {
         AccountVM accountVM;
         try{
             db = new DataSource();
@@ -136,7 +136,7 @@ public class AccountController implements Initializable {
     }
 
 
-    private void LoadAccountComboBoxData() {
+    private void loadAccountComboBoxData() {
         try {
             cbState.setItems(FXCollections.observableArrayList(loadEmployeeStates()));
             cbRole.setItems(FXCollections.observableArrayList(loadRoles()));
@@ -265,18 +265,6 @@ public class AccountController implements Initializable {
                 return;
             }
 
-//            boolean isUsernameValid= AccountFormValidation.validateUsername(accountModel.getUsername());
-//            if(!isUsernameValid){
-//                dm.InvalidUsername();
-//                return;
-//            }
-
-//            boolean isPassswordValid= AccountFormValidation.validatePassword(accountModel.getUsername());
-//            if(!isPassswordValid){
-//                dm.InvalidPassword();
-//                return;
-//            }
-
 
             Boolean result = accountDAO.UpdateAccount(accountModel);
 
@@ -290,7 +278,7 @@ public class AccountController implements Initializable {
         }
 
         clearSTextFieldsAndComboBoxes();
-        InitialLoad();
+        initialLoad();
         btnUpdate.setDisable(true);
         tfPassword.setDisable(true);
         tfUsername.setDisable(true);
@@ -307,6 +295,8 @@ public class AccountController implements Initializable {
         }
     }
 
+
+    //Double click event on the table view
     public void tvMouseClicked(MouseEvent event) {
         Account model = null;
 
@@ -342,18 +332,19 @@ public class AccountController implements Initializable {
             btnUpdate.setDisable(true);
             tfUsername.setDisable(true);
             tfPassword.setDisable(true);
-            LoadAccountComboBoxData();
+            loadAccountComboBoxData();
         }
 
     }
 
+    //Click on excel Export Icon
     public void btnSExcelExportClicked(MouseEvent mouseEvent) {
         ExportToExcel ex = new ExportToExcel(tvAccounts, stackpane);
         ex.run();
 
     }
 
-    public void SearchFunction() {
+    public void searchFunction() {
         // Wrap the ObservableList in a FilteredList (initially display all data).
         FilteredList<Account> filteredData = new FilteredList<>(accountList, b -> true);
 

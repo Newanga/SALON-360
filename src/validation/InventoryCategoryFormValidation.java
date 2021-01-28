@@ -5,7 +5,7 @@ import models.ServiceCategory;
 
 public class InventoryCategoryFormValidation {
 
-    public static Boolean validate(InventoryCategory model) {
+    public static Boolean validateEmptyData(InventoryCategory model) {
         if (model.getName().isEmpty() || model.getDescription().isEmpty())
             return false;
         else

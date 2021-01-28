@@ -3,7 +3,7 @@ package data_access;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.Employee;
-import view_models_dashboard.EmployeeVM;
+import view_models.dashboards.EmployeeVM;
 
 import java.sql.*;
 
@@ -148,17 +148,17 @@ public class EmployeeDAO {
             statement.executeUpdate();
             conn.commit();
 
-            if(model.getRole()=="Manager" ||model.getRole()=="Owner" ||model.getRole()=="Receptionist")
-                return true;
+            if(model.getRole().equals("Manager") ||model.getRole().equals("Owner") ||model.getRole().equals("Receptionist")){
+                ResultSet keys = statement.getGeneratedKeys();
+                keys.next();
+                int customerId = keys.getInt(1);
+                final String sql2 = "INSERT INTO Account (EmployeeId) values (?);";
+                statement = conn.prepareStatement(sql2);
+                statement.setInt(1, customerId);
+                statement.executeUpdate();
+                conn.commit();
+            }
 
-            ResultSet keys = statement.getGeneratedKeys();
-            keys.next();
-            int customerId = keys.getInt(1);
-            final String sql2 = "INSERT INTO Account (EmployeeId) values (?);";
-            statement = conn.prepareStatement(sql2);
-            statement.setInt(1, customerId);
-            statement.executeUpdate();
-            conn.commit();
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -180,24 +180,6 @@ public class EmployeeDAO {
             }
         }
     }
-
-
-    public Blob getEmployeeImage(int id) {
-        final String sql = "SELECT Image FROM employee WHERE Id=?";
-        try {
-            statement = conn.prepareStatement(sql);
-            statement.setInt(1, id);
-            result = statement.executeQuery();
-            // Navigate to first row
-            result.absolute(1);
-            //Get first row data
-            Blob image = result.getBlob("image");
-            return image;
-        } catch (SQLException throwables) {
-            return null;
-        }
-    }
-
 
     public void close() throws SQLException {
         try {
@@ -245,8 +227,8 @@ public class EmployeeDAO {
             employeeVM.setInactiveEmployees(inactive);
 
             return employeeVM;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return employeeVM;
         }
 

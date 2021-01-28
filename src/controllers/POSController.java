@@ -39,8 +39,6 @@ public class POSController implements Initializable {
     @FXML
     private StackPane stackpane;
 
-    @FXML
-    private JFXComboBox<String> cbCategory;
 
     @FXML
     private TableView<Service> tvAllServices;
@@ -114,52 +112,18 @@ public class POSController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            InitialLoad();
-            LoadServiceComboBoxData();
+            initialLoad();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
-        DisableVoucher();
+        disableVoucher();
         CalculateBalance();
 
-        // FilterTVAllServicesByCategory();
     }
 
-    public void FilterTVAllServicesByCategory() {
-        // Wrap the ObservableList in a FilteredList (initially display all data).
-        FilteredList<Service> filteredData = new FilteredList<>(allServicesList, b -> true);
 
-        // 2. Set the filter Predicate whenever the filter changes.
-        cbCategory.valueProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(Service -> {
-                // If filter text is empty, display all persons.
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                // Compare name and description of every inventory with filter text.
-                String lowerCaseFilter = newValue.toLowerCase();
-
-                if (Service.getCategory().toLowerCase().indexOf(lowerCaseFilter) != -1) {
-                    return true; // Filter matches name.
-                } else
-                    return false; // Does not match.
-            });
-        });
-
-        // 3. Wrap the FilteredList in a SortedList.
-        SortedList<Service> sortedData = new SortedList<>(filteredData);
-
-        // 4. Bind the SortedList comparator to the TableView comparator.
-        // 	  Otherwise, sorting the TableView would have no effect.
-        sortedData.comparatorProperty().bind(tvAllServices.comparatorProperty());
-
-        // 5. Add sorted (and filtered) data to the table.
-        tvAllServices.setItems(sortedData);
-
-    }
-
-    private void DisableVoucher() {
+    private void disableVoucher() {
         tfTotalPrice.textProperty().addListener((observable, oldValue, newValue) -> {
             double currentValue = 0.0;
 
@@ -176,20 +140,19 @@ public class POSController implements Initializable {
     }
 
 
-    private void InitialLoad() throws SQLException {
+    private void initialLoad() throws SQLException {
         try {
-            ShowAllServices();
-            LoadServiceComboBoxData();
-            ShowAllPurchase();
+            showAllServices();
+            showAllPurchase();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
     }
 
-    private void ShowAllServices() throws SQLException {
+    private void showAllServices() throws SQLException {
         try {
-            allServicesList = LoadAllServicesFromDB();
+            allServicesList = loadAllServicesFromDB();
             colAllServicesId.setCellValueFactory(new PropertyValueFactory<Service, Integer>("id"));
             colAllServicesName.setCellValueFactory(new PropertyValueFactory<Service, String>("name"));
             colAllServicesCategory.setCellValueFactory(new PropertyValueFactory<Service, String>("category"));
@@ -201,7 +164,7 @@ public class POSController implements Initializable {
 
     }
 
-    private void ShowAllPurchase() {
+    private void showAllPurchase() {
         colPurchaseServicesServiceId.setCellValueFactory(new PropertyValueFactory<Service, Integer>("id"));
         colPurchaseServicesName.setCellValueFactory(new PropertyValueFactory<Service, String>("name"));
         colPurchaseServicesCategory.setCellValueFactory(new PropertyValueFactory<Service, String>("category"));
@@ -210,7 +173,7 @@ public class POSController implements Initializable {
 
     }
 
-    private ObservableList<Service> LoadAllServicesFromDB() throws SQLException {
+    private ObservableList<Service> loadAllServicesFromDB() throws SQLException {
         ObservableList<Service> list = FXCollections.observableArrayList();
 
         try {
@@ -237,31 +200,10 @@ public class POSController implements Initializable {
 
     }
 
-    private void LoadServiceComboBoxData() throws SQLException {
-        cbCategory.setItems(FXCollections.observableArrayList(loadServiceCategory()));
-    }
-
-    private List<String> loadServiceCategory() throws SQLException {
-        List<String> list = FXCollections.observableArrayList();
-        try {
-
-            db = new DataSource();
-            conn = db.getConnection();
-            serviceCategoryDAO = new ServiceCategoryDAO(conn);
-            list = serviceCategoryDAO.getAllServiceCategoryNames();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        if (serviceCategoryDAO != null)
-            serviceCategoryDAO.close();
-        ConnectionResources.close(conn);
-
-        return list;
-    }
 
 
-    public void AppointmentSearch(MouseEvent mouseEvent) throws SQLException {
+
+    public void appointmentSearch(MouseEvent mouseEvent) throws SQLException {
         DialogMessages dm = new DialogMessages(stackpane);
         int custId = 0;
         try {
@@ -281,18 +223,17 @@ public class POSController implements Initializable {
             return;
         } else {
             tfCustomerName.setText(customerName);
-            EnableControlsToProcessTransactions();
+            enableControlsToProcessTransactions();
         }
 
     }
 
-    private void EnableControlsToProcessTransactions() {
+    private void enableControlsToProcessTransactions() {
         tvAllServices.setDisable(false);
-        cbCategory.setDisable(false);
     }
 
 
-    public void AllServicesTableDoubleCLicked(MouseEvent event) {
+    public void allServicesTableDoubleCLicked(MouseEvent event) {
         Service model = null;
 
         //check for a double click on table to load to object
@@ -301,27 +242,27 @@ public class POSController implements Initializable {
         } else {
             return;
         }
-        AddServiceToPurchaseServiceTable(model);
-        RemoveSelectedServiceFromAllServicesTableView(model);
+        addServiceToPurchaseServiceTable(model);
+        removeSelectedServiceFromAllServicesTableView(model);
     }
 
-    private void RemoveSelectedServiceFromAllServicesTableView(Service model) {
+    private void removeSelectedServiceFromAllServicesTableView(Service model) {
         tvAllServices.getItems().removeAll(model);
         tvAllServices.refresh();
     }
 
 
-    public void DeleteServiceFromPurchaseTable(KeyEvent event) {
+    public void deleteServiceFromPurchaseTable(KeyEvent event) {
         Service model = tvPurchaseServices.getSelectionModel().getSelectedItem();
 
         if (!(event.getCode() == KeyCode.DELETE) && model != null) {
             return;
         }
         RemoveServiceFromPurchaseTableTableView(model);
-        AddServiceToAllServiceTableView(model);
+        addServiceToAllServiceTableView(model);
     }
 
-    private void AddServiceToPurchaseServiceTable(Service model) {
+    private void addServiceToPurchaseServiceTable(Service model) {
         purchaseServicesList.add(model);
         tvPurchaseServices.refresh();
         if (tvPurchaseServices.isDisable() == true) {
@@ -367,7 +308,7 @@ public class POSController implements Initializable {
         if (newValue == 0.0) {
             tfTotalPrice.clear();
             tfFinalPrice.clear();
-            RemoveExistingVoucher();
+            removeExistingVoucher();
             DisableCashField();
             tfVoucherCode.setDisable(true);
             btnProcess.setDisable(true);
@@ -381,7 +322,7 @@ public class POSController implements Initializable {
     }
 
 
-    private void AddServiceToAllServiceTableView(Service model) {
+    private void addServiceToAllServiceTableView(Service model) {
         allServicesList.add(model);
         tvAllServices.refresh();
     }
@@ -392,7 +333,7 @@ public class POSController implements Initializable {
         updatePriceSub(model);
     }
 
-    public void ApplyVoucher() throws SQLException {
+    public void applyVoucher() throws SQLException {
         DialogMessages dm = new DialogMessages(stackpane);
         int voucher = 0;
         try {
@@ -419,7 +360,7 @@ public class POSController implements Initializable {
 
     }
 
-    private void RemoveExistingVoucher() {
+    private void removeExistingVoucher() {
         UpdateFinalPriceWithoutVoucher();
         imgVoucher.setVisible(false);
         imgVoucher.setDisable(true);
@@ -461,14 +402,14 @@ public class POSController implements Initializable {
 
     public void VoucherEntered(KeyEvent event) throws SQLException, FileNotFoundException {
         if (event.getCode() == KeyCode.ENTER) {
-            ApplyVoucher();
+            applyVoucher();
         } else {
             return;
         }
     }
 
     public void RemoveVoucherClicked(MouseEvent mouseEvent) {
-        RemoveExistingVoucher();
+        removeExistingVoucher();
     }
 
     private void EnableRemoveVoucher() {
@@ -567,7 +508,6 @@ public class POSController implements Initializable {
             isTransactionSuccess = posDao.CreateNewTransaction(newTransactionData);
 
             if (isTransactionSuccess == false) {
-                SendTransactionCompleteSMS();
                 dm.TransactionFailed();
                 return;
             }
@@ -593,31 +533,44 @@ public class POSController implements Initializable {
 
     }
 
-    // TODO:SEND appointment success SMS
-    private void SendTransactionCompleteSMS() {
 
-    }
-
-    private void ResetAllControls() {
-        purchaseServicesList.clear();
+    private void ResetAllControls() throws SQLException {
+        purchaseServicesList = FXCollections.observableArrayList();
         tvPurchaseServices.refresh();
         tvPurchaseServices.setDisable(true);
         tvAllServices.setDisable(true);
-        cbCategory.setDisable(true);
-
         btnProcess.setDisable(true);
-        DisableCashField();
-        RemoveExistingVoucher();
+
+        //clear voucher
+        imgVoucher.setVisible(false);
+        imgVoucher.setDisable(true);
         tfVoucherCode.clear();
         tfVoucherDiscount.clear();
-        tfVoucherDiscount.setDisable(true);
         tfVoucherCode.setDisable(true);
+
+
+        tfCash.clear();
+        tfCash.setDisable(true);
         tfFinalPrice.clear();
+        tfFinalPrice.setDisable(true);
         tfTotalPrice.clear();
+        tfFinalPrice.setDisable(true);
         tfBalance.clear();
+        tfFinalPrice.setDisable(true);
 
         tfAppId.clear();
         tfCustomerName.clear();
+
+        showAllServices();
+        showAllPurchase();
+
+    }
+
+    public void btnKeyClicked(KeyEvent event) throws SQLException {
+
+        if (event.getCode() == KeyCode.ESCAPE) {
+            ResetAllControls();
+        }
 
     }
 

@@ -29,8 +29,8 @@ public class VoucherStateDAO {
                 voucherStateNames.add(name);
             }
             return voucherStateNames;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return voucherStateNames;
     }
@@ -46,7 +46,8 @@ public class VoucherStateDAO {
             //Get first row data
             int id = result.getInt("Id");
             return id;
-        } catch (SQLException throwables) {
+        } catch (SQLException ex) {
+           ex.printStackTrace();
             return 0;
         }
     }

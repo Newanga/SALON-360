@@ -1,6 +1,7 @@
 package controllers;
 
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSpinner;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -13,33 +14,130 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import main.CurrentUserData;
 
+import javafx.scene.control.Label;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HomeController  {
+public class HomeController implements Initializable {
 
     @FXML
-    public void minimize(MouseEvent mouseEvent) {
-        Stage s=(Stage)((Node)mouseEvent.getSource()).getScene().getWindow();
-        s.setIconified(true);
-    }
+    private Label lblFullName;
 
     @FXML
-    public void close(MouseEvent mouseEvent) {
-        Stage s=(Stage)((Node)mouseEvent.getSource()).getScene().getWindow();
-        s.close();
-    }
+    private Label  lblEmail;
+
+    @FXML
+    private Label lblRole;
+
+    @FXML
+    private JFXButton btnPOS;
+
+    @FXML
+    private JFXButton btnAppointments;
+
+    @FXML
+    private JFXButton btnTransactions;
+
+    @FXML
+    private JFXButton btnCustomers;
+
+    @FXML
+    private JFXButton btnEmployees;
+
+    @FXML
+    private JFXButton btnAccounts;
+
+    @FXML
+    private JFXButton btnServices;
+
+    @FXML
+    private JFXButton btnVouchers;
+
+    @FXML
+    private JFXButton btnMarketing;
+
+    @FXML
+    private JFXButton btnInventory;
+
     @FXML
     private BorderPane borderpane;
+
+
 
     private JFXSpinner spinner;
     private boolean isLoaderActive=false;
     private String currentWindow;
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setCurrentUserData();
+        AuthorizeUser();
+    }
 
-    private boolean CurrentViewState(String view) {
+    private void AuthorizeUser() {
+        String currentRole=CurrentUserData.getRole();
+        if(currentRole.equals("Owner")){
+            AuthorizeAdmin();
+        }
+        if(currentRole.equals("Manager")){
+            AuthorizeReceptionist();
+        }
+        if(currentRole.equals("Receptionist")){
+            AuthorizeManager();
+        }
+    }
+
+    private void AuthorizeAdmin() {
+        btnAccounts.setDisable(false);
+        btnAppointments.setDisable(false);
+        btnCustomers.setDisable(false);
+        btnEmployees.setDisable(false);
+        btnInventory.setDisable(false);
+        btnMarketing.setDisable(false);
+        btnPOS.setDisable(false);
+        btnServices.setDisable(false);
+        btnTransactions.setDisable(false);
+        btnVouchers.setDisable(false);
+    }
+
+    private void AuthorizeManager() {
+        btnPOS.setDisable(false);
+        btnAppointments.setDisable(false);
+        btnCustomers.setDisable(false);
+        btnMarketing.setDisable(false);
+        btnInventory.setDisable(false);
+    }
+
+    private void AuthorizeReceptionist() {
+        btnPOS.setDisable(false);
+        btnAppointments.setDisable(false);
+        btnCustomers.setDisable(false);
+    }
+
+
+
+    //Setting logged user details based on logged user
+    private void setCurrentUserData(){
+        lblFullName.setText(CurrentUserData.getFullName());
+        lblEmail.setText(CurrentUserData.getEmail());
+        lblRole.setText(CurrentUserData.getRole());
+    }
+
+    public void minimizeWindow(MouseEvent mouseEvent) {
+        Stage s=(Stage)((Node)mouseEvent.getSource()).getScene().getWindow();
+        s.setIconified(true);
+    }
+
+    public void closeWindow(MouseEvent mouseEvent) {
+        Stage s=(Stage)((Node)mouseEvent.getSource()).getScene().getWindow();
+        s.close();
+    }
+
+    //Checking whether loader or another view is present
+    private boolean currentViewState(String view) {
         if(isLoaderActive ==true ||currentWindow == view)
             return false;
         else {
@@ -50,7 +148,7 @@ public class HomeController  {
 
     }
 
-    private void StartLoader(){
+    private void startLoader(){
         //Set loader state to true
         isLoaderActive =true;
         VBox hb=new VBox();
@@ -60,7 +158,7 @@ public class HomeController  {
         borderpane.setCenter(hb);
     }
 
-    private void LoadViewInBackgroundThread(String view) {
+    private void loadViewInBackgroundThread(String view) {
         Task<Parent> loadUI = new Task<Parent>() {
             @Override
             public Parent call() throws IOException {
@@ -90,86 +188,83 @@ public class HomeController  {
 
     public void btnServicesClicked() {
         final String view="Services";
-        if(CurrentViewState(view)==false)
+        if(currentViewState(view)==false)
             return;
-        StartLoader();
-        LoadViewInBackgroundThread(view);
+        startLoader();
+        loadViewInBackgroundThread(view);
     }
 
     public void btnCustomersClicked() {
         final String view="Customers";
-        if(CurrentViewState(view)==false)
+        if(currentViewState(view)==false)
             return;
-        StartLoader();
-        LoadViewInBackgroundThread(view);
+        startLoader();
+        loadViewInBackgroundThread(view);
     }
 
     public void btnAccountsClicked() {
         final String view="Accounts";
-        if(CurrentViewState(view)==false)
+        if(currentViewState(view)==false)
             return;
-        StartLoader();
-        LoadViewInBackgroundThread(view);
+        startLoader();
+        loadViewInBackgroundThread(view);
     }
 
     public void btnEmployeesClicked() {
         final String view="Employees";
-        if(CurrentViewState(view)==false)
+        if(currentViewState(view)==false)
             return;
-        StartLoader();
-        LoadViewInBackgroundThread(view);
+        startLoader();
+        loadViewInBackgroundThread(view);
     }
 
     public void btnInventoryClicked() {
         final String view="Inventory";
-        if(CurrentViewState(view)==false)
+        if(currentViewState(view)==false)
             return;
-        StartLoader();
-        LoadViewInBackgroundThread(view);
+        startLoader();
+        loadViewInBackgroundThread(view);
     }
 
     public void btnVouchersClicked() {
         final String view="Vouchers";
-        if(CurrentViewState(view)==false)
+        if(currentViewState(view)==false)
             return;
-        StartLoader();
-        LoadViewInBackgroundThread(view);
+        startLoader();
+        loadViewInBackgroundThread(view);
     }
 
     public void btnAppointmentsClicked() {
         final String view="Appointments";
-        if(CurrentViewState(view)==false)
+        if(currentViewState(view)==false)
             return;
-        StartLoader();
-        LoadViewInBackgroundThread(view);
+        startLoader();
+        loadViewInBackgroundThread(view);
     }
 
     public void btnMarketingClicked() {
         final String view="Marketing";
-        if(CurrentViewState(view)==false)
+        if(currentViewState(view)==false)
             return;
-        StartLoader();
-        LoadViewInBackgroundThread(view);
+        startLoader();
+        loadViewInBackgroundThread(view);
     }
 
     public void btnPOSClicked() {
         final String view="POS";
-        if(CurrentViewState(view)==false)
+        if(currentViewState(view)==false)
             return;
-        StartLoader();
-        LoadViewInBackgroundThread(view);
+        startLoader();
+        loadViewInBackgroundThread(view);
     }
 
     public void btnTransactionClicked() {
         final String view="Transactions";
-        if(CurrentViewState(view)==false)
+        if(currentViewState(view)==false)
             return;
-        StartLoader();
-        LoadViewInBackgroundThread(view);
+        startLoader();
+        loadViewInBackgroundThread(view);
     }
-
-
-
 
 
 

@@ -3,7 +3,7 @@ package data_access;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.Voucher;
-import view_models_dashboard.VoucherVM;
+import view_models.dashboards.VoucherVM;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,8 +40,8 @@ public class VoucherDAO {
                 voucherslist.add(vouc);
             }
             return voucherslist;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return voucherslist;
     }

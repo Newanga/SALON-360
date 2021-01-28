@@ -3,7 +3,7 @@ package data_access;
 import models.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import view_models_dashboard.ServiceVM;
+import view_models.dashboards.ServiceVM;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +21,7 @@ public class ServiceDAO {
     }
 
 
-    public ObservableList<Service> getAllServices() {
+    public ObservableList<Service> getAllServices() throws SQLException {
         ObservableList<Service> serviceCategories = FXCollections.observableArrayList();
         final String sql = "select s.Id,s.Name,s.Price,s.Description,sc.Name as category ,ss.Name as state from service as s\n" +
                 "inner join servicecategory as sc \n" +

@@ -29,8 +29,8 @@ public class SMSModeDAO {
                 smsModeNames.add(name);
             }
             return smsModeNames;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return smsModeNames;
     }
@@ -46,7 +46,8 @@ public class SMSModeDAO {
             //Get first row data
             int id = result.getInt("id");
             return id;
-        } catch (SQLException throwables) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return 0;
         }
     }

@@ -2,7 +2,7 @@ package controllers;
 
 import data_access.*;
 import helpers.dialog_messages.DialogMessages;
-import helpers.report_generation.ExportToExcel;
+import helpers.exports.ExportToExcel;
 import models.Service;
 import models.ServiceCategory;
 import validation.ServiceCategoryFormValidation;
@@ -23,7 +23,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 import javafx.scene.layout.StackPane;
-import view_models_dashboard.ServiceVM;
+import view_models.dashboards.ServiceVM;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -371,11 +371,13 @@ public class ServiceController implements Initializable {
 
     public void btnSUpdateClicked(MouseEvent mouseEvent) throws SQLException {
         DialogMessages dm = new DialogMessages(stackpane);
+        DataSource db = new DataSource();
+        conn = db.getConnection();
+        servicedao = new ServiceDAO(conn);
 
         try {
             db = new DataSource();
             conn = db.getConnection();
-            ServiceCategorydao = new ServiceCategoryDAO(conn);
 
             smodel = new Service();
 
@@ -709,7 +711,7 @@ public class ServiceController implements Initializable {
             conn = db.getConnection();
             ServiceCategorydao = new ServiceCategoryDAO(conn);
 
-            boolean valid = ServiceCategoryFormValidation.validate(scmodel);
+            boolean valid = ServiceCategoryFormValidation.validateEmptyData(scmodel);
             if (!valid) {
                 dm.EmptyDataInForm();
                 return;
@@ -758,7 +760,7 @@ public class ServiceController implements Initializable {
             conn = db.getConnection();
             ServiceCategorydao = new ServiceCategoryDAO(conn);
 
-            boolean valid = ServiceCategoryFormValidation.validate(scmodel);
+            boolean valid = ServiceCategoryFormValidation.validateEmptyData(scmodel);
             if (!valid) {
                 dm.EmptyDataInForm();
                 return;

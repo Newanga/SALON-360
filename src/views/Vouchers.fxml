@@ -10,7 +10,7 @@
 
 <StackPane fx:id="stackpane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VoucherController">
     <children>
-        <AnchorPane onKeyPressed="#btnKeyClicked" prefHeight="900.0" prefWidth="1680.0" style="-fx-background-color: #EEF5F9;" stylesheets="@../resources/CSS/Home.css">
+        <AnchorPane onKeyPressed="#btnKeyClicked" prefHeight="900.0" prefWidth="1680.0" style="-fx-background-color: #EEF5F9;" stylesheets="@../resources/css/Home.css">
             <children>
 
                 <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="1680.0" style="-fx-background-color: #FFFFFF;">
@@ -37,7 +37,7 @@
                                                     <children>
                                                         <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                             <image>
-                                                                <Image url="@../resources/Icons/Common/active.png" />
+                                                                <Image url="@../resources/icons/common/active.png" />
                                                             </image>
                                                         </ImageView>
                                                     </children>
@@ -93,7 +93,7 @@
                                             <children>
                                                 <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
-                                                        <Image url="@../resources/Icons/Common/table.png" />
+                                                        <Image url="@../resources/icons/common/table.png" />
                                                     </image>
                                                 </ImageView>
                                                 <Label text="Vouchers Table">
@@ -107,7 +107,7 @@
                                             <children>
                                                 <ImageView fitHeight="29.0" fitWidth="27.0" onMouseClicked="#btnExcelExportClicked" pickOnBounds="true" preserveRatio="true">
                                                     <image>
-                                                        <Image url="@../resources/Icons/Common/excel.png" />
+                                                        <Image url="@../resources/icons/common/excel.png" />
                                                     </image>
                                                 </ImageView>
                                             </children>

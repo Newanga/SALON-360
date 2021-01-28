@@ -5,7 +5,7 @@ import javafx.collections.ObservableList;
 import models.Customer;
 import models.SingleSMS;
 import models.SMSTemplate;
-import view_models_dashboard.MarketingVM;
+import view_models.dashboards.MarketingVM;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -61,8 +61,8 @@ public class SMSDAO {
                 singleSmsSentList.add(sMS);
             }
             return singleSmsSentList;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return singleSmsSentList;
     }
@@ -99,7 +99,7 @@ public class SMSDAO {
     }
 
     public void SaveSingleSMSSentData(SingleSMS model) {
-        final String sql = "INSERT into SMS (TemplateId,CustomerId,ModeId,sentDate) Values ?,?,?,?;";
+        final String sql = "INSERT into SMS (TemplateId,CustomerId,ModeId,sentDate) Values (?,?,?,?);";
 
         try {
             statement = conn.prepareStatement(sql);
@@ -109,8 +109,9 @@ public class SMSDAO {
             java.util.Date date = Calendar.getInstance().getTime();
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
             statement.setDate(4,sqlDate);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            statement.execute();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 

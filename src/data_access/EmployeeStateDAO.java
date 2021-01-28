@@ -17,7 +17,7 @@ public class EmployeeStateDAO {
         this.conn = conn;
     }
 
-    public int getEmployeeStateIdByName(String name){
+    public int getEmployeeStateIdByName(String name)  throws SQLException{
         final String sql = "SELECT Id FROM employeestate WHERE Name=?";
         try {
             statement = conn.prepareStatement(sql);
@@ -28,7 +28,8 @@ public class EmployeeStateDAO {
             //Get first row data
             int id = result.getInt("id");
             return id;
-        } catch (SQLException throwables) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return 0;
         }
     }
@@ -44,8 +45,8 @@ public class EmployeeStateDAO {
                 EmployeeStateNames.add(name);
             }
             return EmployeeStateNames;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return EmployeeStateNames;
     }

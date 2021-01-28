@@ -38,7 +38,7 @@ import models.Customer;
 import models.SingleSMS;
 import models.SMSTemplate;
 import validation.SMSTemplateFormValidations;
-import view_models_dashboard.MarketingVM;
+import view_models.dashboards.MarketingVM;
 
 
 public class MarketingController implements Initializable {
@@ -51,15 +51,11 @@ public class MarketingController implements Initializable {
 
     public void InitialLoad() {
         try {
-
             ShowCustomers();
             ShowSentSMS();
             LoadSMSComboBoxData();
-
             ShowSMSTemplates();
             LoadSMSDashboard();
-
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -236,7 +232,7 @@ public class MarketingController implements Initializable {
             conn = db.getConnection();
             smsTemplateDAO = new SMSTemplateDAO(conn);
 
-            boolean valid = SMSTemplateFormValidations.validate(stmodel);
+            boolean valid = SMSTemplateFormValidations.validateEmptyData(stmodel);
             if (!valid) {
                 dm.EmptyDataInForm();
                 return;
@@ -283,7 +279,7 @@ public class MarketingController implements Initializable {
             conn = db.getConnection();
             smsTemplateDAO = new SMSTemplateDAO(conn);
 
-            boolean valid = SMSTemplateFormValidations.validate(stmodel);
+            boolean valid = SMSTemplateFormValidations.validateEmptyData(stmodel);
             if (!valid) {
                 dm.EmptyDataInForm();
                 return;
@@ -415,7 +411,7 @@ public class MarketingController implements Initializable {
             colCustId.setCellValueFactory(new PropertyValueFactory<Customer, Integer>("id"));
 
             colCustName.setCellValueFactory(cellData -> Bindings.createStringBinding(
-                    () -> cellData.getValue().getLastName() + " " + cellData.getValue().getFirstName()
+                    () -> cellData.getValue().getFirstName() + " " + cellData.getValue().getLastName()
             ));
 
             colCustContactNo.setCellValueFactory(new PropertyValueFactory<Customer, String>("contactNo"));
@@ -600,7 +596,7 @@ public class MarketingController implements Initializable {
         }
     }
 
-    public void clearSMSTextFieldsAndComboBoxes() {
+    private void clearSMSTextFieldsAndComboBoxes() {
         tfSmsSearchTerm.clear();
         tfSmsCustSearchTerm.clear();
         taSMSMessage.clear();
@@ -608,7 +604,7 @@ public class MarketingController implements Initializable {
         tfSMSCustName.clear();
     }
 
-    public void DisableSMSTextFieldsAndComboBoxes() {
+    private void DisableSMSTextFieldsAndComboBoxes() {
         tfSmsCustSearchTerm.setDisable(true);
         tvSMSCustomer.setDisable(true);
         taSMSMessage.setDisable(true);
@@ -698,18 +694,24 @@ public class MarketingController implements Initializable {
                 return;
             singleSMS = CollectRequiredSingleSMSData();
 
-            Boolean isSingleSMSSent = SendSingleSMS(singleSMS);
-            if (isSingleSMSSent == true) {
+           Boolean isSingleSMSSent = SendSingleSMS(singleSMS);
+           if (isSingleSMSSent == true) {
                 dm.MessageDeliveredSuccessfully();
                 DataSource db = new DataSource();
-                conn = db.getConnection();
-                smsDAO = new SMSDAO(conn);
-                smsDAO.SaveSingleSMSSentData(singleSMS);
-                clearSMSTemplateTextFields();
+
+                try{
+                    conn = db.getConnection();
+                    smsDAO = new SMSDAO(conn);
+                    smsDAO.SaveSingleSMSSentData(singleSMS);
+                }catch (SQLException ex){
+                    ex.printStackTrace();
+                }
+
                 clearSMSTextFieldsAndComboBoxes();
+                 DisableSMSTextFieldsAndComboBoxes();
                 InitialLoad();
                 return;
-            }
+         }
 
         }
 
@@ -722,8 +724,8 @@ public class MarketingController implements Initializable {
             Boolean isBulkSMSSent = SendBulkSMS(bulkSMS);
             if(isBulkSMSSent==true){
                 dm.MessageDeliveredSuccessfully();
-                clearSMSTemplateTextFields();
                 clearSMSTextFieldsAndComboBoxes();
+                DisableSMSTextFieldsAndComboBoxes();
                 InitialLoad();
                 return;
             }

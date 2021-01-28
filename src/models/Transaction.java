@@ -8,8 +8,8 @@ public class Transaction {
 
     private int id;
     private List<TransactionItem> transactionItems;
-    private int appoinmentId;
-    private int vocuherId;
+    private int appointmentId;
+    private int voucherId;
     private Date date;
     private Time time;
     private double cash;
@@ -18,11 +18,11 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(int id, List<TransactionItem> transactionItems, int appoinmentId, int vocuherId, Date date, Time time, double cash, double balance) {
+    public Transaction(int id, List<TransactionItem> transactionItems, int appointmentId, int voucherId, Date date, Time time, double cash, double balance) {
         this.id = id;
         this.transactionItems = transactionItems;
-        this.appoinmentId = appoinmentId;
-        this.vocuherId = vocuherId;
+        this.appointmentId = appointmentId;
+        this.voucherId = voucherId;
         this.date = date;
         this.time = time;
         this.cash = cash;
@@ -45,20 +45,20 @@ public class Transaction {
         this.balance = balance;
     }
 
-    public int getVocuherId() {
-        return vocuherId;
+    public int getVoucherId() {
+        return voucherId;
     }
 
-    public void setVocuherId(int vocuherId) {
-        this.vocuherId = vocuherId;
+    public void setVoucherId(int voucherId) {
+        this.voucherId = voucherId;
     }
 
     public int getAppoinmentId() {
-        return appoinmentId;
+        return appointmentId;
     }
 
     public void setAppoinmentId(int appoinmentId) {
-        this.appoinmentId = appoinmentId;
+        this.appointmentId = appoinmentId;
     }
 
     public int getId() {

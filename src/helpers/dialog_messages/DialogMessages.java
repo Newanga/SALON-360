@@ -424,7 +424,7 @@ public class DialogMessages {
         dialogContent.setBody(new Text(content));
         JFXButton close = new JFXButton("Close");
         close.setButtonType(JFXButton.ButtonType.RAISED);
-        close.setStyle("-fx-background-color: #ef5350");
+        close.setStyle("-fx-background-color: #00bfff");
         dialogContent.setActions(close);
 
         JFXDialog dialog = new JFXDialog(stackpane, dialogContent, JFXDialog.DialogTransition.BOTTOM);
@@ -681,14 +681,14 @@ public class DialogMessages {
     }
 
     public void TransactionSuccessFul() {
-        String title = "Failed";
-        String content = "Transaction failed. Please Try Again.";
+        String title = "Successful";
+        String content = "Transaction Succeessful.";
         dialogContent = new JFXDialogLayout();
         dialogContent.setHeading(new Text(title));
         dialogContent.setBody(new Text(content));
         JFXButton close = new JFXButton("Close");
         close.setButtonType(JFXButton.ButtonType.RAISED);
-        close.setStyle("-fx-background-color: #ef5350");
+        close.setStyle("-fx-background-color: #00bfff");
         dialogContent.setActions(close);
 
         JFXDialog dialog = new JFXDialog(stackpane, dialogContent, JFXDialog.DialogTransition.BOTTOM);
@@ -704,8 +704,8 @@ public class DialogMessages {
     }
 
     public void TransactionFailed() {
-        String title = "Successful";
-        String content = "Transaction was successful";
+        String title = "Failed";
+        String content = "Transaction Failed. Please try again!";
         dialogContent = new JFXDialogLayout();
         dialogContent.setHeading(new Text(title));
         dialogContent.setBody(new Text(content));
@@ -724,4 +724,28 @@ public class DialogMessages {
         });
         dialog.show();
     }
+
+    public void RecheckUserNameAndPassword() {
+        String title = "Login Failed!";
+        String content = "Please recheck the entered Username and Password.";
+        dialogContent = new JFXDialogLayout();
+        dialogContent.setHeading(new Text(title));
+        dialogContent.setBody(new Text(content));
+        JFXButton close = new JFXButton("Close");
+        close.setButtonType(JFXButton.ButtonType.RAISED);
+        close.setStyle("-fx-background-color: #ef5350");
+        dialogContent.setActions(close);
+
+        JFXDialog dialog = new JFXDialog(stackpane, dialogContent, JFXDialog.DialogTransition.BOTTOM);
+
+        close.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+            }
+        });
+        dialog.show();
+    }
+
+
 }

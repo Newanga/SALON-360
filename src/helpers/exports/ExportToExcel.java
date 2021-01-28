@@ -35,6 +35,7 @@ public class ExportToExcel<T>  implements Runnable{
         }
 
 
+        //Travel through indivdiual object for indivdiual rows
         for (int row=0; row<tableView.getItems().size();row++){
 
             XSSFRow hssfRow= xssfSheet.createRow(row+1);
@@ -82,7 +83,7 @@ public class ExportToExcel<T>  implements Runnable{
                 dm.ExportSuccessful();
             }
             catch (IOException ex) {
-
+                ex.printStackTrace();
             }
 
         }
@@ -90,6 +91,8 @@ public class ExportToExcel<T>  implements Runnable{
 
     }
 
+
+    //Run methods in background process
     @Override
     public void run() {
         ExportToExcel();

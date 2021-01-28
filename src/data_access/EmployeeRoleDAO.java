@@ -18,7 +18,7 @@ public class EmployeeRoleDAO {
     }
 
 
-    public int getEmployeeRoleIdByName(String name){
+    public int getEmployeeRoleIdByName(String name) throws SQLException{
         final String sql = "SELECT Id FROM employeerole WHERE Name=?";
         try {
             statement = conn.prepareStatement(sql);
@@ -45,8 +45,8 @@ public class EmployeeRoleDAO {
                 EmployeeRoleNames.add(name);
             }
             return EmployeeRoleNames;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return EmployeeRoleNames;
     }

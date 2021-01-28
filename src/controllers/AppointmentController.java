@@ -2,6 +2,8 @@ package controllers;
 
 import data_access.*;
 import helpers.dialog_messages.DialogMessages;
+import helpers.exports.ExportToExcel;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -15,6 +17,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -34,7 +37,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import models.Appointment;
-import view_models_dashboard.AppointmentVM;
+import view_models.dashboards.AppointmentVM;
+import view_models.tables.TransactionVM;
 
 public class AppointmentController implements Initializable {
 
@@ -60,8 +64,6 @@ public class AppointmentController implements Initializable {
     @FXML
     private JFXTimePicker tpAppSearchTime;
 
-    @FXML
-    private JFXButton btnAppSearch;
 
     @FXML
     private TableView<Appointment> tvAppointments;
@@ -115,25 +117,25 @@ public class AppointmentController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            InitialLoad();
+            initialLoad();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    private void InitialLoad() throws SQLException {
+    private void initialLoad() throws SQLException {
         try {
-            ShowAllAppointmentsToday();
-            LoadAppointmentComboBoxData();
-            ShowALlAppointments();
-            LoadDashBoardData();
+            showAllAppointmentsToday();
+            loadAppointmentComboBoxData();
+            showALlAppointments();
+            loadDashBoardData();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
     }
 
-    private void LoadDashBoardData() throws SQLException {
+    private void loadDashBoardData() throws SQLException {
         AppointmentVM appointmentVM;
         try{
             db = new DataSource();
@@ -149,7 +151,7 @@ public class AppointmentController implements Initializable {
     }
 
 
-    private void LoadAppointmentComboBoxData() {
+    private void loadAppointmentComboBoxData() {
         try {
             cbAppState.setItems(FXCollections.observableArrayList(loadAppointmentStates()));
         } catch (Exception ex) {
@@ -181,10 +183,10 @@ public class AppointmentController implements Initializable {
         return list;
     }
 
-    public void ShowAllAppointmentsToday() throws SQLException {
+    private void showAllAppointmentsToday() throws SQLException {
         try {
             appointmentList = null;
-            appointmentList = LoadAppointmentsTodayFromDB();
+            appointmentList = loadAppointmentsTodayFromDB();
             colAppId.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("id"));
             colAppCustName.setCellValueFactory(new PropertyValueFactory<Appointment, String>("CustomerName"));
             colAppDate.setCellValueFactory(new PropertyValueFactory<Appointment, Date>("AppointmentDate"));
@@ -198,7 +200,7 @@ public class AppointmentController implements Initializable {
 
     }
 
-    public ObservableList<Appointment> LoadAppointmentsTodayFromDB() throws SQLException {
+    private ObservableList<Appointment> loadAppointmentsTodayFromDB() throws SQLException {
         ObservableList<Appointment> list = FXCollections.observableArrayList();
 
         try {
@@ -244,14 +246,14 @@ public class AppointmentController implements Initializable {
             dm.InvalidTime();
             return;
         }
-        ShowAllFilteredAppointments(sqlDate, sqlTime);
+        showAllFilteredAppointments(sqlDate, sqlTime);
 
     }
 
-    public void ShowAllFilteredAppointments(java.sql.Date sqlDate, Time sqlTime) throws SQLException {
+    private void showAllFilteredAppointments(java.sql.Date sqlDate, Time sqlTime) throws SQLException {
         try {
             appointmentList = null;
-            appointmentList = LoadAppointmentsFilteredFromDB(sqlDate, sqlTime);
+            appointmentList = loadAppointmentsFilteredFromDB(sqlDate, sqlTime);
             colAppId.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("id"));
             colAppCustName.setCellValueFactory(new PropertyValueFactory<Appointment, String>("CustomerName"));
             colAppDate.setCellValueFactory(new PropertyValueFactory<Appointment, Date>("AppointmentDate"));
@@ -267,7 +269,7 @@ public class AppointmentController implements Initializable {
 
     }
 
-    public ObservableList<Appointment> LoadAppointmentsFilteredFromDB(java.sql.Date sqlDate, Time sqlTime) throws SQLException {
+    private ObservableList<Appointment> loadAppointmentsFilteredFromDB(java.sql.Date sqlDate, Time sqlTime) throws SQLException {
 
         ObservableList<Appointment> list = FXCollections.observableArrayList();
         try {
@@ -321,7 +323,7 @@ public class AppointmentController implements Initializable {
         btnAppCreate.setDisable(false);
     }
 
-    public void CreateNewAppointment(ActionEvent actionEvent) {
+    public void createNewAppointment(ActionEvent actionEvent) {
         DialogMessages dm = new DialogMessages(stackpane);
         Appointment appointment = new Appointment();
         appointment.setCustomerId(Integer.parseInt(tfAppCustId.getText()));
@@ -349,8 +351,9 @@ public class AppointmentController implements Initializable {
         if (cbAppState.getValue() == null) {
             dm.SelectAppointmentState();
             return;
-        } else
+        } else {
             appointment.setState(cbAppState.getValue());
+        }
 
         // GEt Today Date in sql
         Date date = java.util.Calendar.getInstance().getTime();
@@ -364,15 +367,14 @@ public class AppointmentController implements Initializable {
             Boolean result = appointmentDAO.CreateNewAppointment(appointment);
 
             if (result == true)
-                //TODO: Send Appointment SMS
                 dm.InsertSuccessDialogBox();
             else
                 dm.InsertFailedDialogBox();
 
-            ClearAndResetAllControls();
+            clearAndResetAllControls();
             btnAppUpdate.setDisable(true);
             btnAppCreate.setDisable(false);
-            InitialLoad();
+            initialLoad();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -387,10 +389,12 @@ public class AppointmentController implements Initializable {
         }
     }
 
-    public void UpdateAppointment(ActionEvent actionEvent) {
+
+    public void updateAppointment(ActionEvent actionEvent) {
         DialogMessages dm = new DialogMessages(stackpane);
         Appointment appointment = new Appointment();
         appointment.setId(Integer.parseInt(tfAppId.getText()));
+
 
         //GEt Date
         try {
@@ -426,15 +430,14 @@ public class AppointmentController implements Initializable {
             Boolean result = appointmentDAO.UpdateAppointment(appointment);
 
             if (result == true)
-                // TODO : Appointment Update SMS
                 dm.UpdateSuccessDialogBox();
             else
                 dm.UpdateFailedDialogBox();
 
-            ClearAndResetAllControls();
+            clearAndResetAllControls();
             btnAppUpdate.setDisable(true);
             btnAppCreate.setDisable(false);
-            InitialLoad();
+            initialLoad();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -449,7 +452,7 @@ public class AppointmentController implements Initializable {
         }
     }
 
-    private void ClearAndResetAllControls() {
+    private void clearAndResetAllControls() {
         tfAppCustId.clear();
         tfAppId.clear();
         tfCustName.clear();
@@ -468,7 +471,7 @@ public class AppointmentController implements Initializable {
 
         }
 
-    public void LoadDataFromtvToForm(MouseEvent event) {
+    public void loadDataFromtvToForm(MouseEvent event) {
         String custName = null;
 
         //check for a double click on table to load to object
@@ -498,9 +501,9 @@ public class AppointmentController implements Initializable {
         }
     }
 
-    public void ClearAndResetAll(KeyEvent event) {
+    public void clearAndResetAll(KeyEvent event) {
         if (event.getCode() == KeyCode.ESCAPE) {
-           ClearAndResetAllControls();
+           clearAndResetAllControls();
            btnAppUpdate.setDisable(true);
            btnAppCreate.setDisable(false);
         }
@@ -523,6 +526,7 @@ public class AppointmentController implements Initializable {
 
     @FXML
     private JFXDatePicker dpAllAppToSearch;
+
 
     @FXML
     private TableView<Appointment> tvAllAppointments;
@@ -548,10 +552,10 @@ public class AppointmentController implements Initializable {
     private ObservableList<Appointment> allAppointmentList;
 
 
-    private void ShowALlAppointments() {
+    private void showALlAppointments() {
         try {
             allAppointmentList = null;
-            allAppointmentList = LoadAllAppointmentsTFromDB();
+            allAppointmentList = loadAllAppointmentsTFromDB();
             colAllAppId.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("id"));
             colAllCustName.setCellValueFactory(new PropertyValueFactory<Appointment, String>("CustomerName"));
             colAllAppBookedDate.setCellValueFactory(new PropertyValueFactory<Appointment, Date>("BookedDate"));
@@ -564,7 +568,7 @@ public class AppointmentController implements Initializable {
         }
     }
 
-    public ObservableList<Appointment> LoadAllAppointmentsTFromDB() throws SQLException {
+    private ObservableList<Appointment> loadAllAppointmentsTFromDB() throws SQLException {
         ObservableList<Appointment> list = FXCollections.observableArrayList();
 
         try {
@@ -590,7 +594,7 @@ public class AppointmentController implements Initializable {
         return list;
     }
 
-    public void SearchALLAppointmentsById() {
+    public void searchALLAppointmentsById() {
         // Wrap the ObservableList in a FilteredList (initially display all data).
         FilteredList<Appointment> filteredData = new FilteredList<>(allAppointmentList, b -> true);
 
@@ -623,7 +627,7 @@ public class AppointmentController implements Initializable {
 
     }
 
-    public void SearchALLAppointmentsByCustomerName() {
+    public void searchALLAppointmentsByCustomerName() {
         // Wrap the ObservableList in a FilteredList (initially display all data).
         FilteredList<Appointment> filteredData = new FilteredList<>(allAppointmentList, b -> true);
 
@@ -656,11 +660,36 @@ public class AppointmentController implements Initializable {
 
     }
 
-    //TODO:filter based on date range
-    public void SearchALLAppointmentsBasedOnDateRange() {
+    public void filterbyDate() {
+        // Wrap the ObservableList in a FilteredList (initially display all data).
+        FilteredList<Appointment> filteredItems = new FilteredList<>(allAppointmentList);
 
+        filteredItems.predicateProperty().bind(Bindings.createObjectBinding(() -> {
+                    LocalDate minDate = dpAllAppFromSearch.getValue();
+                    LocalDate maxDate = dpAllAppToSearch.getValue();
+
+                    // get final values != null
+                    final LocalDate finalMin = minDate == null ? LocalDate.MIN : minDate;
+                    final LocalDate finalMax = maxDate == null ? LocalDate.MAX : maxDate;
+
+                    // values for openDate need to be in the interval [finalMin, finalMax]
+                    return ti -> !finalMin.isAfter(ti.getAppointmentDate().toLocalDate()) && !finalMax.isBefore(ti.getAppointmentDate().toLocalDate());
+                },
+                dpAllAppFromSearch.valueProperty(),
+                dpAllAppToSearch.valueProperty()));
+
+        tvAllAppointments.setItems(filteredItems);
 
     }
+
+
+    //Generating Reports
+    public void generateReport(ActionEvent event) {
+        ExportToExcel ex = new ExportToExcel(tvAllAppointments, stackpane);
+        ex.run();
+
+    }
+
 
 }
 

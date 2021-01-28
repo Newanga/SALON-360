@@ -2,7 +2,7 @@ package controllers;
 
 import data_access.*;
 import helpers.dialog_messages.DialogMessages;
-import helpers.report_generation.ExportToExcel;
+import helpers.exports.ExportToExcel;
 import javafx.scene.control.Label;
 import models.Customer;
 import validation.CustomerFormValidation;
@@ -24,7 +24,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import view_models_dashboard.CustomerVM;
+import view_models.dashboards.CustomerVM;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -38,9 +38,6 @@ public class CustomerController implements Initializable {
 
     @FXML
     private StackPane stackpane;
-
-
-
 
     @FXML
     private Label lblTotalCsstomers;
@@ -131,20 +128,20 @@ public class CustomerController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            InitialLoad();
+            initialLoad();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
 
 
-    public void InitialLoad() throws SQLException {
-        LoadCustomerComboBoxData();
-        ShowCustomers();
-        LoadDashboardData();
+    public void initialLoad() throws SQLException {
+        loadCustomerComboBoxData();
+        showCustomers();
+        loadDashboardData();
     }
 
-    private void LoadDashboardData() {
+    private void loadDashboardData() {
         CustomerVM customerVM;
         try{
             db = new DataSource();
@@ -161,8 +158,8 @@ public class CustomerController implements Initializable {
         }
     }
 
-    private void ShowCustomers() throws SQLException {
-        customersList = LoadCustomersFromDB();
+    private void showCustomers() throws SQLException {
+        customersList = loadCustomersFromDB();
         colID.setCellValueFactory(new PropertyValueFactory<Customer, Integer>("id"));
         colFirstName.setCellValueFactory(new PropertyValueFactory<Customer, String>("firstName"));
         colLastName.setCellValueFactory(new PropertyValueFactory<Customer, String>("lastName"));
@@ -175,7 +172,7 @@ public class CustomerController implements Initializable {
         tvCustomer.setItems(customersList);
     }
 
-    public ObservableList<Customer> LoadCustomersFromDB() throws SQLException {
+    public ObservableList<Customer> loadCustomersFromDB() throws SQLException {
         ObservableList<Customer> list = FXCollections.observableArrayList();
 
         try {
@@ -202,7 +199,7 @@ public class CustomerController implements Initializable {
 
     }
 
-    public void LoadCustomerComboBoxData() throws SQLException {
+    public void loadCustomerComboBoxData() throws SQLException {
         try {
             cbCustomerState.setItems(FXCollections.observableArrayList(loadCustomerStates()));
             cbGender.setItems(FXCollections.observableArrayList(loadGenders()));
@@ -367,7 +364,7 @@ public class CustomerController implements Initializable {
         }
 
         clearSTextFieldsAndComboBoxes();
-        InitialLoad();
+        initialLoad();
         btnUpdate.setDisable(true);
         btnCreate.setDisable(false);
 
@@ -444,7 +441,7 @@ public class CustomerController implements Initializable {
         }
 
         clearSTextFieldsAndComboBoxes();
-        InitialLoad();
+        initialLoad();
         btnUpdate.setDisable(true);
         btnCreate.setDisable(false);
 
@@ -466,7 +463,7 @@ public class CustomerController implements Initializable {
             clearSTextFieldsAndComboBoxes();
             btnCreate.setDisable(false);
             btnUpdate.setDisable(true);
-            LoadCustomerComboBoxData();
+            loadCustomerComboBoxData();
         }
 
     }
@@ -477,7 +474,7 @@ public class CustomerController implements Initializable {
 
     }
 
-    public void SearchFunction() {
+    public void searchFunction() {
         // Wrap the ObservableList in a FilteredList (initially display all data).
         FilteredList<Customer> filteredData = new FilteredList<>(customersList, b -> true);
 
@@ -492,13 +489,13 @@ public class CustomerController implements Initializable {
                 String lowerCaseFilter = newValue.toLowerCase();
 
                 if (Customer.getFirstName().toLowerCase().indexOf(lowerCaseFilter) != -1) {
-                    return true; // Filter matches name.
+                    return true;
                 } else if (String.valueOf(Customer.getLastName()).indexOf(lowerCaseFilter) != -1) {
-                    return true; // Filter matches price.
+                    return true;
                 } else if (String.valueOf(Customer.getContactNo()).indexOf(lowerCaseFilter) != -1) {
-                    return true; // Filter matches price.
+                    return true;
                 } else if (String.valueOf(Customer.getEmail()).indexOf(lowerCaseFilter) != -1) {
-                    return true; // Filter matches price.
+                    return true;
                 } else if (String.valueOf(Customer.getId()).indexOf(lowerCaseFilter) != -1) {
                     return true;
                 } else

@@ -1,7 +1,8 @@
 package controllers;
 
+import com.jfoenix.controls.JFXDatePicker;
 import data_access.*;
-import helpers.jasper_reports.CreateTransactionReport;
+import helpers.exports.ExportToExcel;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,14 +20,12 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-import com.jfoenix.controls.JFXDatePicker;
-import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
-import models.Service;
+import models.Appointment;
 import view_models.tables.TransactionVM;
 
 public class TransactionController implements Initializable {
@@ -72,16 +71,16 @@ public class TransactionController implements Initializable {
 
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        InitialLoad();
+   public void initialize(URL location, ResourceBundle resources) {
+        initialLoad();
     }
 
-    public void InitialLoad() {
-        ShowTransactions();
+    public void initialLoad() {
+        showTransactions();
     }
 
-    private void ShowTransactions() {
-        transactionList = LoadTransactionsFromDatabase();
+    private void showTransactions() {
+        transactionList = loadTransactionsFromDatabase();
         colId.setCellValueFactory(new PropertyValueFactory<TransactionVM, Integer>("transactionId"));
         colAppointmentId.setCellValueFactory(new PropertyValueFactory<TransactionVM, Integer>("appointmentId"));
         colDate.setCellValueFactory(new PropertyValueFactory<TransactionVM, Date>("date"));
@@ -93,7 +92,7 @@ public class TransactionController implements Initializable {
 
     }
 
-    private ObservableList<TransactionVM> LoadTransactionsFromDatabase() {
+    private ObservableList<TransactionVM> loadTransactionsFromDatabase() {
         ObservableList<TransactionVM> list = FXCollections.observableArrayList();
 
         try {
@@ -119,18 +118,34 @@ public class TransactionController implements Initializable {
         return list;
     }
 
+    //Generating Reports
+    public void generateReport(ActionEvent event) {
+        ExportToExcel ex = new ExportToExcel(tvTransactions, stackpane);
+        ex.run();
 
-    public void GenerateReport(ActionEvent event) {
-        CreateTransactionReport report = new CreateTransactionReport(transactionList, "TransactionsReport", stackpane);
-        report.run();
+    }
+
+    public void filterbyDate() {
+        // Wrap the ObservableList in a FilteredList (initially display all data).
+        FilteredList<TransactionVM> filteredItems = new FilteredList<>(transactionList);
+
+        filteredItems.predicateProperty().bind(Bindings.createObjectBinding(() -> {
+                    LocalDate minDate = dpSearchFrom.getValue();
+                    LocalDate maxDate = dpSearchTo.getValue();
+
+                    // get final values != null
+                    final LocalDate finalMin = minDate == null ? LocalDate.MIN : minDate;
+                    final LocalDate finalMax = maxDate == null ? LocalDate.MAX : maxDate;
+
+                    // values for openDate need to be in the interval [finalMin, finalMax]
+                    return ti -> !finalMin.isAfter(ti.getDate().toLocalDate()) && !finalMax.isBefore(ti.getDate().toLocalDate());
+                },
+                dpSearchFrom.valueProperty(),
+                dpSearchTo.valueProperty()));
+
+        tvTransactions.setItems(filteredItems);
 
     }
 
 
-    //Todo : Date Range Filter
-    private void FilterBasedOnDateRange() {
-
-
-
-    }
 }

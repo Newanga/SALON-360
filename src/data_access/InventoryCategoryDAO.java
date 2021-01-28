@@ -19,6 +19,7 @@ public class InventoryCategoryDAO {
     public InventoryCategoryDAO(Connection conn) {
         this.conn = conn;
     }
+
     public Boolean createNewInventoryCategory( InventoryCategory model) throws SQLException {
         String sql = "INSERT INTO inventorycategory (name, description) VALUES (?, ?);";
         try {
@@ -29,7 +30,8 @@ public class InventoryCategoryDAO {
             statement.setString(2, description);
             statement.executeUpdate();
             return true;
-        } catch (SQLException throwables) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return false;
         }
     }
@@ -45,7 +47,8 @@ public class InventoryCategoryDAO {
             //Get first row data
             int id = result.getInt("id");
             return id;
-        } catch (SQLException throwables) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return 0;
         }
     }
@@ -61,8 +64,8 @@ public class InventoryCategoryDAO {
                 inventoryCategories.add(sc);
             }
             return inventoryCategories;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return inventoryCategories;
     }
@@ -78,8 +81,8 @@ public class InventoryCategoryDAO {
                 serviceCategoryNames.add(name);
             }
             return serviceCategoryNames;
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return serviceCategoryNames;
     }
@@ -93,7 +96,8 @@ public class InventoryCategoryDAO {
             statement.setInt(3, model.getId());
             statement.executeUpdate();
             return true;
-        } catch (SQLException throwables) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return false;
         }
     }
